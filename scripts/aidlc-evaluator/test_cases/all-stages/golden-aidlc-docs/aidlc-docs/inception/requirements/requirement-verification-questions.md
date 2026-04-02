@@ -1,117 +1,117 @@
-# Requirements Verification Questions — ANSWERED
+# 요구사항 검증 질문 — 답변 완료
 
-Please answer the following questions to help clarify the requirements for the BookShelf Community Library API. Fill in the letter choice after each `[Answer]:` tag.
+BookShelf Community Library API 요구사항을 명확히 하기 위해 아래 질문에 답하세요. 각 `[Answer]:` 태그 뒤에 선택지 문자를 적으세요.
 
 ---
 
-## Question 1
-The vision document lists open questions about late fee behavior. When a member has outstanding fees and tries to check out a book, should the system block the checkout or allow it with a warning?
+## 질문 1
+비전 문서는 연체료 동작에 대한 미결 질문을 나열합니다. 회원이 미결 수수료가 있는 상태에서 도서를 대출하려 할 때, 시스템은 대출을 막아야 합니까, 아니면 경고와 함께 허용해야 합니까?
 
-A) Block checkout — members with any outstanding fees cannot borrow until fees are paid
-B) Block checkout only when outstanding fees exceed a configurable threshold (e.g., $10.00)
-C) Allow checkout but include a warning in the API response indicating outstanding fees
-D) Other (please describe after [Answer]: tag below)
+A) 대출 차단 — 미결 수수료가 있는 회원은 수수료를 납부할 때까지 대출 불가
+B) 미결 수수료가 설정 가능한 임계값(예: $10.00)을 초과할 때만 대출 차단
+C) 대출은 허용하되 API 응답에 미결 수수료가 있음을 알리는 경고 포함
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: B
 
-## Question 2
-When a book is returned and a hold exists, should there be a grace period before the held book is made available to the next person in the queue?
+## 질문 2
+도서가 반납되고 예약이 있을 때, 대기열 다음 사람에게 넘기기 전 유예 기간이 있어야 합니까?
 
-A) No grace period — immediately fulfill the next hold in the queue upon return
-B) Short grace period (e.g., 24 hours) for the returning member to re-check-out before the hold is fulfilled
-C) Configurable grace period set by the library admin
-D) Other (please describe after [Answer]: tag below)
-
-[Answer]: A
-
-## Question 3
-What should happen to a member's active holds and checkouts if an Admin deactivates their account?
-
-A) Cancel all active holds immediately; keep checkouts active so books are still tracked until returned
-B) Cancel all active holds and mark all checkouts as requiring immediate return
-C) Keep everything active — deactivation only prevents new actions (no new checkouts, holds, or renewals)
-D) Other (please describe after [Answer]: tag below)
-
-[Answer]: C
-
-## Question 4
-Should late fees continue accruing indefinitely, or should they cap at a specific amount?
-
-A) Cap at a fixed dollar amount per checkout (e.g., $10.00 as mentioned in the vision)
-B) Cap at the book's replacement value (requires a replacement_value field on books)
-C) Cap at a configurable maximum set by the library admin
-D) No cap — fees accrue indefinitely until the book is returned
-E) Other (please describe after [Answer]: tag below)
+A) 유예 없음 — 반납 즉시 대기열 다음 예약 이행
+B) 짧은 유예(예: 24시간) — 반납 회원이 예약 이행 전에 다시 대출할 수 있음
+C) 도서관 관리자가 설정하는 유예 기간
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: A
 
-## Question 5
-For the MVP two-service architecture, how should the Catalog Service and Lending Service be deployed?
+## 질문 3
+관리자가 회원 계정을 비활성화하면 활성 예약과 대출은 어떻게 되어야 합니까?
 
-A) Two separate FastAPI applications, each with its own AWS Lambda function behind API Gateway
-B) Two separate FastAPI applications, each deployed as an ECS Fargate container behind API Gateway
-C) Let the Infrastructure Design stage determine the optimal compute choice based on NFR analysis
-D) Other (please describe after [Answer]: tag below)
-
-[Answer]: C
-
-## Question 6
-Where should member authentication and management live in the two-service architecture?
-
-A) In the Lending Service — since members are primarily lending-related entities
-B) In a shared authentication layer (e.g., middleware) used by both services, with member data in the Lending Service
-C) As part of both services — each service validates JWTs independently, and the Lending Service owns member data
-D) Other (please describe after [Answer]: tag below)
+A) 활성 예약은 모두 즉시 취소; 대출은 반납까지 추적을 위해 유지
+B) 활성 예약 모두 취소 및 모든 대출을 즉시 반납 필요로 표시
+C) 모두 유지 — 비활성화는 신규 동작만 차단(신규 대출, 예약, 갱신 불가)
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: C
 
-## Question 7
-For the MVP asynchronous hold fulfillment, what level of implementation is expected?
+## 질문 4
+연체료는 무한히 누적되어야 합니까, 아니면 특정 금액에서 상한이 있어야 합니까?
 
-A) Full AWS messaging (SQS/SNS/EventBridge) with actual async event processing between services
-B) In-process async event handling within the Lending Service (simulated event bus using Python async)
-C) Simple synchronous hold check on return — update hold status directly during the return operation, defer true async to Phase 2
-D) Other (please describe after [Answer]: tag below)
-
-[Answer]: C
-
-## Question 8
-How should the two services communicate for book existence/availability verification during checkout?
-
-A) Direct HTTP call from Lending Service to Catalog Service's internal API
-B) Shared database view (violates data isolation — not recommended)
-C) Cached book data in Lending Service, synchronized via events from Catalog Service
-D) Other (please describe after [Answer]: tag below)
+A) 대출당 고정 달러 상한(예: 비전에 언급된 $10.00)
+B) 도서의 교체 가치까지 상한(도서에 replacement_value 필드 필요)
+C) 도서관 관리자가 설정하는 최대값까지 상한
+D) 상한 없음 — 반납할 때까지 무한 누적
+E) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: A
 
-## Question 9
-For the MVP, should the project include AWS CDK infrastructure-as-code for actual deployment, or focus on the application code with deployment deferred?
+## 질문 5
+MVP 두 서비스 아키텍처에서 Catalog Service와 Lending Service는 어떻게 배포해야 합니까?
 
-A) Include complete CDK infrastructure code for both services (Lambda/Fargate, API Gateway, DynamoDB/RDS, SQS, etc.)
-B) Include CDK infrastructure code as stubs/templates showing the architecture but not production-ready
-C) Focus on application code only — provide deployment documentation but no CDK code in the MVP
-D) Other (please describe after [Answer]: tag below)
+A) 각각 별도 FastAPI 앱, 각각 전용 AWS Lambda + API Gateway 뒤에 배포
+B) 각각 별도 FastAPI 앱, 각각 ECS Fargate 컨테이너 + API Gateway 뒤에 배포
+C) 인프라 설계 단계에서 NFR 분석을 바탕으로 최적 컴퓨트 선택
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: C
 
-## Question 10
-What database should be used for each service?
+## 질문 6
+두 서비스 아키텍처에서 회원 인증과 관리는 어디에 두어야 합니까?
 
-A) DynamoDB for both services (key-value access patterns, serverless scaling)
-B) DynamoDB for Catalog Service, RDS PostgreSQL for Lending Service (lending has more relational queries)
-C) RDS PostgreSQL for both services (relational queries, familiar SQL)
-D) Let the NFR Requirements and Infrastructure Design stages determine the optimal choice
-E) Other (please describe after [Answer]: tag below)
+A) Lending Service — 회원은 주로 대출 관련 엔티티이므로
+B) 두 서비스가 쓰는 공유 인증 레이어(예: 미들웨어), 회원 데이터는 Lending Service
+C) 두 서비스 모두 — 각 서비스가 JWT를 독립 검증하고 Lending Service가 회원 데이터 소유
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
+
+[Answer]: C
+
+## 질문 7
+MVP 비동기 예약 이행에 대해 어떤 수준의 구현이 기대됩니까?
+
+A) 전체 AWS 메시징(SQS/SNS/EventBridge)과 서비스 간 실제 비동기 이벤트 처리
+B) Lending Service 내 인프로세스 비동기 이벤트 처리(Python async로 시뮬레이션된 이벤트 버스)
+C) 반납 시 단순 동기 예약 확인 — 반납 작업 중 직접 예약 상태 갱신, 진짜 비동기는 2단계로 연기
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
+
+[Answer]: C
+
+## 질문 8
+대출 시 도서 존재/가용성 검증을 위해 두 서비스는 어떻게 통신해야 합니까?
+
+A) Lending Service에서 Catalog Service 내부 API로 직접 HTTP 호출
+B) 공유 DB 뷰(데이터 격리 위반 — 권장하지 않음)
+C) Lending Service에 캐시된 도서 데이터, Catalog Service 이벤트로 동기화
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
+
+[Answer]: A
+
+## 질문 9
+MVP에 실제 배포를 위한 AWS CDK 인프라 코드를 포함해야 합니까, 아니면 애플리케이션 코드에 집중하고 배포는 연기합니까?
+
+A) 두 서비스 모두 완전한 CDK 인프라 코드(Lambda/Fargate, API Gateway, DynamoDB/RDS, SQS 등)
+B) 아키텍처를 보여 주는 CDK 스텁/템플릿은 포함하나 프로덕션 준비는 아님
+C) 애플리케이션 코드만 집중 — MVP에는 CDK 코드 없이 배포 문서만 제공
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
+
+[Answer]: C
+
+## 질문 10
+각 서비스에 어떤 데이터베이스를 써야 합니까?
+
+A) 두 서비스 모두 DynamoDB(키-값 접근, 서버리스 확장)
+B) Catalog는 DynamoDB, Lending은 RDS PostgreSQL(대출이 관계 쿼리가 더 많음)
+C) 두 서비스 모두 RDS PostgreSQL(관계 쿼리, 익숙한 SQL)
+D) NFR 요구사항 및 인프라 설계 단계에서 최적 선택
+E) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: D
 
-## Question 11: Security Extensions
-Should security extension rules (SECURITY-01 through SECURITY-15) be enforced for this project?
+## 질문 11: 보안 확장
+보안 확장 규칙(SECURITY-01 ~ SECURITY-15)을 이 프로젝트에 적용해야 합니까?
 
-A) Yes — enforce all SECURITY rules as blocking constraints (recommended for production-grade applications)
-B) No — skip all SECURITY rules (suitable for PoCs, prototypes, and experimental projects)
-C) Other (please describe after [Answer]: tag below)
+A) 예 — 모든 SECURITY 규칙을 차단 제약으로 강제(프로덕션급 애플리케이션에 권장)
+B) 아니요 — 모든 SECURITY 규칙 생략(PoC, 프로토타입, 실험에 적합)
+C) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: A
 

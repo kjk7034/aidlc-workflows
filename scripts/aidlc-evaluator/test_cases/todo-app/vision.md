@@ -1,50 +1,50 @@
-# Todo List Application — Product Vision
+# 할 일 목록 애플리케이션 — 제품 비전
 
-## Overview
+## 개요
 
-A simple, full-stack todo list application that allows users to create, read, update, and delete tasks. The application provides a clean web interface for managing daily tasks with filtering and completion tracking.
+사용자가 작업을 생성·조회·수정·삭제할 수 있는 단순한 풀스택 할 일 목록 애플리케이션입니다. 필터링과 완료 추적으로 일상 작업을 관리할 수 있는 깔끔한 웹 UI를 제공합니다.
 
-## Core Features
+## 핵심 기능
 
-### Task Management
-- Create new tasks with a title and optional description
-- Mark tasks as complete or incomplete (toggle)
-- Edit existing task titles and descriptions
-- Delete tasks permanently
-- View all tasks in a scrollable list
+### 작업 관리
+- 제목과 선택적 설명으로 새 작업 생성
+- 작업을 완료 또는 미완료로 표시(토글)
+- 기존 작업 제목 및 설명 편집
+- 작업 영구 삭제
+- 스크롤 가능한 목록에서 모든 작업 보기
 
-### Filtering
-- Filter tasks by status: All, Active (incomplete), Completed
-- Display count of remaining active tasks
+### 필터링
+- 상태별 필터: 전체, 활성(미완료), 완료
+- 남은 활성 작업 개수 표시
 
-### Persistence
-- Tasks persist across page refreshes via the REST API
-- Server stores tasks in memory (no database required for MVP)
+### 지속성
+- REST API를 통해 페이지 새로고침 후에도 작업 유지
+- 서버가 메모리에 작업 저장(MVP에 DB 불필요)
 
-## User Interface
+## 사용자 인터페이스
 
-The UI is a single-page application with:
-- A header showing the application title
-- An input field at the top for adding new tasks
-- A list of tasks below, each with:
-  - A checkbox to toggle completion
-  - The task title (with strikethrough when completed)
-  - An edit button
-  - A delete button
-- A filter bar at the bottom with All / Active / Completed tabs
-- A counter showing "X items left"
+UI는 단일 페이지 애플리케이션으로 구성됩니다:
+- 애플리케이션 제목을 보여 주는 헤더
+- 상단에 새 작업을 추가하는 입력 필드
+- 아래 작업 목록. 각 항목에:
+  - 완료를 토글하는 체크박스
+  - 작업 제목(완료 시 취소선)
+  - 편집 버튼
+  - 삭제 버튼
+- 하단에 전체 / 활성 / 완료 탭이 있는 필터 바
+- "남은 항목 X개"를 보여 주는 카운터
 
-## Non-Functional Requirements
+## 비기능 요구사항
 
-- The application should load in under 2 seconds
-- The UI should be responsive and work on mobile viewports
-- All CRUD operations should complete in under 500ms
-- The API should return proper HTTP status codes and error messages
+- 애플리케이션은 2초 이내에 로드되어야 함
+- UI는 반응형이어야 하며 모바일 뷰포트에서 동작해야 함
+- 모든 CRUD 작업은 500ms 이내에 완료되어야 함
+- API는 적절한 HTTP 상태 코드와 오류 메시지를 반환해야 함
 
-## Out of Scope (MVP)
+## 범위 밖 (MVP)
 
-- User authentication / multi-user support
-- Task due dates or priorities
-- Drag-and-drop reordering
-- Database persistence (in-memory store is acceptable)
-- Deployment / CI pipeline
+- 사용자 인증 / 다중 사용자 지원
+- 작업 마감일 또는 우선순위
+- 드래그 앤 드롭으로 순서 변경
+- 데이터베이스 지속성(메모리 저장 허용)
+- 배포 / CI 파이프라인

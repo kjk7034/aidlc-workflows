@@ -1,25 +1,25 @@
-# Vision Document Guide
+# 비전 문서 가이드
 
-## Purpose
+## 목적
 
-A Vision Document defines the **business goals**, **target outcomes**, and **scope boundaries** for a project before entering the AI-DLC workflow. It serves as the primary input to the Inception Phase, giving the AI model and the team a shared understanding of what the project aims to achieve and why it matters.
+비전 문서는 AI-DLC 워크플로에 들어가기 전에 프로젝트의 **비즈니스 목표**, **목표 성과**, **범위 경계**를 정의합니다. Inception Phase의 주 입력으로, AI 모델과 팀이 프로젝트가 무엇을 달성하려 하는지와 왜 중요한지 공유된 이해를 갖게 합니다.
 
-A well-written Vision Document reduces ambiguity during Requirements Analysis, improves User Story quality, and prevents scope creep during Construction.
+잘 쓴 비전 문서는 Requirements Analysis의 모호함을 줄이고 사용자 스토리 품질을 높이며 Construction에서 범위 확대를 막습니다.
 
-## When to Write a Vision Document
+## 비전 문서를 쓰는 시점
 
-- Before starting any new project or major initiative
-- When proposing a new product, feature set, or platform
-- When pivoting an existing product in a new direction
-- When multiple stakeholders need alignment on goals before development begins
+- 새 프로젝트나 큰 이니셔티브를 시작하기 전
+- 새 제품·기능 묶음·플랫폼을 제안할 때
+- 기존 제품을 새 방향으로 전환할 때
+- 개발 전에 여러 이해관계자가 목표를 맞춰야 할 때
 
-## Document Structure
+## 문서 구조
 
 ### 1. Executive Summary
 
-A brief paragraph (3-5 sentences) that captures the essence of the project. Anyone reading only this section should understand what the project is, who it serves, and why it exists.
+프로젝트의 핵심을 담은 짧은 단락(3~5문장)입니다. 이 절만 읽어도 프로젝트가 무엇인지, 누구를 위한지, 왜 존재하는지 알 수 있어야 합니다.
 
-**Template:**
+**템플릿:**
 
 ```markdown
 ## Executive Summary
@@ -29,7 +29,7 @@ It addresses [business problem or opportunity] by [approach or differentiation].
 The expected outcome is [measurable business result].
 ```
 
-**Example:**
+**예시:**
 
 ```markdown
 ## Executive Summary
@@ -45,9 +45,9 @@ time and elimination of manual inventory reconciliation.
 
 ### 2. Business Context
 
-Describe the business environment, the problem being solved, and why solving it matters now.
+비즈니스 환경, 해결하는 문제, 지금 해결해야 하는 이유를 설명합니다.
 
-**Sections to include:**
+**포함할 절:**
 
 ```markdown
 ## Business Context
@@ -85,9 +85,9 @@ Use specific, measurable criteria.]
 
 ### 3. Full Scope Vision
 
-This section describes the **complete long-term vision** for the product or system. It is deliberately aspirational and covers everything the project could become, not just what will be built first.
+제품 또는 시스템의 **완전한 장기 비전**을 설명합니다. 의도적으로 지향적이며, 처음에 만들 것만이 아니라 프로젝트가 될 수 있는 전부를 다룹니다.
 
-**Sections to include:**
+**포함할 절:**
 
 ```markdown
 ## Full Scope Vision
@@ -147,9 +147,9 @@ This is directional, not committal.]
 
 ### 4. MVP Scope
 
-This section defines the **minimum viable product**: the smallest set of functionality that delivers measurable value and validates the core business hypothesis. Everything listed here must be built before the product can launch or be evaluated.
+**최소 기능 제품(MVP)** 을 정의합니다. 측정 가능한 가치를 내고 핵심 비즈니스 가설을 검증하는 최소 기능 집합입니다. 여기 나열된 것은 제품을 출시하거나 평가하기 전에 모두 구현되어야 합니다.
 
-**Sections to include:**
+**포함할 절:**
 
 ```markdown
 ## MVP Scope
@@ -235,35 +235,35 @@ These feed directly into the Requirements Analysis clarifying questions.]
 
 ---
 
-## Writing Guidelines
+## 작성 지침
 
-### Do
+### 할 것
 
-- Be specific and measurable. "Reduce order processing time by 30%" is better than "make things faster."
-- Clearly separate full vision from MVP. Mixing them causes scope creep.
-- Include "out of scope" lists. They are as valuable as "in scope" lists.
-- Write for the team, not for executives. Avoid marketing language.
-- State assumptions explicitly so they can be challenged.
-- Include success criteria that can actually be tested.
+- 구체적이고 측정 가능하게 쓰세요. "주문 처리 시간 30% 단축"은 "더 빠르게"보다 낫습니다.
+- 전체 비전과 MVP를 분리하세요. 섞으면 범위가 불어납니다.
+- "범위 밖" 목록을 포함하세요. "범위 안"만큼 가치가 있습니다.
+- 경영진이 아니라 팀을 위해 쓰세요. 마케팅 언어는 피하세요.
+- 가정을 명시해 반박할 수 있게 하세요.
+- 실제로 검증할 수 있는 성공 기준을 넣으세요.
 
-### Do Not
+### 하지 말 것
 
-- Use vague language: "world-class," "seamless," "intuitive," "best-in-class."
-- List technologies or implementation details. That belongs in the Technical Environment Document.
-- Skip the MVP section. Every project needs a defined starting boundary.
-- Combine features and user journeys. Features describe what the system does; journeys describe how users experience it.
-- Assume readers know the business context. Write the Problem Statement even if it seems obvious.
+- "world-class," "seamless," "intuitive," "best-in-class" 같은 모호한 표현.
+- 기술이나 구현 세부를 나열하지 마세요. 그것은 Technical Environment Document에 둡니다.
+- MVP 절을 빼지 마세요. 모든 프로젝트에 시작 경계가 필요합니다.
+- 기능과 사용자 여정을 섞지 마세요. 기능은 시스템이 하는 일이고, 여정은 사용자가 경험하는 방식입니다.
+- 독자가 비즈니스 맥락을 안다고 가정하지 마세요. 당연해 보여도 Problem Statement를 쓰세요.
 
 ---
 
-## How This Document Feeds Into AI-DLC
+## 이 문서가 AI-DLC에 어떻게 쓰이는지
 
-| Vision Document Section | AI-DLC Stage | How It Is Used |
+| 비전 문서 절 | AI-DLC 단계 | 사용 방식 |
 |------------------------|--------------|----------------|
-| Executive Summary | Workspace Detection | Initial context for project classification |
-| Business Context | Requirements Analysis | Drives clarifying questions and requirements depth |
-| Full Scope Vision | User Stories, Application Design | Informs persona creation, component identification |
-| MVP Scope | Workflow Planning | Determines which stages execute, scope boundaries |
-| Features In/Out of Scope | Code Generation | Defines what gets built in this iteration |
-| Risks and Dependencies | All stages | Informs risk assessment and error handling |
-| Open Questions | Requirements Analysis | Become clarifying questions in the question files |
+| Executive Summary | Workspace Detection | 프로젝트 분류를 위한 초기 맥락 |
+| Business Context | Requirements Analysis | 명확화 질문과 요구 사항 깊이를 이끎 |
+| Full Scope Vision | User Stories, Application Design | 페르소나·컴포넌트 식별에 반영 |
+| MVP Scope | Workflow Planning | 실행할 단계와 범위 경계 결정 |
+| Features In/Out of Scope | Code Generation | 이번 반복에서 무엇을 만들지 정의 |
+| Risks and Dependencies | All stages | 위험 평가와 오류 처리에 반영 |
+| Open Questions | Requirements Analysis | 질문 파일의 명확화 질문이 됨 |

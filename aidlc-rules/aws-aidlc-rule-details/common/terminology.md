@@ -1,184 +1,184 @@
-# AI-DLC Terminology Glossary
+# AI-DLC 용어 사전
 
-## Core Terminology
+## 핵심 용어
 
 ### Phase vs Stage
 
-**Phase**: One of the three high-level lifecycle phases in AI-DLC
-- 🔵 **INCEPTION PHASE** - Planning & Architecture (WHAT and WHY)
-- 🟢 **CONSTRUCTION PHASE** - Design, Implementation & Test (HOW)
-- 🟡 **OPERATIONS PHASE** - Deployment & Monitoring (future expansion)
+**Phase**: AI-DLC의 세 가지 상위 생명주기 단계 중 하나
+- 🔵 **INCEPTION PHASE** — 계획 및 아키텍처(WHAT과 WHY)
+- 🟢 **CONSTRUCTION PHASE** — 설계, 구현 및 테스트(HOW)
+- 🟡 **OPERATIONS PHASE** — 배포 및 모니터링(향후 확장)
 
-**Stage**: An individual workflow activity within a phase
-- Examples: Context Assessment stage, Requirements Assessment stage, Code Generation stage
-- Each stage has specific prerequisites, steps, and outputs
-- Stages can be ALWAYS-EXECUTE or CONDITIONAL
+**Stage**: 단계 내 개별 워크플로 활동
+- 예: Context Assessment 단계, Requirements Assessment 단계, Code Generation 단계
+- 각 단계에는 전제 조건, 단계, 산출물이 있음
+- 단계는 ALWAYS-EXECUTE이거나 CONDITIONAL일 수 있음
 
-**Usage Examples**:
-- ✅ "The CONSTRUCTION phase contains 7 stages"
-- ✅ "The Code Generation stage is always executed"
-- ✅ "We're in the INCEPTION phase, executing the Requirements Assessment stage"
-- ❌ "The Requirements Assessment phase" (should be "stage")
-- ❌ "The CONSTRUCTION stage" (should be "phase")
+**사용 예**:
+- ✅ "CONSTRUCTION phase에는 7개의 stage가 있다"
+- ✅ "Code Generation stage는 항상 실행된다"
+- ✅ "INCEPTION phase에서 Requirements Assessment **stage**를 실행 중이다"
+- ❌ "Requirements Assessment **phase**" (올바른 표현은 "stage")
+- ❌ "CONSTRUCTION **stage**" (올바른 표현은 "phase")
 
-## Three-Phase Lifecycle
+## 세 단계 생명주기
 
 ### INCEPTION PHASE
-**Purpose**: Planning and architectural decisions  
-**Focus**: Determine WHAT to build and WHY  
-**Location**: `inception/` directory
+**목적**: 계획 및 아키텍처 결정  
+**초점**: 무엇을 만들지(WHAT), 왜 만들지(WHY)  
+**위치**: `inception/` 디렉터리
 
-**Stages**:
-- Workspace Detection (ALWAYS)
-- Reverse Engineering (CONDITIONAL - Brownfield only)
-- Requirements Analysis (ALWAYS - Adaptive depth)
-- User Stories (CONDITIONAL)
-- Workflow Planning (ALWAYS)
-- Application Design (CONDITIONAL)
-- Design - Units Planning/Generation (CONDITIONAL)
+**Stage**:
+- Workspace Detection (항상)
+- Reverse Engineering (조건부 — Brownfield만)
+- Requirements Analysis (항상 — 적응형 깊이)
+- User Stories (조건부)
+- Workflow Planning (항상)
+- Application Design (조건부)
+- Design - Units Planning/Generation (조건부)
 
-**Outputs**: Requirements, user stories, architectural decisions, unit definitions
+**산출물**: 요구사항, user stories, 아키텍처 결정, 단위 정의
 
 ### CONSTRUCTION PHASE
-**Purpose**: Detailed design and implementation  
-**Focus**: Determine HOW to build it  
-**Location**: `construction/` directory
+**목적**: 상세 설계 및 구현  
+**초점**: 어떻게 만들지(HOW)  
+**위치**: `construction/` 디렉터리
 
-**Stages**:
-- Functional Design (CONDITIONAL, per-unit)
-- NFR Requirements (CONDITIONAL, per-unit)
-- NFR Design (CONDITIONAL, per-unit)
-- Infrastructure Design (CONDITIONAL, per-unit)
-- Code Generation (ALWAYS) — includes Part 1: Planning and Part 2: Generation
-- Build and Test (ALWAYS)
+**Stage**:
+- Functional Design (조건부, 단위별)
+- NFR Requirements (조건부, 단위별)
+- NFR Design (조건부, 단위별)
+- Infrastructure Design (조건부, 단위별)
+- Code Generation (항상) — Part 1: Planning, Part 2: Generation 포함
+- Build and Test (항상)
 
-**Outputs**: Design artifacts, NFR implementations, code, tests
+**산출물**: 설계 산출물, NFR 구현, 코드, 테스트
 
 ### OPERATIONS PHASE
-**Purpose**: Deployment and operational readiness  
-**Focus**: How to DEPLOY and RUN it  
-**Location**: `operations/` directory
+**목적**: 배포 및 운영 준비  
+**초점**: 배포·실행 방법  
+**위치**: `operations/` 디렉터리
 
-**Stages**:
+**Stage**:
 - Operations (PLACEHOLDER)
 
-**Outputs**: Build instructions, deployment guides, monitoring setup, verification procedures
+**산출물**: 빌드 지침, 배포 가이드, 모니터링 설정, 검증 절차
 
 ---
 
-## Workflow Stages
+## 워크플로 단계
 
-### Always-Execute Stages
-- **Workspace Detection**: Initial analysis of workspace state and project type
-- **Requirements Analysis**: Gathering requirements (depth varies based on complexity)
-- **Workflow Planning**: Creating execution plan for which phases to run
-- **Code Generation**: Single stage with two parts — Part 1 (Planning) creates detailed implementation plans, Part 2 (Generation) generates actual code based on plans and prior artifacts
-- **Build and Test**: Building all units and executing comprehensive testing
+### 항상 실행되는 Stage
+- **Workspace Detection**: 워크스페이스 상태와 프로젝트 유형의 초기 분석
+- **Requirements Analysis**: 요구사항 수집(복잡도에 따라 깊이 변동)
+- **Workflow Planning**: 실행할 phase를 정하는 실행 계획 작성
+- **Code Generation**: 두 부분으로 구성된 단일 stage — Part 1(Planning)은 상세 구현 계획, Part 2(Generation)은 계획과 이전 산출물을 바탕으로 실제 코드 생성
+- **Build and Test**: 모든 단위 빌드 및 포괄적 테스트 실행
 
-### Conditional Stages
-- **Reverse Engineering**: Analyzing existing codebase (brownfield projects only)
-- **User Stories**: Creating user stories and personas (includes Story Planning and Story Generation)
-- **Application Design**: Designing application components, methods, business rules, and services
-- **Design**: Designing system components (includes Units Planning, Units Generation, per-unit design)
-- **Functional Design**: Technology-agnostic business logic design (per-unit)
-- **NFR Requirements**: Determining NFRs and selecting tech stack (per-unit)
-- **NFR Design**: Incorporating NFR patterns and logical components (per-unit)
-- **Infrastructure Design**: Mapping to actual infrastructure services (per-unit)
+### 조건부 Stage
+- **Reverse Engineering**: 기존 코드베이스 분석(brownfield만)
+- **User Stories**: user stories 및 페르소나 생성(Story Planning 및 Story Generation 포함)
+- **Application Design**: 애플리케이션 컴포넌트, 메서드, 비즈니스 규칙, 서비스 설계
+- **Design**: 시스템 컴포넌트 설계(Units Planning, Units Generation, 단위별 설계 포함)
+- **Functional Design**: 기술 중립적 비즈니스 로직 설계(단위별)
+- **NFR Requirements**: NFR 결정 및 기술 스택 선택(단위별)
+- **NFR Design**: NFR 패턴 및 논리 컴포넌트 반영(단위별)
+- **Infrastructure Design**: 실제 인프라 서비스에 매핑(단위별)
 
-## Application Design Terms
+## Application Design 용어
 
-- **Component**: A functional unit with specific responsibilities
-- **Method**: A function or operation within a component with defined business rules
-- **Business Rule**: Logic that governs method behavior and validation
-- **Service**: Orchestration layer that coordinates business logic across components
-- **Component Dependency**: Relationship and communication pattern between components
+- **Component**: 명확한 책임을 가진 기능 단위
+- **Method**: 정의된 비즈니스 규칙을 가진 컴포넌트 내 함수 또는 연산
+- **Business Rule**: 메서드 동작과 검증을 관장하는 로직
+- **Service**: 컴포넌트 간 비즈니스 로직을 조율하는 오케스트레이션 레이어
+- **Component Dependency**: 컴포넌트 간 관계와 통신 패턴
 
-## Architecture Terms (Infrastructure)
+## 아키텍처 용어(인프라)
 
 ### Unit of Work
-A logical grouping of user stories for development purposes. The term used during planning and decomposition.
+개발 목적으로 user stories를 묶는 논리적 그룹. 계획과 분해 시 사용하는 용어입니다.
 
-**Usage**: "We need to decompose the system into units of work"
+**사용 예**: "시스템을 작업 단위로 분해해야 한다"
 
 ### Service
-An independently deployable component in a microservices architecture. Each service is a separate unit of work.
+마이크로서비스 아키텍처에서 독립 배포 가능한 컴포넌트. 각 서비스는 별도의 작업 단위입니다.
 
-**Usage**: "The Payment Service handles all payment processing"
+**사용 예**: "Payment Service가 모든 결제 처리를 담당한다"
 
 ### Module
-A logical grouping of functionality within a single service or monolith. Modules are not independently deployable.
+단일 서비스나 모놀리스 내 기능의 논리적 묶음. 모듈은 독립 배포되지 않습니다.
 
-**Usage**: "The authentication module within the User Service"
+**사용 예**: "User Service 내 인증 모듈"
 
 ### Component
-A reusable building block within a service or module. Components are classes, functions, or packages that provide specific functionality.
+서비스나 모듈 내 재사용 가능한 빌딩 블록. 특정 기능을 제공하는 클래스, 함수 또는 패키지입니다.
 
-**Usage**: "The EmailValidator component validates email addresses"
+**사용 예**: "EmailValidator 컴포넌트가 이메일 주소를 검증한다"
 
-## Terminology Guidelines
+## 용어 사용 지침
 
-### When to Use Each Term
+### 각 용어를 쓸 때
 
 **Unit of Work**:
-- During Units Planning and Units Generation stages
-- When discussing system decomposition
-- In planning documents and discussions
-- Example: "How should we decompose this into units of work?"
+- Units Planning 및 Units Generation stage에서
+- 시스템 분해를 논할 때
+- 계획 문서와 논의에서
+- 예: "이것을 작업 단위로 어떻게 나눌까?"
 
 **Service**:
-- When referring to independently deployable components
-- In microservices architecture contexts
-- In deployment and infrastructure discussions
-- Example: "The Order Service will be deployed to ECS"
+- 독립 배포 가능한 컴포넌트를 가리킬 때
+- 마이크로서비스 아키텍처 맥락에서
+- 배포·인프라 논의에서
+- 예: "Order Service를 ECS에 배포할 것이다"
 
 **Module**:
-- When referring to logical groupings within a service
-- In monolith architecture contexts
-- When discussing internal organization
-- Example: "The reporting module generates all reports"
+- 서비스 내 논리적 묶음을 가리킬 때
+- 모놀리스 아키텍처 맥락에서
+- 내부 구조를 논할 때
+- 예: "보고 모듈이 모든 보고서를 생성한다"
 
 **Component**:
-- When referring to specific classes, functions, or packages
-- In design and implementation discussions
-- When discussing reusable building blocks
-- Example: "The DatabaseConnection component manages connections"
+- 특정 클래스, 함수, 패키지를 가리킬 때
+- 설계·구현 논의에서
+- 재사용 빌딩 블록을 논할 때
+- 예: "DatabaseConnection 컴포넌트가 연결을 관리한다"
 
-## Stage Terminology
+## Stage 용어
 
 ### Planning vs Generation
-- **Planning**: Creating a plan with questions and checkboxes for execution
-- **Generation**: Executing the plan to create artifacts
+- **Planning**: 실행을 안내하는 질문과 체크박스가 있는 계획 작성
+- **Generation**: 계획을 실행해 산출물 생성
 
-Examples:
+예:
 - Story Planning → Story Generation
 - Units Planning → Units Generation
 - Unit Design Planning → Unit Design Generation
 - NFR Planning → NFR Generation
 - Code Generation Part 1 (Planning) → Code Generation Part 2 (Generation)
 
-### Depth Levels
-- **Minimal**: Quick, focused execution for simple changes
-- **Standard**: Normal depth with standard artifacts for typical projects
-- **Comprehensive**: Full depth with all artifacts for complex/high-risk projects
+### 깊이 수준
+- **Minimal**: 단순 변경을 위한 빠르고 집중된 실행
+- **Standard**: 일반 프로젝트를 위한 표준 산출물이 있는 보통 깊이
+- **Comprehensive**: 복잡·고위험 프로젝트를 위한 전체 깊이와 모든 산출물
 
-## Artifact Types
+## 산출물 유형
 
 ### Plans
-Documents with checkboxes and questions that guide execution.
-- Located in `aidlc-docs/plans/`
-- Examples: `story-generation-plan.md`, `unit-of-work-plan.md`
+실행을 안내하는 체크박스와 질문이 있는 문서.
+- `aidlc-docs/plans/`에 위치
+- 예: `story-generation-plan.md`, `unit-of-work-plan.md`
 
 ### Artifacts
-Generated outputs from executing plans.
-- Located in various `aidlc-docs/` subdirectories
-- Examples: `requirements.md`, `stories.md`, `design.md`
+계획 실행으로 생성된 출력.
+- `aidlc-docs/`의 여러 하위 디렉터리에 위치
+- 예: `requirements.md`, `stories.md`, `design.md`
 
 ### State Files
-Files tracking workflow progress and status.
-- `aidlc-state.md`: Overall workflow state
-- `audit.md`: Complete audit trail of all interactions
+워크플로 진행과 상태를 추적하는 파일.
+- `aidlc-state.md`: 전체 워크플로 상태
+- `audit.md`: 모든 상호작용의 완전한 감사 추적
 
-## Common Abbreviations
+## 일반 약어
 
 - **AI-DLC**: AI-Driven Development Life Cycle
 - **NFR**: Non-Functional Requirements

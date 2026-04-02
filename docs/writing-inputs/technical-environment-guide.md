@@ -1,32 +1,32 @@
-# Technical Environment Document Guide
+# 기술 환경 문서 가이드
 
-## Purpose
+## 목적
 
-A Technical Environment Document defines the **technical tooling, standards, constraints, and preferences** that govern how a project is built. It is the technical counterpart to the Vision Document and serves as a binding reference during the Construction Phase of AI-DLC.
+기술 환경 문서는 프로젝트를 **어떻게** 짓는지를 관통하는 **기술 도구, 표준, 제약, 선호**를 정의합니다. 비전 문서의 기술적 짝이며 AI-DLC Construction Phase에서 준수해야 할 참조입니다.
 
-This document ensures that code generation, infrastructure design, and NFR decisions align with organizational standards, security policies, and team capabilities. Without it, AI-DLC stages will ask extensive clarifying questions to fill in these gaps, or worse, make assumptions that require rework.
+이 문서가 있으면 코드 생성, 인프라 설계, NFR 결정이 조직 표준, 보안 정책, 팀 역량과 맞춰집니다. 없으면 AI-DLC 단계가 이 공백을 메우려 많은 명확화 질문을 하거나, 더 나쁘게는 재작업이 필요한 가정을 합니다.
 
-## When to Write a Technical Environment Document
+## 기술 환경 문서를 쓰는 시점
 
-- Before starting any new project (greenfield)
-- Before modifying an existing project where technical constraints have changed (brownfield)
-- When organizational technology standards have been updated
-- When migrating between cloud providers, frameworks, or deployment models
+- 새 프로젝트(그린필드)를 시작하기 전
+- 기술 제약이 바뀐 기존 프로젝트를 수정하기 전
+- 조직 기술 표준이 갱신되었을 때
+- 클라우드 제공자, 프레임워크, 배포 모델을 옮길 때
 
-## Document Applicability
+## 문서 적용 범위
 
-A Technical Environment Document can target one of two project contexts:
+기술 환경 문서는 두 가지 프로젝트 맥락 중 하나를 대상으로 할 수 있습니다.
 
-| Context | Definition | Key Differences |
+| 맥락 | 정의 | 주요 차이 |
 |---------|-----------|-----------------|
-| **Greenfield** | No existing code. Building from scratch. | All choices are open. Document defines the starting point. |
-| **Brownfield** | Existing codebase. Adding, modifying, or migrating. | Choices are constrained by what exists. Document defines what to keep, change, or avoid. |
+| **Greenfield** | 기존 코드 없음. 처음부터 구축. | 선택이 모두 열려 있음. 문서가 출발점을 정의. |
+| **Brownfield** | 기존 코드베이스. 추가·수정·이전. | 존재하는 것에 의해 선택이 제약됨. 문서가 유지·변경·회피할 것을 정의. |
 
-Structure your document for the applicable context. Sections below are marked with **(Greenfield)**, **(Brownfield)**, or **(Both)** to indicate where they apply.
+해당 맥락에 맞게 문서를 구성하세요. 아래 절은 적용 대상이 **(Greenfield)**, **(Brownfield)**, **(Both)** 로 표시되어 있습니다.
 
 ---
 
-## Document Structure
+## 문서 구조
 
 ### 1. Project Technical Summary (Both)
 
@@ -46,7 +46,7 @@ Structure your document for the applicable context. Sections below are marked wi
 
 ### 2. Programming Languages (Both)
 
-Define the languages the project must use, may use, and must not use.
+프로젝트가 써야 하는 언어, 써도 되는 언어, 쓰면 안 되는 언어를 정의합니다.
 
 ```markdown
 ## Programming Languages
@@ -76,7 +76,7 @@ Define the languages the project must use, may use, and must not use.
 | Ruby | Organizational standard prohibits new Ruby services |
 ```
 
-**Brownfield addition:**
+**브라운필드 추가:**
 
 ```markdown
 ### Existing Language Inventory
@@ -365,7 +365,7 @@ OWASP Top 10 (2021) as the chosen framework.
 
 ### 8. Example and Template Code Guidance (Both)
 
-This section tells AI-DLC and the development team how to provide, use, and maintain example or template code that establishes project conventions.
+이 절은 프로젝트 관례를 세우는 예시·템플릿 코드를 AI-DLC와 개발 팀이 어떻게 제공·사용·유지할지 설명합니다.
 
 ````markdown
 ## Example and Template Code Guidance
@@ -484,7 +484,7 @@ During Code Generation, AI-DLC should:
 
 ### 9. Brownfield-Specific Sections
 
-Include these sections only for brownfield projects.
+브라운필드 프로젝트에만 이 절들을 포함합니다.
 
 ```markdown
 ## Brownfield: Existing Technical Inventory
@@ -534,16 +534,16 @@ a summary of the current technical state.]
 
 ---
 
-## How This Document Feeds Into AI-DLC
+## 이 문서가 AI-DLC에 어떻게 쓰이는지
 
-| Technical Environment Section | AI-DLC Stage | How It Is Used |
+| 기술 환경 절 | AI-DLC 단계 | 사용 방식 |
 |------------------------------|--------------|----------------|
-| Project Technical Summary | Workspace Detection | Context for project classification |
-| Programming Languages | Code Generation | Language selection and version constraints |
-| Frameworks and Libraries | Code Generation, NFR Design | Dependency selection and prohibited library checks |
-| Cloud Services Allow/Disallow Lists | Infrastructure Design | Service selection boundaries |
-| Preferred Patterns | Application Design, Functional Design | Architecture and design pattern decisions |
-| Security Requirements | NFR Requirements, NFR Design | Security pattern selection and compliance checks |
-| Testing Requirements | Code Generation, Build and Test | Test strategy, tooling, and coverage targets |
-| Example Code | Code Generation | Pattern reference during code generation |
-| Brownfield Inventory | Reverse Engineering, Workflow Planning | Migration decisions and coexistence rules |
+| Project Technical Summary | Workspace Detection | 프로젝트 분류 맥락 |
+| Programming Languages | Code Generation | 언어 선택과 버전 제약 |
+| Frameworks and Libraries | Code Generation, NFR Design | 의존성 선택과 금지 라이브러리 검사 |
+| Cloud Services Allow/Disallow Lists | Infrastructure Design | 서비스 선택 경계 |
+| Preferred Patterns | Application Design, Functional Design | 아키텍처·설계 패턴 결정 |
+| Security Requirements | NFR Requirements, NFR Design | 보안 패턴 선택과 규정 준수 검사 |
+| Testing Requirements | Code Generation, Build and Test | 테스트 전략, 도구, 커버리지 목표 |
+| Example Code | Code Generation | 코드 생성 시 패턴 참조 |
+| Brownfield Inventory | Reverse Engineering, Workflow Planning | 마이그레이션 결정과 공존 규칙 |

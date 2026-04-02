@@ -1,1 +1,1 @@
-Create a sub folder with you tests in it.  The full AIDLC docs folder and any code output.
+테스트용 하위 폴더를 만들고, 전체 AIDLC 문서 폴더와 코드 출력을 넣으세요.

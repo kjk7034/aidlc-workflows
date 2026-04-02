@@ -1,72 +1,72 @@
-# Execution Plan
+# 실행 계획
 
-## Detailed Analysis Summary
+## 상세 분석 요약
 
-### Change Impact Assessment
-- **User-facing changes**: Yes — entirely new API, all endpoints are user-facing
-- **Structural changes**: Yes — new project from scratch with routes, models, and engine layers
-- **Data model changes**: Yes — Pydantic request/response models for all operations
-- **API changes**: Yes — full REST API with 7 route groups + health check
-- **NFR impact**: Yes — performance, correctness, and test coverage requirements
+### 변경 영향 평가
+- **사용자 대면 변경**: 예 — 완전히 새 API, 모든 엔드포인트가 사용자 대면
+- **구조적 변경**: 예 — routes, models, engine 계층으로 처음부터 새 프로젝트
+- **데이터 모델 변경**: 예 — 모든 연산에 대한 Pydantic 요청/응답 모델
+- **API 변경**: 예 — 라우트 그룹 7개 + 헬스 체크를 갖춘 전체 REST API
+- **NFR 영향**: 예 — 성능, 정확성, 테스트 커버리지 요구사항
 
-### Risk Assessment
-- **Risk Level**: Low — well-defined scope, single application, no external dependencies beyond Python stdlib
-- **Rollback Complexity**: Easy — greenfield, no existing system to break
-- **Testing Complexity**: Moderate — many operations with domain constraints and edge cases
+### 위험 평가
+- **위험 수준**: 낮음 — 범위가 잘 정의됨, 단일 애플리케이션, Python 표준 라이브러리 외부 의존성 없음
+- **롤백 복잡도**: 쉬움 — greenfield, 깨뜨릴 기존 시스템 없음
+- **테스트 복잡도**: 보통 — 정의역 제약과 엣지 케이스가 많은 많은 연산
 
-## Workflow Visualization
+## 워크플로 시각화
 
 ```
 Phase 1: INCEPTION
-  [x] Workspace Detection ......... COMPLETED
-  [ ] Reverse Engineering ......... SKIPPED (greenfield)
-  [x] Requirements Analysis ....... COMPLETED
-  [ ] User Stories ................ SKIPPED
-  [x] Workflow Planning ........... IN PROGRESS
-  [ ] Application Design ......... EXECUTE
-  [ ] Units Generation ........... SKIPPED
+  [x] 워크스페이스 탐지 ......... 완료
+  [ ] 리버스 엔지니어링 ......... 생략 (greenfield)
+  [x] 요구사항 분석 ....... 완료
+  [ ] 사용자 스토리 ................ 생략
+  [x] 워크플로 계획 ........... 진행 중
+  [ ] 애플리케이션 설계 ......... 실행
+  [ ] 유닛 생성 ........... 생략
 
 Phase 2: CONSTRUCTION
-  [ ] Functional Design ........... SKIPPED
-  [ ] NFR Requirements ............ SKIPPED
-  [ ] NFR Design .................. SKIPPED
-  [ ] Infrastructure Design ....... SKIPPED
-  [ ] Code Generation ............. EXECUTE
-  [ ] Build and Test .............. EXECUTE
+  [ ] 기능 설계 ........... 생략
+  [ ] NFR 요구사항 ............ 생략
+  [ ] NFR 설계 .................. 생략
+  [ ] 인프라 설계 ....... 생략
+  [ ] 코드 생성 ............. 실행
+  [ ] 빌드 및 테스트 .............. 실행
 ```
 
-## Phases to Execute
+## 실행할 단계
 
-### INCEPTION PHASE
-- [x] Workspace Detection (COMPLETED) — Greenfield identified
-- [x] Requirements Analysis (COMPLETED) — 10 FR groups, 5 NFR groups
-- [x] Workflow Planning (IN PROGRESS)
-- [ ] Application Design — **EXECUTE**
-  - **Rationale**: New project with multiple components (routes, models, engine). Need to define component boundaries, service layer, and dependencies before code generation.
-- [ ] User Stories — **SKIP**
-  - **Rationale**: Single-purpose API with no distinct user personas. API surface fully defined in vision.
-- [ ] Units Generation — **SKIP**
-  - **Rationale**: Single deployable unit. The project is small enough to implement as one unit of work. The tech-env already defines the exact project structure.
+### INCEPTION 단계
+- [x] 워크스페이스 탐지 (완료) — Greenfield로 식별
+- [x] 요구사항 분석 (완료) — FR 그룹 10개, NFR 그룹 5개
+- [x] 워크플로 계획 (진행 중)
+- [ ] 애플리케이션 설계 — **실행**
+  - **근거**: routes, models, engine을 갖춘 신규 프로젝트. 코드 생성 전에 컴포넌트 경계, 서비스 계층, 의존성을 정의해야 함.
+- [ ] 사용자 스토리 — **생략**
+  - **근거**: 구별되는 사용자 페르소나가 없는 단일 목적 API. API 표면이 비전에 완전히 정의됨.
+- [ ] 유닛 생성 — **생략**
+  - **근거**: 단일 배포 가능 유닛. 프로젝트가 작아 하나의 작업 단위로 구현 가능. tech-env가 정확한 프로젝트 구조를 이미 정의함.
 
-### CONSTRUCTION PHASE
-- [ ] Functional Design — **SKIP**
-  - **Rationale**: Business logic (math operations) is fully specified in the vision. Domain constraints are clear. No additional functional design needed.
-- [ ] NFR Requirements — **SKIP**
-  - **Rationale**: NFRs are fully specified in tech-env.md and captured in requirements. No further NFR elaboration needed.
-- [ ] NFR Design — **SKIP**
-  - **Rationale**: NFR Requirements skipped; no NFR patterns to integrate.
-- [ ] Infrastructure Design — **SKIP**
-  - **Rationale**: No cloud infrastructure. This is a local FastAPI application with uvicorn. No deployment architecture needed for MVP.
-- [ ] Code Generation — **EXECUTE** (ALWAYS)
-  - **Rationale**: Must generate all source code, tests, and configuration files.
-- [ ] Build and Test — **EXECUTE** (ALWAYS)
-  - **Rationale**: Must install dependencies, run tests, and verify 90% coverage.
+### CONSTRUCTION 단계
+- [ ] 기능 설계 — **생략**
+  - **근거**: 비즈니스 로직(수학 연산)이 비전에 완전히 명시됨. 정의역 제약이 명확함. 추가 기능 설계 불필요.
+- [ ] NFR 요구사항 — **생략**
+  - **근거**: NFR이 tech-env.md에 완전히 명시되고 요구사항에 반영됨. 추가 NFR 상세화 불필요.
+- [ ] NFR 설계 — **생략**
+  - **근거**: NFR 요구사항 생략; 통합할 NFR 패턴 없음.
+- [ ] 인프라 설계 — **생략**
+  - **근거**: 클라우드 인프라 없음. uvicorn을 쓰는 로컬 FastAPI 애플리케이션. MVP에 배포 아키텍처 불필요.
+- [ ] 코드 생성 — **실행** (항상)
+  - **근거**: 모든 소스 코드, 테스트, 설정 파일을 생성해야 함.
+- [ ] 빌드 및 테스트 — **실행** (항상)
+  - **근거**: 의존성 설치, 테스트 실행, 90% 커버리지 검증이 필요함.
 
-## Estimated Timeline
-- **Total Stages to Execute**: 3 remaining (Application Design, Code Generation, Build and Test)
-- **Total Stages Skipped**: 7 (Reverse Engineering, User Stories, Units Generation, Functional Design, NFR Requirements, NFR Design, Infrastructure Design)
+## 예상 일정
+- **실행할 남은 단계**: 3개(애플리케이션 설계, 코드 생성, 빌드 및 테스트)
+- **생략한 단계 총계**: 7개(리버스 엔지니어링, 사용자 스토리, 유닛 생성, 기능 설계, NFR 요구사항, NFR 설계, 인프라 설계)
 
-## Success Criteria
-- **Primary Goal**: Working Scientific Calculator API with all endpoints functional
-- **Key Deliverables**: Complete source code, test suite, pyproject.toml
-- **Quality Gates**: All tests pass, ≥90% line coverage, ruff clean
+## 성공 기준
+- **주요 목표**: 모든 엔드포인트가 동작하는 Scientific Calculator API
+- **주요 산출물**: 완전한 소스 코드, 테스트 스위트, pyproject.toml
+- **품질 게이트**: 모든 테스트 통과, 라인 커버리지 ≥90%, ruff 깨끗함

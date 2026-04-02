@@ -1,188 +1,188 @@
-# Units Generation - Detailed Steps
+# Units Generation - 상세 단계
 
-## Overview
-This stage decomposes the system into manageable units of work through two integrated parts:
-- **Part 1 - Planning**: Create decomposition plan with questions, collect answers, analyze for ambiguities, get approval
-- **Part 2 - Generation**: Execute approved plan to generate unit artifacts
+## 개요
+이 단계는 두 개의 연속된 부분을 통해 시스템을 관리 가능한 작업 단위로 분해합니다:
+- **Part 1 - Planning**: 질문이 있는 분해 계획 작성, 답변 수집, 모호성 분석, 승인
+- **Part 2 - Generation**: 승인된 계획을 실행해 단위 산출물 생성
 
-**DEFINITION**: A unit of work is a logical grouping of stories for development purposes. For microservices, each unit becomes an independently deployable service. For monoliths, the single unit represents the entire application with logical modules.
+**정의**: 작업 단위(unit of work)는 개발 목적으로 스토리를 묶는 논리적 그룹입니다. 마이크로서비스에서는 각 단위가 독립 배포 가능한 서비스가 됩니다. 모놀리스에서는 단일 단위가 논리 모듈을 가진 전체 애플리케이션을 나타냅니다.
 
-**Terminology**: Use "Service" for independently deployable components, "Module" for logical groupings within a service, "Unit of Work" for planning context.
+**용어**: 독립 배포 가능한 컴포넌트는 "Service", 서비스 내 논리적 묶음은 "Module", 계획 맥락에서는 "Unit of Work"를 사용합니다.
 
-## Prerequisites
-- Workspace Detection must be complete
-- Requirements Analysis recommended (provides functional scope)
-- User Stories recommended (stories map to units)
-- Application Design stage REQUIRED (determines components, methods, and services)
-- Execution plan must indicate Design stage should execute
+## 전제 조건
+- Workspace Detection이 완료되어야 함
+- Requirements Analysis 권장(기능 범위 제공)
+- User Stories 권장(스토리가 단위에 매핑됨)
+- Application Design 단계 **필수**(컴포넌트, 메서드, 서비스 결정)
+- 실행 계획에 Design 단계 실행이 포함되어야 함
 
 ---
 
 # PART 1: PLANNING
 
-## Step 1: Create Unit of Work Plan
-- Generate plan with checkboxes [] for decomposing system into units of work
-- Focus on breaking down the system into manageable development units
-- Each step and sub-step should have a checkbox []
+## Step 1: 작업 단위 계획 생성
+- 시스템을 작업 단위로 분해하는 체크박스 [] 계획 생성
+- 관리 가능한 개발 단위로 시스템 분해에 초점
+- 각 단계와 하위 단계에 체크박스 [] 포함
 
-## Step 2: Include Mandatory Unit Artifacts in Plan
-**ALWAYS** include these mandatory artifacts in the unit plan:
-- [ ] Generate `aidlc-docs/inception/application-design/unit-of-work.md` with unit definitions and responsibilities
-- [ ] Generate `aidlc-docs/inception/application-design/unit-of-work-dependency.md` with dependency matrix
-- [ ] Generate `aidlc-docs/inception/application-design/unit-of-work-story-map.md` mapping stories to units
-- [ ] **Greenfield only**: Document code organization strategy in `unit-of-work.md` (see code-generation.md for structure patterns)
-- [ ] Validate unit boundaries and dependencies
-- [ ] Ensure all stories are assigned to units
+## Step 2: 계획에 필수 단위 산출물 포함
+**반드시** 단위 계획에 다음 필수 산출물 포함:
+- [ ] 단위 정의와 책임이 담긴 `aidlc-docs/inception/application-design/unit-of-work.md` 생성
+- [ ] 의존성 매트릭스가 담긴 `aidlc-docs/inception/application-design/unit-of-work-dependency.md` 생성
+- [ ] 스토리를 단위에 매핑한 `aidlc-docs/inception/application-design/unit-of-work-story-map.md` 생성
+- [ ] **Greenfield만**: `unit-of-work.md`에 코드 구성 전략 문서화(code-generation.md의 구조 패턴 참고)
+- [ ] 단위 경계와 의존성 검증
+- [ ] 모든 스토리가 단위에 배정되었는지 확인
 
-## Step 3: Generate Context-Appropriate Questions
-**DIRECTIVE**: Thoroughly analyze the requirements, stories, and application design to identify ALL areas where clarification would improve unit decomposition quality. Be proactive in asking questions to ensure comprehensive coverage of decomposition concerns.
+## Step 3: 맥락에 맞는 질문 생성
+**지시**: 요구사항, 스토리, application design을 철저히 분석해 단위 분해 품질을 높이려면 명확화가 필요한 **모든** 영역을 식별합니다. 분해 관심사를 포괄적으로 다루려면 질문을 적극적으로 합니다.
 
-**CRITICAL**: Default to asking questions when there is ANY ambiguity or missing detail that could affect unit boundaries or decomposition quality. It's better to ask too many questions than to make incorrect assumptions about how the system should be decomposed.
+**중요**: 단위 경계나 분해 품질에 영향을 줄 수 있는 모호함이나 누락이 **조금이라도** 있으면 기본적으로 질문합니다. 시스템을 어떻게 분해해야 할지 잘못 가정하는 것보다 질문이 많은 편이 낫습니다.
 
-**MANDATORY**: Evaluate ALL of the following categories by asking targeted questions about each. For each category, determine applicability based on evidence from the requirements, stories, and application design -- do not skip categories without explicit justification:
+**필수**: 아래 범주 **전부**를 평가하고 각에 대해 목적에 맞는 질문을 합니다. 요구사항, 스토리, application design의 근거로 적용 여부를 판단하고 — 명시적 근거 없이 범주를 건너뛰지 않습니다:
 
-- EMBED questions using [Answer]: tag format
-- Focus on ANY ambiguities, missing information, or areas needing clarification
-- Generate questions wherever user input would improve decomposition decisions
-- **When in doubt, ask the question** - overconfidence leads to poor unit boundaries
+- [Answer]: 태그 형식으로 질문 삽입
+- 모호함, 누락 정보, 명확화가 필요한 영역에 초점
+- 분해 결정을 개선하려면 사용자 입력이 필요한 곳마다 질문 생성
+- **의심스러우면 질문한다** — 과신은 나쁜 단위 경계로 이어짐
 
-**Question categories to evaluate** (consider ALL categories):
-- **Story Grouping** - Ask about grouping strategy, story affinity, and logical clustering approaches
-- **Dependencies** - Ask about integration approach, shared resources, and inter-unit communication patterns
-- **Team Alignment** - Ask about team structure, ownership boundaries, and collaboration models
-- **Technical Considerations** - Ask about scalability/deployment requirements that may differ across units
-- **Business Domain** - Ask about domain boundaries, bounded contexts, and business capability alignment
-- **Code Organization (Greenfield multi-unit only)** - Ask about deployment model and directory structure preferences
+**평가할 질문 범주**(모든 범주 고려):
+- **스토리 그룹화** — 그룹화 전략, 스토리 친화도, 논리적 클러스터링
+- **의존성** — 통합 접근, 공유 리소스, 단위 간 통신 패턴
+- **팀 정렬** — 팀 구조, 소유 경계, 협업 모델
+- **기술적 고려** — 단위마다 다를 수 있는 확장성/배포 요구
+- **비즈니스 도메인** — 도메인 경계, 바운디드 컨텍스트, 비즈니스 역량 정렬
+- **코드 구성(Greenfield 다중 단위만)** — 배포 모델과 디렉터리 구조 선호
 
-## Step 4: Store UOW Plan
-- Save as `aidlc-docs/inception/plans/unit-of-work-plan.md`
-- Include all [Answer]: tags for user input
-- Ensure plan covers all aspects of system decomposition
+## Step 4: UOW 계획 저장
+- `aidlc-docs/inception/plans/unit-of-work-plan.md`로 저장
+- 사용자 입력용 [Answer]: 태그 모두 포함
+- 시스템 분해 측면 전체를 다루는지 확인
 
-## Step 5: Request User Input
-- Ask user to fill [Answer]: tags directly in the plan document
-- Emphasize importance of decomposition decisions
-- Provide clear instructions on completing the [Answer]: tags
+## Step 5: 사용자 입력 요청
+- 사용자에게 계획 문서에서 [Answer]: 태그를 직접 채우도록 요청
+- 분해 결정의 중요성 강조
+- [Answer]: 태그 완료 방법을 명확히 안내
 
-## Step 6: Collect Answers
-- Wait for user to provide answers to all questions using [Answer]: tags in the document
-- Do not proceed until ALL [Answer]: tags are completed
-- Review the document to ensure no [Answer]: tags are left blank
+## Step 6: 답변 수집
+- 사용자가 문서에서 [Answer]: 태그로 모든 질문에 답할 때까지 대기
+- 모든 [Answer]: 태그가 채워질 때까지 진행하지 않음
+- 빈 [Answer]: 태그가 없는지 문서 검토
 
-## Step 7: ANALYZE ANSWERS (MANDATORY)
-Before proceeding, you MUST carefully review all user answers for:
-- **Vague or ambiguous responses**: "mix of", "somewhere between", "not sure", "depends"
-- **Undefined criteria or terms**: References to concepts without clear definitions
-- **Contradictory answers**: Responses that conflict with each other
-- **Missing generation details**: Answers that lack specific guidance
-- **Answers that combine options**: Responses that merge different approaches without clear decision rules
+## Step 7: 답변 분석 (필수)
+진행하기 전에 **반드시** 모든 사용자 답변을 꼼꼼히 검토합니다:
+- **모호하거나 애매한 답**: "mix of", "somewhere between", "not sure", "depends"
+- **정의되지 않은 기준이나 용어**: 명확한 정의 없이 언급된 개념
+- **상충하는 답**: 서로 충돌하는 응답
+- **생성 세부 부족**: 구체적 안내가 부족한 답
+- **옵션을 합친 답**: 명확한 결정 규칙 없이 여러 접근을 섞은 응답
 
-## Step 8: MANDATORY Follow-up Questions
-If the analysis in step 7 reveals ANY ambiguous answers, you MUST:
-- Add specific follow-up questions to the plan document using [Answer]: tags
-- DO NOT proceed to approval until all ambiguities are resolved
-- Examples of required follow-ups:
-  - "You mentioned 'mix of A and B' - what specific criteria should determine when to use A vs B?"
-  - "You said 'somewhere between A and B' - can you define the exact middle ground approach?"
-  - "You indicated 'not sure' - what additional information would help you decide?"
-  - "You mentioned 'depends on complexity' - how do you define complexity levels?"
+## Step 8: 필수 후속 질문
+7단계 분석에서 **어떤** 모호한 답이라도 드러나면 **반드시**:
+- [Answer]: 태그로 계획 문서에 구체적 후속 질문 추가
+- 모든 모호함이 해소될 때까지 승인으로 진행하지 않음
+- 필요한 후속 질문 예:
+  - "'A와 B의 혼합'이라고 하셨는데, A와 B 중 언제 무엇을 쓸지 판단하는 구체적 기준은 무엇인가요?"
+  - "'A와 B 사이'라고 하셨는데, 정확한 중간 지점 접근을 정의해 주실 수 있나요?"
+  - "'잘 모르겠다'고 하셨는데, 결정에 도움이 될 추가 정보는 무엇인가요?"
+  - "'복잡도에 따라 다름'이라고 하셨는데, 복잡도 수준은 어떻게 정의하시나요?"
 
-## Step 9: Request Approval
-- Ask: "**Unit of work plan complete. Review the plan in aidlc-docs/inception/plans/unit-of-work-plan.md. Ready to proceed to generation?**"
-- DO NOT PROCEED until user confirms
+## Step 9: 승인 요청
+- 다음과 같이 질문: "**작업 단위 계획이 완료되었습니다. aidlc-docs/inception/plans/unit-of-work-plan.md의 계획을 검토했습니다. 생성 단계로 진행할까요?**"
+- 사용자가 확인할 때까지 **진행하지 않음**
 
-## Step 10: Log Approval
-- Log prompt and response in audit.md with timestamp
-- Use ISO 8601 timestamp format
-- Include complete approval prompt text
+## Step 10: 승인 로깅
+- audit.md에 프롬프트와 응답을 타임스탬프와 함께 기록
+- ISO 8601 타임스탬프 형식 사용
+- 승인 프롬프트 전문 포함
 
-## Step 11: Update Progress
-- Mark Units Planning complete in aidlc-state.md
-- Update the "Current Status" section
-- Prepare for transition to Units Generation
+## Step 11: 진행 갱신
+- aidlc-state.md에서 Units Planning 완료 표시
+- "Current Status" 섹션 갱신
+- Units Generation으로 전환 준비
 
 ---
 
 # PART 2: GENERATION
 
-## Step 12: Load Unit of Work Plan
-- [ ] Read the complete plan from `aidlc-docs/inception/plans/unit-of-work-plan.md`
-- [ ] Identify the next uncompleted step (first [ ] checkbox)
-- [ ] Load the context and requirements for that step
+## Step 12: 작업 단위 계획 로드
+- [ ] `aidlc-docs/inception/plans/unit-of-work-plan.md`에서 전체 계획 읽기
+- [ ] 다음 미완료 단계 식별(첫 번째 [ ] 체크박스)
+- [ ] 해당 단계의 맥락과 요구사항 로드
 
-## Step 13: Execute Current Step
-- [ ] Perform exactly what the current step describes
-- [ ] Generate unit artifacts as specified in the plan
-- [ ] Follow the approved decomposition approach from Planning
-- [ ] Use the criteria and boundaries specified in the plan
+## Step 13: 현재 단계 실행
+- [ ] 현재 단계가 설명하는 대로 정확히 수행
+- [ ] 계획에 명시된 대로 단위 산출물 생성
+- [ ] Planning에서 승인된 분해 접근 방식 준수
+- [ ] 계획에 명시된 기준과 경계 사용
 
-## Step 14: Update Progress
-- [ ] Mark the completed step as [x] in the unit of work plan
-- [ ] Update `aidlc-docs/aidlc-state.md` current status
-- [ ] Save all generated artifacts
+## Step 14: 진행 갱신
+- [ ] 작업 단위 계획에서 완료된 단계를 [x]로 표시
+- [ ] `aidlc-docs/aidlc-state.md`의 current status 갱신
+- [ ] 생성된 산출물 모두 저장
 
-## Step 15: Continue or Complete
-- [ ] If more steps remain, return to Step 12
-- [ ] If all steps complete, verify units are ready for design stages
-- [ ] Mark Units Generation stage as complete
+## Step 15: 계속 또는 완료
+- [ ] 남은 단계가 있으면 Step 12로 돌아감
+- [ ] 모든 단계가 완료되면 단위가 설계 단계에 준비되었는지 검증
+- [ ] Units Generation 단계를 완료로 표시
 
-## Step 16: Present Completion Message
+## Step 16: 완료 메시지 제시
 
 ```markdown
 # 🔧 Units Generation Complete
 
-[AI-generated summary of units and decomposition created in bullet points]
+[생성된 단위와 분해에 대한 AI 생성 요약 — 글머리 기호]
 
-> **📋 <u>**REVIEW REQUIRED:**</u>**  
-> Please examine the units generation artifacts at: `aidlc-docs/inception/application-design/`
+> **📋 <u>**검토 필요:**</u>**  
+> 다음 경로의 units generation 산출물을 검토하세요: `aidlc-docs/inception/application-design/`
 
-> **🚀 <u>**WHAT'S NEXT?**</u>**
+> **🚀 <u>**다음 단계**</u>**
 >
-> **You may:**
+> **선택할 수 있는 항목:**
 >
-> 🔧 **Request Changes** - Ask for modifications to the units generation if required
-> ✅ **Approve & Continue** - Approve units and proceed to **CONSTRUCTION PHASE**
+> 🔧 **변경 요청** - 필요 시 units generation 수정을 요청합니다
+> ✅ **승인 후 계속** - 단위를 승인하고 **CONSTRUCTION PHASE**로 진행합니다
 ```
 
-## Step 17: Wait for Explicit Approval
-- Do not proceed until the user explicitly approves the units generation
-- Approval must be clear and unambiguous
-- If user requests changes, update the units and repeat the approval process
+## Step 17: 명시적 승인 대기
+- 사용자가 units generation을 명시적으로 승인할 때까지 진행하지 않음
+- 승인은 명확하고 모호하지 않아야 함
+- 사용자가 변경을 요청하면 단위를 수정하고 승인 절차 반복
 
-## Step 18: Record Approval Response
-- Log the user's approval response with timestamp in `aidlc-docs/audit.md`
-- Include the exact user response text
-- Mark the approval status clearly
+## Step 18: 승인 응답 기록
+- `aidlc-docs/audit.md`에 타임스탬프와 함께 사용자 승인 응답 기록
+- 사용자 응답 원문 그대로 포함
+- 승인 상태를 명확히 표시
 
-## Step 19: Update Progress
-- Mark Units Generation stage complete in `aidlc-docs/aidlc-state.md`
-- Update the "Current Status" section
-- Prepare for transition to CONSTRUCTION PHASE
+## Step 19: 진행 갱신
+- `aidlc-docs/aidlc-state.md`에서 Units Generation 단계 완료 표시
+- "Current Status" 섹션 갱신
+- CONSTRUCTION PHASE로 전환 준비
 
 ---
 
-## Critical Rules
+## 중요 규칙
 
-### Planning Phase Rules
-- Generate ONLY context-relevant questions
-- Use [Answer]: tag format for all questions
-- Analyze all answers for ambiguities before proceeding
-- Resolve ALL ambiguities with follow-up questions
-- Get explicit user approval before generation
+### Planning 단계 규칙
+- 맥락에 맞는 질문만 생성
+- 모든 질문에 [Answer]: 태그 형식 사용
+- 진행 전 모든 답변의 모호성 분석
+- 후속 질문으로 **모든** 모호성 해소
+- 생성 전 사용자의 명시적 승인
 
-### Generation Phase Rules
-- **NO HARDCODED LOGIC**: Only execute what's written in the unit of work plan
-- **FOLLOW PLAN EXACTLY**: Do not deviate from the step sequence
-- **UPDATE CHECKBOXES**: Mark [x] immediately after completing each step
-- **USE APPROVED APPROACH**: Follow the decomposition methodology from Planning
-- **VERIFY COMPLETION**: Ensure all unit artifacts are complete before proceeding
+### Generation 단계 규칙
+- **하드코딩 로직 없음**: 작업 단위 계획에 쓰인 것만 실행
+- **계획을 정확히 따름**: 단계 순서에서 벗어나지 않음
+- **체크박스 갱신**: 각 단계 완료 직후 [x] 표시
+- **승인된 접근 사용**: Planning의 분해 방법론 준수
+- **완료 검증**: 진행 전 모든 단위 산출물이 완료되었는지 확인
 
-## Completion Criteria
-- All planning questions answered and ambiguities resolved
-- User approval obtained for the plan
-- All steps in unit of work plan marked [x]
-- All unit artifacts generated according to plan:
-  - `unit-of-work.md` with unit definitions
-  - `unit-of-work-dependency.md` with dependency matrix
-  - `unit-of-work-story-map.md` with story mappings
-- Units verified and ready for per-unit design stages
+## 완료 기준
+- 모든 계획 질문에 답했고 모호성이 해소됨
+- 사용자가 계획에 대한 승인을 함
+- 작업 단위 계획의 모든 단계가 [x]로 표시됨
+- 계획에 따라 모든 단위 산출물이 생성됨:
+  - 단위 정의가 담긴 `unit-of-work.md`
+  - 의존성 매트릭스가 담긴 `unit-of-work-dependency.md`
+  - 스토리 매핑이 담긴 `unit-of-work-story-map.md`
+- 단위가 단위별 설계 단계에 준비되었음을 검증함

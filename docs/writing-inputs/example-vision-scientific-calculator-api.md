@@ -1,366 +1,366 @@
-# Vision Document: CalcEngine Scientific Calculator API
+# 비전 문서: CalcEngine 과학 계산기 API
 
-## Executive Summary
+## 경영 요약
 
-CalcEngine is a hosted scientific calculator library delivered as a REST API that enables software development teams to embed accurate, standards-compliant mathematical computation into their own applications without building or maintaining calculation logic themselves. It addresses the recurring problem of engineering teams spending months implementing, testing, and debugging mathematical functions that are peripheral to their core product. The expected outcome is a subscription API service generating $2M ARR within 24 months by capturing developers building in education technology, financial modeling, engineering simulation, and data analysis.
+CalcEngine은 REST API로 제공되는 호스트형 과학 계산 라이브러리로, 소프트웨어 개발 팀이 핵심 제품과 별개인 계산 로직을 직접 만들거나 유지하지 않고도 자체 애플리케이션에 정확하고 표준에 맞는 수학 연산을 넣을 수 있게 합니다. 엔지니어링 팀이 수개월씩 수학 함수를 구현·테스트·디버깅하는 반복 문제를 다룹니다. 기대 결과는 교육 기술, 금융 모델링, 엔지니어링 시뮬레이션, 데이터 분석 분야의 개발자를 포착해 24개월 내 연 $2M ARR을 내는 구독 API 서비스입니다.
 
 ---
 
-## Business Context
+## 비즈니스 맥락
 
-### Problem Statement
+### 문제 정의
 
-Software teams building products in education, finance, engineering, and science regularly need mathematical computation beyond basic arithmetic. They face a choice: use a local library (often language-specific, inconsistent across platforms, and a maintenance burden) or build the math functions themselves (expensive, error-prone, and slow).
+교육, 금융, 엔지니어링, 과학 분야 제품을 만드는 소프트웨어 팀은 기본 사칙을 넘는 수학 연산이 자주 필요합니다. 선택지는 로컬 라이브러리(언어별로 다르고 플랫폼 간 일관성이 없으며 유지 부담)를 쓰거나 수학 함수를 직접 만드는 것(비용·오류·시간)입니다.
 
-The specific problems are:
+구체적 문제는 다음과 같습니다.
 
-- **Accuracy risk**: Teams without mathematics expertise introduce subtle floating-point errors, incorrect edge-case handling (division by zero, overflow, domain errors), and inconsistent rounding behavior that erode trust in their products.
-- **Duplicated effort**: Every team that needs trigonometric functions, statistical distributions, matrix operations, or unit conversions builds them independently. This work is repeated across thousands of companies.
-- **Cross-platform inconsistency**: A calculation performed in a Python backend may produce a different result than the same calculation in a JavaScript frontend. Customers who operate across platforms cannot guarantee consistency.
-- **Compliance and auditability**: In regulated industries (finance, healthcare, engineering), calculations must be traceable, versioned, and validated. Ad-hoc implementations rarely meet audit requirements.
+- **정확도 위험**: 수학 전문성이 없는 팀은 미묘한 부동소수점 오류, 잘못된 엣지 케이스 처리(0으로 나눔, 오버플로, 도메인 오류), 일관되지 않은 반올림 동작을 도입해 제품에 대한 신뢰를 훼손합니다.
+- **중복 노력**: 삼각함수, 통계 분포, 행렬 연산, 단위 변환이 필요한 모든 팀이 이를 독립적으로 구축합니다. 이 작업은 수천 개 기업에서 반복됩니다.
+- **크로스 플랫폼 불일치**: Python 백엔드에서 수행한 계산이 JavaScript 프런트엔드에서 같은 계산과 다른 결과를 낼 수 있습니다. 여러 플랫폼에서 운영하는 고객은 일관성을 보장하기 어렵습니다.
+- **규제 준수 및 감사 가능성**: 규제 산업(금융, 건강, 엔지니어링)에서는 계산이 추적 가능하고 버전 관리되며 검증되어야 합니다. 임시 구현은 감사 요구를 거의 충족하지 못합니다.
 
-### Business Drivers
+### 비즈니스 동인
 
-- **API-first economy**: Developers increasingly prefer consuming hosted APIs over embedding libraries. Stripe (payments), Twilio (communications), and SendGrid (email) have proven the model. No equivalent exists for mathematical computation.
-- **EdTech growth**: The global education technology market is expanding rapidly, and calculator functionality is a universal requirement across math, science, and engineering courseware.
-- **Regulatory pressure**: Financial services firms face increasing scrutiny on calculation accuracy. A certified, auditable API reduces their compliance burden.
-- **AI/ML preprocessing**: Data science teams need reliable mathematical transformations as preprocessing steps. An API that guarantees precision and reproducibility has clear value in ML pipelines.
+- **API 우선 경제**: 개발자는 라이브러리를 임베딩하기보다 호스트형 API 소비를 점점 더 선호합니다. Stripe(결제), Twilio(통신), SendGrid(이메일)가 모델을 증명했습니다. 수학 연산에 대해 동등한 것은 없습니다.
+- **EdTech 성장**: 글로벌 교육 기술 시장이 빠르게 확장하고 있으며, 계산기 기능은 수학·과학·공학 교과서 전반에서 보편적 요구입니다.
+- **규제 압력**: 금융 서비스 기업은 계산 정확도에 대한 심사가 강화되고 있습니다. 인증·감사 가능한 API는 규제 부담을 줄입니다.
+- **AI/ML 전처리**: 데이터 과학 팀은 전처리 단계로 신뢰할 수 있는 수학 변환이 필요합니다. 정밀도와 재현성을 보장하는 API는 ML 파이프라인에서 분명한 가치가 있습니다.
 
-### Target Users and Stakeholders
+### 대상 사용자 및 이해관계자
 
-| User Type | Description | Primary Need |
+| 사용자 유형 | 설명 | 주요 필요 |
 |-----------|-------------|--------------|
-| Application Developer | Backend or frontend engineer integrating math into a product | Reliable, well-documented API with consistent results across calls |
-| EdTech Product Manager | Non-technical stakeholder at an education company | Confidence that calculation results shown to students are correct |
-| Financial Analyst / Quant Developer | Developer building financial models or trading systems | Arbitrary-precision arithmetic with auditable, versioned calculation history |
-| Engineering Simulation Developer | Engineer building CAD, physics, or modeling tools | High-performance matrix, vector, and differential equation operations |
-| Data Scientist | Analyst building preprocessing pipelines | Consistent statistical functions callable from any language or platform |
-| DevOps / Platform Engineer | Engineer responsible for uptime and integration | Low-latency, high-availability API with clear SLAs and monitoring |
+| Application Developer | 제품에 수학을 통합하는 백엔드 또는 프런트엔드 엔지니어 | 호출 간 일관된 결과를 주는 신뢰할 수 있고 문서화된 API |
+| EdTech Product Manager | 교육 기업의 비기술 이해관계자 | 학생에게 보여주는 계산 결과가 정확하다는 확신 |
+| Financial Analyst / Quant Developer | 금융 모델이나 트레이딩 시스템을 만드는 개발자 | 감사 가능·버전 관리된 계산 이력이 있는 임의 정밀 산술 |
+| Engineering Simulation Developer | CAD, 물리, 모델링 도구를 만드는 엔지니어 | 고성능 행렬·벡터·미분방정식 연산 |
+| Data Scientist | 전처리 파이프라인을 만드는 분석가 | 어떤 언어·플랫폼에서도 호출 가능한 일관된 통계 함수 |
+| DevOps / Platform Engineer | 가동 시간과 통합을 담당하는 엔지니어 | 명확한 SLA와 모니터링이 있는 저지연·고가용 API |
 
-### Business Constraints
+### 비즈니스 제약
 
-- **Bootstrap budget**: Initial development funded from existing revenue. No external investment planned for MVP. Total MVP budget is $150K (covering development, infrastructure, and initial marketing).
-- **Small team**: Two backend developers, one frontend developer (for documentation portal), one QA engineer. No dedicated math PhD on staff for MVP phase.
-- **Time to market**: MVP must be publicly available within 6 months to validate demand before committing to Phase 2 investment.
-- **Pricing model**: Must support a free tier (to drive adoption) and usage-based paid tiers. Pricing infrastructure needed at launch.
-- **Accuracy standards**: All functions must match or exceed the accuracy of IEEE 754 double-precision arithmetic. Arbitrary-precision mode is a Phase 2 feature, not MVP.
+- **부트스트랩 예산**: 초기 개발은 기존 수익으로 자금 조달. MVP에 외부 투자 계획 없음. MVP 총예산 $150K(개발, 인프라, 초기 마케팅).
+- **소규모 팀**: 백엔드 2, 문서 포털용 프런트엔드 1, QA 1. MVP 단계에 전임 수학 박사 없음.
+- **출시 시기**: MVP는 6개월 안에 공개되어 수요를 검증한 뒤 Phase 2 투자를 결정해야 함.
+- **가격 모델**: 무료 티어(채택 유도)와 사용량 기반 유료 티어를 지원해야 함. 출시 시 가격 인프라 필요.
+- **정확도 기준**: 모든 함수는 IEEE 754 배밀도 정밀도 이상이어야 함. 임의 정밀 모드는 Phase 2 기능이며 MVP 아님.
 
-### Success Metrics
+### 성공 지표
 
-| Metric | Current State | Target State (12 months post-MVP) | Measurement Method |
+| 지표 | 현재 | 목표(MVP 후 12개월) | 측정 방법 |
 |--------|--------------|-----------------------------------|-------------------|
-| Registered API accounts | 0 | 5,000 | API key registration count |
-| Monthly active API consumers | 0 | 1,200 | Unique API keys making at least 1 call/month |
-| API calls per month | 0 | 10 million | CloudWatch API Gateway metrics |
-| Paid subscribers | 0 | 200 | Billing system records |
-| Monthly recurring revenue | $0 | $80K | Billing system records |
-| API uptime | N/A | 99.9% | CloudWatch availability monitoring |
-| Mean response time (p50) | N/A | < 50ms | CloudWatch latency metrics |
-| Customer-reported accuracy bugs | N/A | < 5 per quarter | Support ticket tracking |
-| Developer documentation satisfaction | N/A | > 4.2 / 5.0 | Quarterly survey of registered developers |
+| 등록된 API 계정 | 0 | 5,000 | API 키 등록 수 |
+| 월간 활성 API 소비자 | 0 | 1,200 | 월 1회 이상 호출한 고유 API 키 수 |
+| 월간 API 호출 수 | 0 | 1천만 | CloudWatch API Gateway 메트릭 |
+| 유료 구독자 | 0 | 200 | 결제 시스템 기록 |
+| 월 반복 매출(MRR) | $0 | $80K | 결제 시스템 기록 |
+| API 가동 시간 | N/A | 99.9% | CloudWatch 가용성 모니터링 |
+| 평균 응답 시간(p50) | N/A | < 50ms | CloudWatch 지연 메트릭 |
+| 고객 보고 정확도 버그 | N/A | 분기당 < 5건 | 지원 티켓 추적 |
+| 개발자 문서 만족도 | N/A | > 4.2 / 5.0 | 등록 개발자 분기 설문 |
 
 ---
 
-## Full Scope Vision
+## 전체 범위 비전
 
-### Product Vision Statement
+### 제품 비전 진술
 
-CalcEngine becomes the default computation layer for any application that needs mathematical operations beyond basic arithmetic, the way Stripe became the default for payments, by offering an API that is more accurate, more consistent, and easier to integrate than building it yourself.
+CalcEngine은 기본 사칙을 넘는 수학 연산이 필요한 모든 애플리케이션의 기본 계산 레이어가 되며, Stripe가 결제의 기본이 된 것처럼, 직접 구축하는 것보다 더 정확하고 일관되며 통합하기 쉬운 API를 제공합니다.
 
-### Feature Areas
+### 기능 영역
 
-#### Feature Area 1: Core Arithmetic and Algebra
+#### 기능 영역 1: 핵심 산술 및 대수
 
-- **Description**: Fundamental mathematical operations that go beyond what standard language math libraries provide reliably.
-- **Key Capabilities**:
-  - Arbitrary-precision integer and decimal arithmetic (configurable precision up to 1,000 digits)
-  - Expression parsing and evaluation (accept string expressions like "2 * sin(pi/4) + log(100)")
-  - Polynomial operations (evaluation, root finding, factoring)
-  - Equation solving (linear, quadratic, cubic, systems of linear equations)
-  - Fraction and rational number arithmetic (exact representation, simplification)
-  - Complex number arithmetic (addition, multiplication, polar/rectangular conversion)
-- **User Value**: Developers send a math expression as a string and get a precise, verified result without implementing a parser or worrying about operator precedence, floating-point drift, or edge cases.
+- **설명**: 표준 언어 수학 라이브러리가 안정적으로 제공하기 어려운 기본 수학 연산.
+- **핵심 역량**:
+  - 임의 정밀 정수·소수 산술(최대 1,000자리까지 설정 가능한 정밀도)
+  - 식 파싱 및 평가( `"2 * sin(pi/4) + log(100)"` 같은 문자열 식 수락)
+  - 다항식 연산(평가, 근 찾기, 인수분해)
+  - 방정식 풀이(일차, 이차, 삼차, 연립선형방정식)
+  - 분수·유리수 산술(정확한 표현, 약분)
+  - 복소수 산술(덧셈, 곱셈, 극좌표/직교 좌표 변환)
+- **사용자 가치**: 개발자가 수식을 문자열로 보내면 파서를 구현하거나 연산자 우선순위, 부동소수점 드리프트, 엣지 케이스를 걱정하지 않고 정확하고 검증된 결과를 받습니다.
 
-#### Feature Area 2: Trigonometry and Geometry
+#### 기능 영역 2: 삼각법 및 기하
 
-- **Description**: Complete trigonometric and geometric calculation capabilities.
-- **Key Capabilities**:
-  - All six trigonometric functions and their inverses (sin, cos, tan, csc, sec, cot)
-  - Hyperbolic functions and inverses
-  - Degree/radian/gradian conversion
-  - Coordinate system conversions (Cartesian, polar, spherical, cylindrical)
-  - Geometric calculations (area, volume, perimeter for standard shapes)
-  - Distance and angle calculations in 2D and 3D space
-- **User Value**: Eliminates the need to implement trigonometric edge cases (exact values at special angles, quadrant handling, domain validation).
+- **설명**: 완전한 삼각·기하 계산 역량.
+- **핵심 역량**:
+  - 여섯 삼각함수와 역함수 전부(sin, cos, tan, csc, sec, cot)
+  - 쌍곡선 함수와 역함수
+  - 도/라디안/그라드 변환
+  - 좌표계 변환(Cartesian, polar, spherical, cylindrical)
+  - 기하 계산(표준 도형의 면적, 부피, 둘레)
+  - 2D·3D 공간에서의 거리·각 계산
+- **사용자 가치**: 특수각의 정확한 값, 사분면 처리, 도메인 검증 등 삼각법 엣지 케이스를 직접 구현할 필요가 없습니다.
 
-#### Feature Area 3: Statistics and Probability
+#### 기능 영역 3: 통계 및 확률
 
-- **Description**: Statistical analysis and probability distribution functions.
-- **Key Capabilities**:
-  - Descriptive statistics (mean, median, mode, variance, standard deviation, quartiles, percentiles)
-  - Probability distributions (normal, binomial, Poisson, chi-squared, t-distribution, F-distribution) with PDF, CDF, and inverse CDF
-  - Regression analysis (linear, polynomial, exponential, logarithmic)
-  - Hypothesis testing (t-test, chi-squared test, ANOVA)
-  - Combinatorics (permutations, combinations, factorial, binomial coefficients)
-  - Random number generation with configurable distributions and seeds
-- **User Value**: A single API call replaces importing and configuring statistical libraries. Results are reproducible and auditable.
+- **설명**: 통계 분석과 확률 분포 함수.
+- **핵심 역량**:
+  - 기술 통계(mean, median, mode, variance, standard deviation, quartiles, percentiles)
+  - 확률 분포(normal, binomial, Poisson, chi-squared, t-distribution, F-distribution)와 PDF, CDF, 역 CDF
+  - 회귀 분석(linear, polynomial, exponential, logarithmic)
+  - 가설 검정(t-test, chi-squared test, ANOVA)
+  - 조합론(permutations, combinations, factorial, binomial coefficients)
+  - 설정 가능한 분포와 시드로 난수 생성
+- **사용자 가치**: 단일 API 호출로 통계 라이브러리를 가져와 설정하는 일을 대체합니다. 결과는 재현 가능하고 감사 가능합니다.
 
-#### Feature Area 4: Linear Algebra and Matrix Operations
+#### 기능 영역 4: 선형대수 및 행렬 연산
 
-- **Description**: Matrix and vector computation for engineering, graphics, and data science.
-- **Key Capabilities**:
-  - Matrix arithmetic (addition, multiplication, scalar operations)
-  - Matrix decompositions (LU, QR, SVD, Cholesky, eigenvalue)
-  - Determinant, inverse, rank, trace
-  - Vector operations (dot product, cross product, normalization)
-  - Systems of linear equations (Gaussian elimination, least squares)
-  - Sparse matrix support for large-scale problems
-- **User Value**: Teams building simulation, ML, or graphics applications get validated linear algebra without linking to LAPACK or maintaining native bindings.
+- **설명**: 엔지니어링, 그래픽, 데이터 과학을 위한 행렬·벡터 계산.
+- **핵심 역량**:
+  - 행렬 산술(덧셈, 곱셈, 스칼라 연산)
+  - 행렬 분해(LU, QR, SVD, Cholesky, eigenvalue)
+  - 행렬식, 역행렬, 랭크, 대각합(trace)
+  - 벡터 연산(내적, 외적, 정규화)
+  - 연립선형방정식(Gaussian elimination, least squares)
+  - 대규모 문제를 위한 희소 행렬 지원
+- **사용자 가치**: 시뮬레이션, ML, 그래픽 애플리케이션을 만드는 팀이 LAPACK에 링크하거나 네이티브 바인딩을 유지하지 않고 검증된 선형대수를 얻습니다.
 
-#### Feature Area 5: Calculus
+#### 기능 영역 5: 미적분
 
-- **Description**: Symbolic and numerical calculus operations.
-- **Key Capabilities**:
-  - Numerical differentiation (first and higher-order derivatives)
-  - Numerical integration (definite integrals with configurable methods: trapezoidal, Simpson's, Gaussian quadrature)
-  - Symbolic differentiation and integration (for supported expression types)
-  - Limits and series expansion (Taylor, Maclaurin)
-  - Ordinary differential equation solvers (Euler, Runge-Kutta)
-- **User Value**: Engineers and scientists get calculus operations via API without embedding a computer algebra system.
+- **설명**: 기호·수치 미적분 연산.
+- **핵심 역량**:
+  - 수치 미분(1차 및 고차 도함수)
+  - 수치 적분(사다리꼴, Simpson, Gaussian quadrature 등 설정 가능한 방법으로 정적분)
+  - 기호 미분·적분(지원되는 식 유형에 한함)
+  - 극한과 급수 전개(Taylor, Maclaurin)
+  - 상미분방정식 솔버(Euler, Runge-Kutta)
+- **사용자 가치**: 엔지니어와 과학자가 컴퓨터 대수 시스템을 임베딩하지 않고 API로 미적분 연산을 얻습니다.
 
-#### Feature Area 6: Unit Conversion and Physical Constants
+#### 기능 영역 6: 단위 변환 및 물리 상수
 
-- **Description**: Standard unit conversion and access to verified physical and mathematical constants.
-- **Key Capabilities**:
-  - Unit conversion across all SI and common imperial units (length, mass, temperature, time, energy, pressure, speed, etc.)
-  - Currency conversion (with daily rate updates from a financial data provider)
-  - Physical constants (speed of light, Planck's constant, Avogadro's number, etc.) with cited sources and uncertainty values
-  - Mathematical constants to configurable precision (pi, e, golden ratio, etc.)
-  - Dimensional analysis (validate that unit combinations are physically meaningful)
-- **User Value**: One API replaces multiple conversion libraries and hardcoded constant values, with the guarantee that constants are sourced and current.
+- **설명**: 표준 단위 변환과 검증된 물리·수학 상수 접근.
+- **핵심 역량**:
+  - 모든 SI 및 일반 영국 단위 변환(길이, 질량, 온도, 시간, 에너지, 압력, 속도 등)
+  - 통화 변환(금융 데이터 제공자의 일일 환율 갱신)
+  - 물리 상수(광속, 플랑크 상수, 아보가드로 수 등)와 출처 인용·불확도 값
+  - 설정 가능한 정밀도의 수학 상수(pi, e, golden ratio 등)
+  - 차원 분석(단위 조합이 물리적으로 의미 있는지 검증)
+- **사용자 가치**: 하나의 API로 여러 변환 라이브러리와 하드코딩 상수를 대체하며, 상수가 출처가 있고 최신임을 보장합니다.
 
-#### Feature Area 7: Financial Mathematics
+#### 기능 영역 7: 금융 수학
 
-- **Description**: Financial calculation functions for lending, investment, and risk analysis.
-- **Key Capabilities**:
-  - Time value of money (present value, future value, annuities, perpetuities)
-  - Loan amortization schedules
-  - Bond pricing and yield calculations
-  - Option pricing (Black-Scholes, binomial model)
-  - Internal rate of return (IRR) and net present value (NPV)
-  - Depreciation methods (straight-line, declining balance, sum-of-years)
-- **User Value**: FinTech companies get auditable, regulation-ready financial calculations without building proprietary math engines.
+- **설명**: 대출, 투자, 리스크 분석을 위한 금융 계산 함수.
+- **핵심 역량**:
+  - 화폐의 시간 가치(현재가치, 미래가치, 연금, 영구채)
+  - 대출 상환 스케줄
+  - 채권 가격·수익률 계산
+  - 옵션 가격(Black-Scholes, 이항 모델)
+  - 내부수익률(IRR)과 순현재가치(NPV)
+  - 감가상각 방식(정액법, 체감잔액법, 연수합계법)
+- **사용자 가치**: FinTech 기업이 독자 수학 엔진을 만들지 않고도 감사 가능·규제 대응 금융 계산을 얻습니다.
 
-#### Feature Area 8: Developer Experience and Platform
+#### 기능 영역 8: 개발자 경험 및 플랫폼
 
-- **Description**: The API platform, documentation, SDKs, and developer tools that make CalcEngine easy to adopt.
-- **Key Capabilities**:
-  - Interactive API documentation with live "try it" sandbox
-  - Client SDKs for Python, JavaScript/TypeScript, Java, C#, Go, and Ruby
-  - Webhook support for long-running calculations (batch processing)
-  - Calculation history and audit log per API key
-  - Rate limiting with clear quotas and overage handling
-  - API versioning with 12-month deprecation policy
-  - Workspace feature for teams (shared API keys, usage dashboards, billing management)
-- **User Value**: Developers can go from signup to first successful API call in under 5 minutes.
+- **설명**: CalcEngine을 쉽게 도입하게 하는 API 플랫폼, 문서, SDK, 개발자 도구.
+- **핵심 역량**:
+  - 라이브 "try it" 샌드박스가 있는 대화형 API 문서
+  - Python, JavaScript/TypeScript, Java, C#, Go, Ruby용 클라이언트 SDK
+  - 장시간 계산(배치 처리)용 Webhook 지원
+  - API 키별 계산 이력 및 감사 로그
+  - 명확한 할당량과 초과 처리가 있는 rate limiting
+  - 12개월 폐기 정책이 있는 API 버전 관리
+  - 팀용 워크스페이스(공유 API 키, 사용량 대시보드, 결제 관리)
+- **사용자 가치**: 개발자가 가입부터 첫 성공 API 호출까지 5분 이내에 할 수 있습니다.
 
-### Integration Points
+### 통합 지점
 
-- **Payment processor** (Stripe) - Subscription billing and usage-based metering
-- **Identity provider** (Auth0 or Cognito) - Developer account authentication
-- **Financial data provider** (for currency rates) - Daily exchange rate feeds
-- **NIST / CODATA** - Source of truth for physical constants
-- **CI/CD systems** (GitHub Actions, GitLab CI) - SDK publishing and version management
-- **Monitoring** (Datadog or CloudWatch) - API performance, error rates, usage dashboards
+- **결제 처리**(Stripe) - 구독 결제 및 사용량 기반 과금
+- **Identity provider** (Auth0 또는 Cognito) - 개발자 계정 인증
+- **금융 데이터 제공자**(환율용) - 일일 환율 피드
+- **NIST / CODATA** - 물리 상수의 근거 소스
+- **CI/CD 시스템**(GitHub Actions, GitLab CI) - SDK 배포 및 버전 관리
+- **모니터링**(Datadog 또는 CloudWatch) - API 성능, 오류율, 사용량 대시보드
 
-### User Journeys (Full Vision)
+### 사용자 여정(전체 비전)
 
-#### Journey 1: EdTech Developer Adds Calculation to a Course Platform
+#### 여정 1: EdTech 개발자가 강좌 플랫폼에 계산 추가
 
-1. Developer discovers CalcEngine through a search for "scientific calculator API" and lands on the documentation site.
-2. Developer creates a free account and gets an API key in under 2 minutes.
-3. Developer browses the interactive documentation, finds the trigonometry endpoint, and tests `sin(pi/4)` in the sandbox.
-4. Developer installs the Python SDK via pip and writes a 3-line integration that sends student-entered expressions to CalcEngine and displays the result.
-5. Developer configures the API to return step-by-step solution breakdowns so students can see how the answer was derived.
-6. Course platform goes live. Thousands of students submit calculations daily. The developer monitors usage through the CalcEngine dashboard and upgrades to a paid tier when free-tier limits are reached.
+1. 개발자가 "scientific calculator API" 검색으로 CalcEngine을 발견하고 문서 사이트에 도착합니다.
+2. 무료 계정을 만들고 2분 이내에 API 키를 받습니다.
+3. 대화형 문서를 살펴보고 삼각법 엔드포인트를 찾아 샌드박스에서 `sin(pi/4)`를 테스트합니다.
+4. pip로 Python SDK를 설치하고 학생이 입력한 식을 CalcEngine으로 보내 결과를 표시하는 3줄 통합을 작성합니다.
+5. API가 단계별 풀이 분해를 반환하도록 설정해 학생이 답이 도출된 과정을 볼 수 있게 합니다.
+6. 강좌 플랫폼이 출시됩니다. 매일 수천 명의 학생이 계산을 제출합니다. 개발자는 CalcEngine 대시보드로 사용량을 모니터링하고 무료 한도에 도달하면 유료 티어로 전환합니다.
 
-**Outcome**: The education platform ships a reliable calculator feature in one afternoon instead of spending weeks building and testing math parsing.
+**결과**: 교육 플랫폼이 수학 파싱을 구축·테스트하는 데 수 주를 쓰는 대신 하루 만에 신뢰할 수 있는 계산기 기능을 출시합니다.
 
-#### Journey 2: FinTech Startup Builds a Loan Comparison Tool
+#### 여정 2: FinTech 스타트업이 대출 비교 도구 구축
 
-1. Product team at a lending startup needs amortization schedules, APR calculations, and present-value computations for a customer-facing loan comparison tool.
-2. Developer signs up for CalcEngine and navigates to the Financial Mathematics section.
-3. Developer uses the loan amortization endpoint to generate a payment schedule for a 30-year mortgage at 6.5% interest. The API returns month-by-month principal, interest, and balance breakdowns.
-4. Developer integrates the NPV and IRR endpoints to let customers compare different loan offers side by side.
-5. Compliance team reviews CalcEngine's accuracy certification and audit log. Each calculation is traceable to a versioned API call with timestamped inputs and outputs.
-6. The loan comparison tool launches. CalcEngine handles 500K calculations per month. The startup pays based on usage and avoids hiring a quant developer.
+1. 대출 스타트업 제품 팀이 고객 대면 대출 비교 도구에 상환 스케줄, APR 계산, 현재가치 계산이 필요합니다.
+2. 개발자가 CalcEngine에 가입하고 금융 수학 섹션으로 이동합니다.
+3. 대출 상환 엔드포인트로 30년 모기지 6.5% 이자의 상환 일정을 생성합니다. API는 월별 원금, 이자, 잔액 분해를 반환합니다.
+4. NPV·IRR 엔드포인트를 통합해 고객이 여러 대출 제안을 나란히 비교할 수 있게 합니다.
+5. 규정 준수 팀이 CalcEngine의 정확도 인증과 감사 로그를 검토합니다. 각 계산은 타임스탬프가 찍힌 입출력과 함께 버전이 매겨진 API 호출로 추적 가능합니다.
+6. 대출 비교 도구가 출시됩니다. CalcEngine은 월 50만 건 계산을 처리합니다. 스타트업은 사용량 기반으로 지불하고 퀀트 개발자 채용을 피합니다.
 
-**Outcome**: The FinTech startup launches a compliant, auditable financial tool without building proprietary calculation logic.
+**결과**: FinTech 스타트업이 독자 계산 로직 없이 규제에 맞고 감사 가능한 금융 도구를 출시합니다.
 
-#### Journey 3: Data Scientist Uses CalcEngine in an ML Pipeline
+#### 여정 3: 데이터 과학자가 ML 파이프라인에서 CalcEngine 사용
 
-1. A data scientist at a healthcare company needs to normalize patient measurement data using statistical transformations (z-scores, percentile ranks, log transforms) as preprocessing before model training.
-2. Data scientist installs the CalcEngine Python SDK and calls the statistics endpoints from within a Jupyter notebook.
-3. The SDK accepts arrays of values and returns descriptive statistics and transformed datasets.
-4. The data scientist configures batch mode to process 100K records. CalcEngine returns results via webhook when processing completes.
-5. Because CalcEngine guarantees reproducible results (same inputs, same outputs, across versions), the scientist can cite the API version in their research paper for reproducibility.
+1. 헬스케어 기업의 데이터 과학자가 모델 학습 전 전처리로 통계 변환(z-score, 백분위 순위, 로그 변환)으로 환자 측정 데이터를 정규화해야 합니다.
+2. 데이터 과학자가 CalcEngine Python SDK를 설치하고 Jupyter 노트북에서 통계 엔드포인트를 호출합니다.
+3. SDK는 값 배열을 받아 기술 통계와 변환된 데이터셋을 반환합니다.
+4. 데이터 과학자가 10만 건 레코드를 처리하도록 배치 모드를 설정합니다. 처리가 끝나면 CalcEngine이 Webhook으로 결과를 반환합니다.
+5. CalcEngine이 재현 가능한 결과(동일 입력, 동일 출력, 버전 간)를 보장하므로 과학자는 논문에 재현성을 위해 API 버전을 인용할 수 있습니다.
 
-**Outcome**: The scientist gets validated, reproducible statistical transformations without writing and debugging custom statistics code.
+**결과**: 과학자가 맞춤 통계 코드를 작성·디버깅하지 않고 검증되고 재현 가능한 통계 변환을 얻습니다.
 
-### Scalability and Growth
+### 확장성 및 성장
 
-- **Geographic expansion**: Initial deployment in US-East. Expand to EU-West and AP-Southeast within 12 months of MVP based on user geography data.
-- **Volume growth**: Architect for 1 billion API calls/month within 3 years. Start serverless, migrate high-traffic endpoints to containers if latency requires it.
-- **Feature growth**: New feature areas added based on customer demand data. Candidates include: number theory, graph theory, signal processing, optimization solvers.
-- **Enterprise expansion**: Introduce on-premises deployment option for regulated industries that cannot send data to a shared API. Target Phase 3.
-- **Marketplace presence**: List on AWS Marketplace, Azure Marketplace, and RapidAPI for additional distribution channels.
+- **지역 확장**: 초기 배포는 US-East. 사용자 지리 데이터에 따라 MVP 후 12개월 이내 EU-West, AP-Southeast로 확장.
+- **거래량 성장**: 3년 이내 월 10억 API 호출을 목표로 설계. Serverless로 시작하고 지연이 요구하면 고트래픽 엔드포인트를 컨테이너로 이전.
+- **기능 성장**: 고객 수요 데이터에 따라 새 기능 영역 추가. 후보: 정수론, 그래프 이론, 신호 처리, 최적화 솔버.
+- **엔터프라이즈 확장**: 공유 API로 데이터를 보낼 수 없는 규제 산업을 위해 온프레미스 배포 옵션 도입. Phase 3 목표.
+- **마켓플레이스 노출**: AWS Marketplace, Azure Marketplace, RapidAPI에 등록해 유통 채널 확대.
 
-### Long-Term Roadmap
+### 장기 로드맵
 
-| Phase | Focus | Timeframe |
+| Phase | 초점 | 기간 |
 |-------|-------|-----------|
-| MVP | Core arithmetic, trigonometry, basic statistics, expression evaluation, API platform, documentation portal, free + paid tiers | Months 1-6 |
-| Phase 2 | Linear algebra, calculus, financial math, arbitrary-precision mode, client SDKs (5 languages), calculation audit log, team workspaces | Months 7-14 |
-| Phase 3 | Unit conversion, physical constants, step-by-step solutions, batch processing, enterprise features, on-premises option | Months 15-22 |
-| Phase 4 | Advanced statistics (hypothesis testing, regression), symbolic computation, optimization solvers, marketplace listings | Months 23-30 |
+| MVP | 핵심 산술, 삼각법, 기본 통계, 식 평가, API 플랫폼, 문서 포털, 무료 + 유료 티어 | 1~6개월 |
+| Phase 2 | 선형대수, 미적분, 금융 수학, 임의 정밀 모드, 클라이언트 SDK(5개 언어), 계산 감사 로그, 팀 워크스페이스 | 7~14개월 |
+| Phase 3 | 단위 변환, 물리 상수, 단계별 풀이, 배치 처리, 엔터프라이즈 기능, 온프레미스 옵션 | 15~22개월 |
+| Phase 4 | 고급 통계(가설 검정, 회귀), 기호 연산, 최적화 솔버, 마켓플레이스 등록 | 23~30개월 |
 
 ---
 
-## MVP Scope
+## MVP 범위
 
-### MVP Objective
+### MVP 목표
 
-Prove that developers will pay for a hosted scientific calculator API by launching with core mathematical functions, validating adoption through free-tier signups, and converting at least 50 accounts to paid plans within 6 months of launch.
+핵심 수학 함수로 출시하고 무료 티어 가입으로 도입을 검증하며, 출시 후 6개월 이내 최소 50개 계정을 유료 플랜으로 전환해 개발자가 호스트형 과학 계산기 API에 비용을 지불할지 증명합니다.
 
-### MVP Success Criteria
+### MVP 성공 기준
 
-- [ ] 1,000 registered developer accounts within 3 months of launch
-- [ ] 300 monthly active API consumers (at least 1 call/month) within 3 months
-- [ ] 50 paid subscribers within 6 months
-- [ ] $15K MRR within 6 months
-- [ ] API uptime of 99.9% over first 3 months
-- [ ] Mean response time (p50) under 50ms for all MVP endpoints
-- [ ] Zero critical accuracy bugs reported (calculations returning wrong results)
-- [ ] Net Promoter Score of 40+ from developer survey at 3-month mark
+- [ ] 출시 후 3개월 이내 등록 개발자 계정 1,000개
+- [ ] 출시 후 3개월 이내 월간 활성 API 소비자 300명(월 1회 이상 호출)
+- [ ] 6개월 이내 유료 구독자 50명
+- [ ] 6개월 이내 MRR $15K
+- [ ] 처음 3개월 API 가동률 99.9%
+- [ ] 모든 MVP 엔드포인트 평균 응답 시간(p50) 50ms 미만
+- [ ] 치명적 정확도 버그 0건 보고(잘못된 결과를 반환하는 계산)
+- [ ] 3개월 시점 개발자 설문 Net Promoter Score 40 이상
 
-### Features In Scope (MVP)
+### MVP 범위 내 기능
 
-| Feature | Description | Priority | Rationale for Inclusion |
+| 기능 | 설명 | 우선순위 | 포함 근거 |
 |---------|-------------|----------|------------------------|
-| Basic arithmetic operations | Add, subtract, multiply, divide, modulo, power, square root, nth root, absolute value, floor, ceiling, rounding | Must Have | Foundation for all other calculations. Table stakes for any calculator API. |
-| Expression evaluation | Accept a string math expression (e.g., "2 * (3 + 4)^2 / sin(pi)") and return the evaluated result. Support operator precedence, parentheses, and nested functions. | Must Have | The single most valuable differentiator. Developers send expressions as strings instead of building parsers. |
-| Trigonometric functions | sin, cos, tan, asin, acos, atan, atan2 with degree and radian mode | Must Have | Universal requirement across EdTech, engineering, and graphics use cases. |
-| Logarithmic and exponential functions | log (base 10), ln (natural log), log with arbitrary base, exp, power | Must Have | Required for financial, scientific, and statistical calculations. |
-| Basic statistics | Mean, median, mode, standard deviation, variance, min, max, sum, count, percentile | Must Have | High-frequency need. Validates demand from data science and EdTech segments. |
-| Mathematical constants | pi, e, golden ratio (phi), sqrt(2), sqrt(3), ln(2), ln(10) to IEEE 754 double precision | Must Have | Low implementation cost, high utility. Prevents developers from hardcoding imprecise values. |
-| Factorial, permutations, combinations | n!, nPr, nCr with large number support | Must Have | Required for probability and combinatorics use cases in EdTech. |
-| Error handling and domain validation | Clear error responses for domain errors (sqrt of negative, log of zero, division by zero), overflow, and invalid expressions. Structured error format with error codes. | Must Have | Professional API quality. Bad error handling is the top reason developers abandon APIs. |
-| API key management | Developer signup, API key generation, key rotation, key revocation | Must Have | Minimum authentication infrastructure for a commercial API. |
-| Usage metering and rate limiting | Track calls per API key. Free tier: 10,000 calls/month. Paid tier: 1M calls/month. Clear rate limit headers in responses. | Must Have | Revenue model depends on usage-based pricing. Must be present at launch. |
-| REST API with JSON | All endpoints accept JSON, return JSON. Standard REST conventions. OpenAPI 3.x specification published. | Must Have | Expected standard for modern APIs. |
-| API documentation portal | Hosted documentation site with endpoint reference, code examples in 3 languages (Python, JavaScript, cURL), and interactive "try it" sandbox. | Must Have | Developer adoption depends entirely on documentation quality. |
-| Billing integration | Stripe-based subscription billing. Free tier, Starter ($29/mo), Professional ($99/mo). Usage overage billing. | Must Have | Revenue collection must be automated from day one. |
+| 기본 사칙 연산 | 덧셈, 뺄셈, 곱셈, 나눗셈, 모듈로, 거듭제곱, 제곱근, n제곱근, 절댓값, floor, ceiling, 반올림 | Must Have | 모든 다른 계산의 기반. 계산기 API의 최소 요건. |
+| 식 평가 | 문자열 수학 식(예: `"2 * (3 + 4)^2 / sin(pi)"`)을 받아 평가 결과 반환. 연산자 우선순위, 괄호, 중첩 함수 지원. | Must Have | 가장 큰 차별점. 개발자가 파서를 만들지 않고 문자열로 식을 보냄. |
+| 삼각함수 | sin, cos, tan, asin, acos, atan, atan2, 도·라디안 모드 | Must Have | EdTech, 엔지니어링, 그래픽 사례 전반의 보편적 요구. |
+| 로그·지수 함수 | log(밑 10), ln(자연로그), 임의 밑 log, exp, power | Must Have | 금융, 과학, 통계 계산에 필요. |
+| 기본 통계 | mean, median, mode, standard deviation, variance, min, max, sum, count, percentile | Must Have | 빈번한 요구. 데이터 과학·EdTech 수요 검증. |
+| 수학 상수 | pi, e, golden ratio(phi), sqrt(2), sqrt(3), ln(2), ln(10)을 IEEE 754 double 정밀도로 | Must Have | 구현 비용 낮고 유용도 높음. 부정확한 값 하드코딩 방지. |
+| 팩토리얼, 순열, 조합 | 큰 수 지원이 있는 n!, nPr, nCr | Must Have | EdTech의 확률·조합 사례에 필요. |
+| 오류 처리 및 도메인 검증 | 도메인 오류(음수의 sqrt, 0의 log, 0으로 나눔), 오버플로, 잘못된 식에 대한 명확한 오류 응답. 오류 코드가 있는 구조화된 오류 형식. | Must Have | 전문적인 API 품질. 나쁜 오류 처리는 개발자가 API를 버리는 주된 이유. |
+| API 키 관리 | 개발자 가입, API 키 생성, 키 로테이션, 키 폐기 | Must Have | 상용 API를 위한 최소 인증 인프라. |
+| 사용량 측정 및 rate limiting | API 키당 호출 추적. 무료 티어: 월 1만 회. 유료 티어: 월 100만 회. 응답에 명확한 rate limit 헤더. | Must Have | 수익 모델이 사용량 기반 가격에 의존. 출시 시 반드시 있어야 함. |
+| JSON을 사용하는 REST API | 모든 엔드포인트가 JSON 수락·반환. 표준 REST 관례. OpenAPI 3.x 스펙 공개. | Must Have | 현대 API의 기대 표준. |
+| API 문서 포털 | 엔드포인트 참조, 3개 언어(Python, JavaScript, cURL) 코드 예시, 대화형 "try it" 샌드박스가 있는 호스트 문서 사이트. | Must Have | 개발자 도입은 문서 품질에 전적으로 의존. |
+| 결제 통합 | Stripe 기반 구독 결제. 무료 티어, Starter($29/월), Professional($99/월). 사용량 초과 과금. | Must Have | 수익 징수는 첫날부터 자동화되어야 함. |
 
-### Features Explicitly Out of Scope (MVP)
+### MVP에서 명시적으로 범위 밖인 기능
 
-| Feature | Reason for Deferral | Target Phase |
+| 기능 | 연기 이유 | 대상 Phase |
 |---------|-------------------|--------------|
-| Arbitrary-precision arithmetic | Adds significant complexity to every endpoint. Standard IEEE 754 double precision is sufficient for MVP validation. | Phase 2 |
-| Matrix and linear algebra operations | Large feature surface area. Not needed to validate core business hypothesis. | Phase 2 |
-| Calculus (differentiation, integration) | Requires numerical methods expertise and extensive edge-case testing. | Phase 2 |
-| Financial mathematics | Specialized domain. Validate general developer demand first. | Phase 2 |
-| Symbolic computation | Requires a computer algebra system. Out of scope for small team and MVP timeline. | Phase 3 |
-| Step-by-step solution breakdowns | High value for EdTech but significant implementation effort. Validate demand through customer interviews during MVP. | Phase 3 |
-| Unit conversion | Useful but not core to calculator value proposition. Many free alternatives exist. | Phase 3 |
-| Physical constants database | Low implementation cost but low urgency. Include in Phase 3 with unit conversion. | Phase 3 |
-| Client SDKs (Python, JS, Java, etc.) | Documentation with cURL and code examples is sufficient for MVP. SDKs accelerate adoption but are not required to validate demand. | Phase 2 |
-| Batch processing / webhooks | Needed for high-volume users. MVP focuses on synchronous single-calculation calls. | Phase 3 |
-| Calculation audit log | Important for regulated industries. Not needed for initial developer adoption. | Phase 2 |
-| Team workspaces | Enterprise feature. Individual developer accounts are sufficient for MVP. | Phase 3 |
-| On-premises deployment | Enterprise feature requiring significant packaging effort. | Phase 3+ |
-| Probability distributions (PDF, CDF) | Useful but not core to MVP validation. Basic statistics covers initial demand. | Phase 2 |
-| Regression analysis | Specialized statistical feature. Defer until statistics demand is validated. | Phase 4 |
-| Complex number arithmetic | Niche use case. Validate demand from engineering users first. | Phase 2 |
+| 임의 정밀 산술 | 모든 엔드포인트에 상당한 복잡도 추가. MVP 검증에는 표준 IEEE 754 double 정밀도로 충분. | Phase 2 |
+| 행렬 및 선형대수 연산 | 기능 면이 큼. 핵심 비즈니스 가설 검증에 불필요. | Phase 2 |
+| 미적분(미분, 적분) | 수치 방법 전문성과 광범위한 엣지 케이스 테스트 필요. | Phase 2 |
+| 금융 수학 | 전문 도메인. 먼저 일반 개발자 수요 검증. | Phase 2 |
+| 기호 연산 | 컴퓨터 대수 시스템 필요. 소규모 팀과 MVP 일정에 비해 범위 밖. | Phase 3 |
+| 단계별 풀이 분해 | EdTech에 가치 높으나 구현 부담 큼. MVP 중 고객 인터뷰로 수요 검증. | Phase 3 |
+| 단위 변환 | 유용하나 계산기 가치 제안의 핵심은 아님. 무료 대안이 많음. | Phase 3 |
+| 물리 상수 DB | 구현 비용은 낮으나 긴급도 낮음. 단위 변환과 함께 Phase 3에 포함. | Phase 3 |
+| 클라이언트 SDK(Python, JS, Java 등) | MVP에는 cURL과 코드 예시 문서로 충분. SDK는 도입을 가속하나 수요 검증에 필수는 아님. | Phase 2 |
+| 배치 처리 / Webhooks | 고용량 사용자에게 필요. MVP는 동기 단일 계산 호출에 초점. | Phase 3 |
+| 계산 감사 로그 | 규제 산업에 중요. 초기 개발자 도입에는 불필요. | Phase 2 |
+| 팀 워크스페이스 | 엔터프라이즈 기능. MVP에는 개별 개발자 계정으로 충분. | Phase 3 |
+| 온프레미스 배포 | 상당한 패키징 노력이 필요한 엔터프라이즈 기능. | Phase 3+ |
+| 확률 분포(PDF, CDF) | 유용하나 MVP 검증의 핵심은 아님. 기본 통계로 초기 수요 커버. | Phase 2 |
+| 회귀 분석 | 전문 통계 기능. 통계 수요 검증까지 연기. | Phase 4 |
+| 복소수 산술 | 틈새 사례. 먼저 엔지니어링 사용자 수요 검증. | Phase 2 |
 
-### MVP User Journeys
+### MVP 사용자 여정
 
-#### Journey 1: Developer Discovers and Integrates CalcEngine
+#### 여정 1: 개발자가 CalcEngine을 발견하고 통합
 
-1. Developer searches for "math expression evaluation API" and finds CalcEngine documentation.
-2. Developer clicks "Get API Key" and completes a one-page signup form (email, password, company name optional).
-3. Developer receives API key immediately on the confirmation page and in a welcome email.
-4. Developer copies a cURL example from the documentation and runs it in their terminal: `curl -X POST https://api.calcengine.io/v1/evaluate -H "Authorization: Bearer {key}" -d '{"expression": "sin(pi/4) * 2 + sqrt(16)"}'`
-5. Developer receives a JSON response: `{"result": 5.414213562373095, "expression": "sin(pi/4) * 2 + sqrt(16)", "precision": "double"}`
-6. Developer reads the Python code example on the documentation site, copies it into their application, and replaces the expression string with user input.
-7. Application is live. Developer monitors usage on the CalcEngine dashboard.
+1. 개발자가 "math expression evaluation API"를 검색해 CalcEngine 문서를 찾습니다.
+2. "Get API Key"를 클릭하고 한 페이지 가입 양식(이메일, 비밀번호, 회사명 선택)을 완료합니다.
+3. 확인 페이지와 환영 이메일에서 즉시 API 키를 받습니다.
+4. 문서에서 cURL 예시를 복사해 터미널에서 실행합니다: `curl -X POST https://api.calcengine.io/v1/evaluate -H "Authorization: Bearer {key}" -d '{"expression": "sin(pi/4) * 2 + sqrt(16)"}'`
+5. JSON 응답을 받습니다: `{"result": 5.414213562373095, "expression": "sin(pi/4) * 2 + sqrt(16)", "precision": "double"}`
+6. 문서 사이트의 Python 코드 예시를 읽고 애플리케이션에 복사한 뒤 식 문자열을 사용자 입력으로 바꿉니다.
+7. 애플리케이션이 라이브됩니다. 개발자는 CalcEngine 대시보드에서 사용량을 모니터링합니다.
 
-**Outcome**: Developer goes from discovery to working integration in under 15 minutes.
-**Limitation vs Full Vision**: No SDK (raw HTTP calls), no step-by-step breakdowns, no audit log.
+**결과**: 개발자가 발견부터 동작하는 통합까지 15분 이내에 도달합니다.
+**전체 비전 대비 제한**: SDK 없음(원시 HTTP 호출), 단계별 분해 없음, 감사 로그 없음.
 
-#### Journey 2: EdTech Company Evaluates CalcEngine for Student Use
+#### 여정 2: EdTech 기업이 학생용으로 CalcEngine 평가
 
-1. EdTech product manager asks their developer to evaluate CalcEngine for a homework-checking feature.
-2. Developer signs up for the free tier and tests 20 common student calculations (quadratic formula, trig identities, basic statistics) using the API sandbox.
-3. Developer verifies results against known correct answers. All match.
-4. Developer integrates CalcEngine into the homework checker. Students type math expressions, the app sends them to CalcEngine, and the result is compared against the expected answer.
-5. Free tier handles initial classroom pilot (500 students, ~8,000 calls/month). When the pilot expands to the full school district, the developer upgrades to the Starter plan.
+1. EdTech 제품 관리자가 개발자에게 과제 채점 기능을 위해 CalcEngine 평가를 요청합니다.
+2. 개발자가 무료 티어에 가입하고 API 샌드박스로 20가지 흔한 학생 계산(이차방정식, 삼각 항등식, 기본 통계)을 테스트합니다.
+3. 알려진 정답과 결과를 대조해 검증합니다. 모두 일치합니다.
+4. 개발자가 과제 채점기에 CalcEngine을 통합합니다. 학생이 수식을 입력하면 앱이 CalcEngine으로 보내고 결과를 기대 답과 비교합니다.
+5. 무료 티어가 초기 교실 파일럿(학생 500명, 월 약 8,000회 호출)을 처리합니다. 파일럿이 전체 학군으로 확대되면 개발자가 Starter 플랜으로 전환합니다.
 
-**Outcome**: EdTech company ships a homework-checking feature without building a math parser.
-**Limitation vs Full Vision**: No step-by-step solutions for students, no complex number support, no calculus functions for advanced courses.
+**결과**: EdTech 기업이 수학 파서를 만들지 않고 과제 채점 기능을 출시합니다.
+**전체 비전 대비 제한**: 학생용 단계별 풀이 없음, 복소수 지원 없음, 고급 과정용 미적분 함수 없음.
 
-### MVP Constraints and Assumptions
+### MVP 제약 및 가정
 
-- **Assumption**: Developers prefer a hosted API over a local library for math operations. **Risk if wrong**: Low adoption despite accurate computation. **Mitigation**: Free tier allows low-commitment validation; pivot to open-source library model if API model fails.
-- **Assumption**: Expression evaluation (string-in, result-out) is the highest-value feature. **Risk if wrong**: Developers actually want individual function endpoints more than expression parsing. **Mitigation**: MVP includes both expression evaluation and individual function endpoints; usage data will reveal which is preferred.
-- **Assumption**: IEEE 754 double precision is sufficient for MVP users. **Risk if wrong**: Early adopters in finance or science demand higher precision immediately. **Mitigation**: Arbitrary precision is Phase 2 priority and can be accelerated if demand signals are strong.
-- **Assumption**: 10,000 free calls/month is enough to evaluate the product but low enough to drive paid conversion. **Risk if wrong**: Free tier is either too generous (no conversion) or too restrictive (users leave before evaluating). **Mitigation**: Adjust limit based on conversion data at 2-month mark.
-- **Accepted Limitation**: No client SDKs at MVP. Developers must make raw HTTP calls. This adds friction but SDKs are expensive to build and maintain across multiple languages before product-market fit is validated.
-- **Accepted Limitation**: Single-region deployment (US-East-1). Latency for users in Europe and Asia will be higher. Acceptable for MVP because calculation payloads are small (low bandwidth sensitivity).
+- **가정**: 개발자는 수학 연산에 로컬 라이브러리보다 호스트형 API를 선호합니다. **틀릴 때 위험**: 정확한 계산에도 도입이 낮음. **완화**: 무료 티어로 낮은 부담 검증; API 모델이 실패하면 오픈소스 라이브러리 모델로 피벗.
+- **가정**: 식 평가(문자열 입력, 결과 출력)가 가장 가치 높은 기능입니다. **틀릴 때 위험**: 개발자가 식 파싱보다 개별 함수 엔드포인트를 더 원함. **완화**: MVP에 식 평가와 개별 함수 엔드포인트 모두 포함; 사용 데이터가 선호를 드러냄.
+- **가정**: IEEE 754 double 정밀도가 MVP 사용자에게 충분합니다. **틀릴 때 위험**: 금융·과학 조기 도입자가 즉시 더 높은 정밀도를 요구. **완화**: 임의 정밀도는 Phase 2 우선순위이며 수요 신호가 강하면 앞당길 수 있음.
+- **가정**: 무료 월 1만 회 호출이 제품 평가에는 충분하고 유료 전환을 유도할 만큼 낮습니다. **틀릴 때 위험**: 무료 티어가 지나치게 너그러움(전환 없음) 또는 지나치게 제한적(평가 전 이탈). **완화**: 2개월 시점 전환 데이터로 한도 조정.
+- **수용한 제한**: MVP에 클라이언트 SDK 없음. 개발자는 원시 HTTP 호출을 해야 함. 마찰이 있으나 제품-시장 적합이 검증되기 전 여러 언어에 SDK를 구축·유지하는 비용이 큼.
+- **수용한 제한**: 단일 리전 배포(US-East-1). 유럽·아시아 사용자 지연은 더 큼. 계산 페이로드가 작아 대역폭 민감도가 낮아 MVP에는 허용 가능.
 
-### MVP Definition of Done
+### MVP 완료 정의(DoD)
 
-- [ ] All 13 "Must Have" features implemented, tested, and deployed
-- [ ] API responds correctly to a validation suite of 500+ mathematical test cases covering all MVP functions
-- [ ] Edge cases handled gracefully: division by zero, overflow, underflow, invalid expressions, domain errors (e.g., log(-1))
-- [ ] API uptime demonstrated at 99.9% over a 2-week burn-in period before public launch
-- [ ] p50 response time under 50ms, p99 under 200ms measured over burn-in period
-- [ ] Documentation portal live with endpoint reference, code examples (Python, JavaScript, cURL), and interactive sandbox
-- [ ] Billing integration functional: free tier enforced, paid tier purchasable, usage tracked accurately
-- [ ] OpenAPI 3.x specification published and downloadable
-- [ ] Security review completed: API key authentication, rate limiting, input validation, no injection vulnerabilities
-- [ ] Load test completed: API handles 1,000 concurrent requests without degradation
-- [ ] Stakeholder demo completed and sign-off received
+- [ ] 13개 "Must Have" 기능이 구현·테스트·배포됨
+- [ ] 모든 MVP 함수를 다루는 500개 이상 수학 테스트 케이스 검증 스위트에 API가 올바르게 응답함
+- [ ] 엣지 케이스를 우아하게 처리: 0으로 나눔, 오버플로, 언더플로, 잘못된 식, 도메인 오류(예: log(-1))
+- [ ] 공개 출시 전 2주 버닝 기간 동안 API 가동률 99.9% 입증
+- [ ] 버닝 기간 동안 측정한 p50 응답 50ms 미만, p99 200ms 미만
+- [ ] 엔드포인트 참조, 코드 예시(Python, JavaScript, cURL), 대화형 샌드박스가 있는 문서 포털 라이브
+- [ ] 결제 통합 동작: 무료 티어 시행, 유료 티어 구매 가능, 사용량 정확히 추적
+- [ ] OpenAPI 3.x 스펙 공개 및 다운로드 가능
+- [ ] 보안 검토 완료: API 키 인증, rate limiting, 입력 검증, 인젝션 취약점 없음
+- [ ] 부하 테스트 완료: API가 1,000 동시 요청을 성능 저하 없이 처리
+- [ ] 이해관계자 데모 완료 및 서명 승인
 
 ---
 
-## Risks and Dependencies
+## 위험 및 의존성
 
-### Key Risks
+### 주요 위험
 
-| Risk | Likelihood | Impact | Mitigation |
+| 위험 | 가능성 | 영향 | 완화 |
 |------|-----------|--------|------------|
-| Low developer adoption: market prefers local libraries over hosted APIs for math | Medium | High | Free tier lowers barrier. Emphasize cross-platform consistency and expression evaluation as differentiators that local libraries lack. Monitor signup-to-active-use conversion. |
-| Accuracy bugs damage credibility: a wrong calculation result reported publicly | Low | Critical | Comprehensive test suite (500+ cases per function), comparison against reference implementations (Wolfram Alpha, Python mpmath), automated regression testing on every deploy. |
-| Expression parser edge cases: unexpected input causes crashes or wrong results | Medium | High | Fuzz testing with randomized expressions, explicit grammar definition, sandbox the parser to prevent injection. |
-| Free tier abuse: bots or scrapers consume resources without converting | Medium | Medium | Rate limiting per API key, CAPTCHA on signup, anomaly detection on usage patterns. Adjust free tier limit if needed. |
-| Stripe billing integration delays MVP launch | Low | Medium | Begin billing integration in month 2. Use manual invoicing as temporary fallback if needed. |
-| Single-region outage takes down the entire service | Low | High | Deploy to two availability zones within US-East-1. Multi-region is Phase 2 but AZ redundancy provides baseline resilience. |
-| Competitor launches similar API during our development | Low | Medium | Speed to market is the primary defense. 6-month MVP timeline. Focus on developer experience as a moat: documentation quality, response time, error messages. |
+| 개발자 도입 낮음: 시장이 수학에 호스트 API보다 로컬 라이브러리 선호 | Medium | High | 무료 티어로 진입 장벽 낮춤. 크로스 플랫폼 일관성과 식 평가를 로컬 라이브러리에 없는 차별점으로 강조. 가입~활성 사용 전환 모니터링. |
+| 정확도 버그가 신뢰 훼손: 잘못된 계산 결과가 공개적으로 보고됨 | Low | Critical | 함수당 500개 이상 포괄 테스트 스위트, 참조 구현(Wolfram Alpha, Python mpmath)과 비교, 매 배포 자동 회귀 테스트. |
+| 식 파서 엣지 케이스: 예상치 못한 입력으로 크래시나 잘못된 결과 | Medium | High | 무작위 식으로 퍼즈 테스트, 명시적 문법 정의, 인젝션 방지를 위해 파서 샌드박스. |
+| 무료 티어 악용: 봇·스크래퍼가 전환 없이 리소스 소모 | Medium | Medium | API 키당 rate limiting, 가입 시 CAPTCHA, 사용 패턴 이상 탐지. 필요 시 무료 티어 한도 조정. |
+| Stripe 결제 통합이 MVP 출시 지연 | Low | Medium | 2개월차에 결제 통합 시작. 필요 시 수동 인보이싱을 임시 대안으로 사용. |
+| 단일 리전 장애로 전체 서비스 중단 | Low | High | US-East-1 내 두 가용 영역에 배포. 다중 리전은 Phase 2이나 AZ 중복이 기본 복원력 제공. |
+| 개발 중 경쟁사가 유사 API 출시 | Low | Medium | 시장 진입 속도가 주 방어. 6개월 MVP 일정. 개발자 경험을 해자로: 문서 품질, 응답 시간, 오류 메시지. |
 
-### External Dependencies
+### 외부 의존성
 
-- **Stripe** - Payment processing and subscription management - Available, well-documented API
-- **Auth0 or AWS Cognito** - Developer authentication - Available, evaluate during month 1
-- **Domain registrar** - calcengine.io domain (or similar) - Must secure before documentation site goes live
-- **Cloud provider (AWS)** - Compute, API Gateway, database - Available, no approval needed
-- **SSL certificate provider** - TLS for API and documentation site - Available via AWS Certificate Manager
+- **Stripe** - 결제 처리 및 구독 관리 - 사용 가능, 문서화된 API
+- **Auth0 또는 AWS Cognito** - 개발자 인증 - 사용 가능, 1개월차에 평가
+- **도메인 등록 기관** - calcengine.io 도메인(또는 유사) - 문서 사이트 라이브 전 확보 필요
+- **클라우드 제공자(AWS)** - 컴퓨트, API Gateway, 데이터베이스 - 사용 가능, 별도 승인 불필요
+- **SSL 인증서 제공** - API 및 문서 사이트용 TLS - AWS Certificate Manager로 사용 가능
 
-### Open Questions
+### 열린 질문
 
-- [ ] Should the expression evaluator support variable assignment (e.g., "x = 5; 2*x + 3") or only single-expression evaluation in the MVP?
-- [ ] What is the maximum expression length the parser should accept? 1KB? 10KB? Need to balance flexibility against abuse potential.
-- [ ] Should the API return results as strings (preserving precision representation) or as JSON numbers (risking floating-point serialization issues)?
-- [ ] Do we need to support implicit multiplication (e.g., "2pi" meaning "2 * pi") or require explicit operators?
-- [ ] Should the free tier require a credit card on file to reduce abuse, or is email-only signup better for adoption?
-- [ ] What is the cancellation and refund policy for paid subscriptions?
-- [ ] Should we publish accuracy benchmarks comparing CalcEngine results against Wolfram Alpha and Python mpmath on the documentation site?
+- [ ] 식 평가기가 변수 할당(예: `"x = 5; 2*x + 3"`)을 지원해야 하는가, MVP에서는 단일 식 평가만 할 것인가?
+- [ ] 파서가 허용해야 하는 식의 최대 길이는? 1KB? 10KB? 유연성과 악용 가능성의 균형 필요.
+- [ ] API는 결과를 문자열(정밀도 표현 유지)로 반환해야 하는가, JSON 숫자로 반환해야 하는가(부동소수점 직렬화 이슈 위험)?
+- [ ] 암시적 곱셈(예: `"2pi"`가 `"2 * pi"`)을 지원해야 하는가, 명시적 연산자를 요구해야 하는가?
+- [ ] 무료 티어는 악용 감소를 위해 카드 등록을 요구해야 하는가, 도입에는 이메일만 가입이 나은가?
+- [ ] 유료 구독의 취소 및 환불 정책은 무엇인가?
+- [ ] 문서 사이트에 Wolfram Alpha 및 Python mpmath 대비 CalcEngine 결과 정확도 벤치마크를 공개해야 하는가?

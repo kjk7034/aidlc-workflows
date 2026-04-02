@@ -1,8 +1,8 @@
-# Generated aidlc-docs/ Reference
+# 생성된 aidlc-docs/ 참조
 
-When you run the AI-DLC workflow, all documentation artifacts are generated inside an `aidlc-docs/` directory at your workspace root. The exact files created depend on your project type (greenfield vs brownfield), complexity, and which stages the workflow executes or skips.
+AI-DLC 워크플로를 실행하면 모든 문서 산출물이 워크스페이스 루트의 `aidlc-docs/` 디렉터리 안에 생성됩니다. 실제로 만들어지는 파일은 프로젝트 유형(그린필드 vs 브라운필드), 복잡도, 워크플로가 실행하거나 건너뛴 단계에 따라 달라집니다.
 
-Below is the fully populated structure showing every possible file across all phases and stages. Conditional files are annotated with notes indicating when they appear.
+아래는 모든 단계와 스테이지에 걸쳐 가능한 모든 파일을 보여 주는 완전한 구조입니다. 조건부 파일은 나타나는 시점을 설명하는 메모로 표시했습니다.
 
 ```
 aidlc-docs/
@@ -91,12 +91,12 @@ aidlc-docs/
 └── operations/                                             # 🟡 OPERATIONS PHASE — placeholder for future expansion
 ```
 
-## Notes
+## 참고
 
-- `{unit-name}` is replaced with the actual unit name (e.g., `api-service`, `frontend-app`, `data-processor`). For single-unit projects, there is typically one unit directory under `construction/`.
-- For simpler single-unit projects, the model may simplify naming — for example, `construction/plans/code-generation-plan.md` instead of `construction/plans/{unit-name}-code-generation-plan.md`, or place `application-design.md` as a single consolidated file without the individual component files.
-- The `build-and-test/` directory always includes `build-and-test-summary.md`. The individual instruction files (`build-instructions.md`, `unit-test-instructions.md`, `integration-test-instructions.md`, etc.) are generated based on project complexity and testing needs.
-- Plans in `inception/plans/` and `construction/plans/` contain `[Answer]:` tags where users provide input, and `[ ]`/`[x]` checkboxes that track execution progress.
-- Application code is never placed inside `aidlc-docs/` — it goes to the workspace root. Only markdown documentation lives here.
-- The `audit.md` file is append-only and captures every interaction with ISO 8601 timestamps.
-- The `aidlc-state.md` file tracks which stages have been completed, skipped, or are in progress, along with extension configuration.
+- `{unit-name}`은 실제 작업 단위 이름으로 바뀝니다(예: `api-service`, `frontend-app`, `data-processor`). 단일 작업 단위 프로젝트에서는 보통 `construction/` 아래에 작업 단위 디렉터리가 하나입니다.
+- 더 단순한 단일 작업 단위 프로젝트에서는 모델이 이름을 단순화할 수 있습니다. 예: `construction/plans/code-generation-plan.md`처럼 `construction/plans/{unit-name}-code-generation-plan.md` 대신 쓰거나, 개별 컴포넌트 파일 없이 `application-design.md` 하나로 통합할 수 있습니다.
+- `build-and-test/` 디렉터리에는 항상 `build-and-test-summary.md`가 포함됩니다. 개별 안내 파일(`build-instructions.md`, `unit-test-instructions.md`, `integration-test-instructions.md` 등)은 프로젝트 복잡도와 테스트 필요에 따라 생성됩니다.
+- `inception/plans/`와 `construction/plans/` 안의 계획에는 사용자가 입력하는 `[Answer]:` 태그와 실행 진행을 추적하는 `[ ]`/`[x]` 체크박스가 있습니다.
+- 애플리케이션 코드는 `aidlc-docs/` 안에 두지 않고 워크스페이스 루트에 둡니다. 여기에는 마크다운 문서만 있습니다.
+- `audit.md`는 추가 전용이며 ISO 8601 타임스탬프와 함께 모든 상호작용을 기록합니다.
+- `aidlc-state.md`는 완료·건너뜀·진행 중인 스테이지와 확장 구성을 추적합니다.

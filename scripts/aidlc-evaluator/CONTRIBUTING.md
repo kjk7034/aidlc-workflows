@@ -1,16 +1,16 @@
-# Contributing to AI-DLC Evaluation Framework
+# AI-DLC 평가 프레임워크에 기여하기
 
-Thank you for contributing to the AI-DLC workflows evaluation and reporting framework!
+AI-DLC 워크플로 평가 및 보고 프레임워크에 기여해 주셔서 감사합니다.
 
-## Getting Started
+## 시작하기
 
-### Prerequisites
+### 사전 요구사항
 
 - Python 3.13+
-- [uv](https://github.com/astral-sh/uv) package manager
+- [uv](https://github.com/astral-sh/uv) 패키지 매니저
 - Git
 
-### Setup
+### 설정
 
 ```bash
 # Clone the repository
@@ -24,30 +24,30 @@ uv sync
 uv run pytest
 ```
 
-## Development Workflow
+## 개발 워크플로
 
-### 1. Create a Branch
+### 1. 브랜치 만들기
 
 ```bash
 git checkout -b feature/your-feature-name
 ```
 
-### 2. Make Changes
+### 2. 변경 작업
 
-Work in the appropriate package:
-- `aidlc-runner/` - Execution Framework (two-agent AIDLC workflow runner)
-- `packages/qualitative/` - Semantic Evaluation (intent & design similarity scoring)
-- `packages/quantitative/` - Code Evaluation (linting, security, organization)
-- `packages/nonfunctional/` - NFR Evaluation (tokens, timing, consistency)
-- `packages/reporting/` - Report generation
-- `packages/shared/` - Common utilities
+적절한 패키지에서 작업합니다.
+- `aidlc-runner/` - 실행 프레임워크(AIDLC 두 에이전트 워크플로 러너)
+- `packages/qualitative/` - 의미 평가(의도·설계 유사도 채점)
+- `packages/quantitative/` - 코드 평가(린트, 보안, 구조)
+- `packages/nonfunctional/` - NFR 평가(토큰, 시간, 일관성)
+- `packages/reporting/` - 보고서 생성
+- `packages/shared/` - 공통 유틸리티
 
-Or contribute to other work streams:
-- `test_cases/` - Golden Test Cases (baseline inputs)
-- `docs/writing-inputs/` - Vision and tech-env document guides
-- `.github/workflows/` - GitHub CI/CD Integration & Management
+또는 다른 작업 흐름에 기여할 수 있습니다.
+- `test_cases/` - 골든 테스트 케이스(기준 입력)
+- `docs/writing-inputs/` - 비전·기술 환경 문서 가이드
+- `.github/workflows/` - GitHub CI/CD 통합 및 관리
 
-### 3. Run Tests
+### 3. 테스트 실행
 
 ```bash
 # Run all tests
@@ -60,7 +60,7 @@ uv run pytest tests/test_qualitative.py
 uv run pytest --cov
 ```
 
-### 4. Lint Your Code
+### 4. 린트
 
 ```bash
 # Check code style
@@ -73,85 +73,85 @@ uv run ruff check --fix .
 uv run ruff format .
 ```
 
-### 5. Commit Changes
+### 5. 커밋
 
-Write clear, descriptive commit messages:
+명확하고 설명적인 커밋 메시지를 작성합니다.
 
 ```bash
 git add .
 git commit -m "Add token tracking to nonfunctional package"
 ```
 
-### 6. Submit a Pull Request
+### 6. Pull Request 제출
 
-- Push your branch to the repository
-- Open a PR with a clear description of changes
-- Link to any related issues
-- Wait for automated tests to pass
-- Address review feedback
+- 브랜치를 저장소에 푸시합니다
+- 변경 사항을 명확히 설명하는 PR을 엽니다
+- 관련 이슈가 있으면 링크합니다
+- 자동 테스트가 통과할 때까지 기다립니다
+- 리뷰 피드백을 반영합니다
 
-## Work Streams
+## 작업 흐름
 
-The project is organized around six big rocks. Your changes will typically fall into one or more of these:
+프로젝트는 여섯 가지 big rock으로 구성됩니다. 변경은 보통 그중 하나 이상에 해당합니다.
 
-| Work Stream | Description | Package / Area |
+| 작업 흐름 | 설명 | 패키지 / 영역 |
 |---|---|---|
-| **Golden Test Case** | Curated baseline test inputs | `test_cases/` |
-| **Execution Framework** | Two-agent AIDLC workflow runner (Owner: Jeff) | `aidlc-runner/` |
-| **Semantic Evaluation** | Intent & design similarity scoring | `packages/qualitative/` |
-| **Code Evaluation** | Linting, security, organization | `packages/quantitative/` |
-| **NFR Evaluation** | Tokens, timing, consistency | `packages/nonfunctional/` |
-| **GitHub CI/CD** | Pipeline integration & management | `.github/workflows/` |
+| **골든 테스트 케이스** | 선별된 기준 테스트 입력 | `test_cases/` |
+| **실행 프레임워크** | AIDLC 두 에이전트 워크플로 러너(담당: Jeff) | `aidlc-runner/` |
+| **의미 평가** | 의도·설계 유사도 채점 | `packages/qualitative/` |
+| **코드 평가** | 린트, 보안, 구조 | `packages/quantitative/` |
+| **NFR 평가** | 토큰, 시간, 일관성 | `packages/nonfunctional/` |
+| **GitHub CI/CD** | 파이프라인 통합 및 관리 | `.github/workflows/` |
 
-## Code Standards
+## 코드 기준
 
-### Python Style
+### Python 스타일
 
-- Follow PEP 8 (enforced by Ruff)
-- Use type hints
-- Maximum line length: 100 characters
-- Write docstrings for public functions and classes
+- PEP 8 준수(Ruff로 강제)
+- 타입 힌트 사용
+- 최대 줄 길이: 100자
+- 공개 함수·클래스에는 독스트링 작성
 
-### Testing
+### 테스트
 
-- Write tests for new functionality
-- Maintain or improve code coverage
-- Use descriptive test names: `test_<what>_<condition>_<expected>`
+- 새 기능에는 테스트 작성
+- 코드 커버리지 유지 또는 개선
+- 설명적인 테스트 이름: `test_<what>_<condition>_<expected>`
 
-### Documentation
+### 문서
 
-- Update README.md if adding new features
-- Add docstrings to new modules and functions
-- Update relevant docs in `docs/` directory
+- 새 기능을 추가하면 README.md 갱신
+- 새 모듈·함수에는 독스트링 추가
+- `docs/`의 관련 문서 갱신
 
-## Package Dependencies
+## 패키지 의존성
 
-When adding dependencies:
+의존성을 추가할 때:
 
-1. Add to the appropriate `pyproject.toml` in `packages/<package>/` or `aidlc-runner/`
-2. Run `uv sync` to update lock file
-3. Document why the dependency is needed in your PR
+1. `packages/<package>/` 또는 `aidlc-runner/`의 해당 `pyproject.toml`에 추가
+2. `uv sync`로 lock 파일 갱신
+3. PR에 해당 의존성이 필요한 이유를 문서화
 
-## Reporting Issues
+## 이슈 보고
 
-When reporting bugs or requesting features:
+버그나 기능 요청 시:
 
-- Use GitHub Issues
-- Provide clear reproduction steps
-- Include relevant logs or error messages
-- Specify which package is affected
+- GitHub Issues 사용
+- 재현 단계를 명확히 기술
+- 관련 로그나 오류 메시지 포함
+- 영향받는 패키지 명시
 
-## Questions?
+## 질문이 있으면?
 
-- Review [FAQ.md](./FAQ.md) for common questions
-- Check [OPERATING_PRINCIPLES.md](./OPERATING_PRINCIPLES.md) for decision-making guidance
-- Ask in PR comments or open a discussion
+- 자주 묻는 질문은 [FAQ.md](./FAQ.md) 참고
+- 의사결정 가이드는 [OPERATING_PRINCIPLES.md](./OPERATING_PRINCIPLES.md) 참고
+- PR 댓글이나 Discussion에 질문
 
-## Code of Conduct
+## 행동 강령
 
-- Be respectful and constructive
-- Focus on the code, not the person
-- Welcome diverse perspectives
-- Help others learn and grow
+- 서로 존중하고 건설적으로 대화합니다
+- 사람이 아니라 코드에 집중합니다
+- 다양한 관점을 환영합니다
+- 서로 배우고 성장하는 데 도움을 줍니다
 
-Thank you for helping improve the AI-DLC evaluation framework!
+AI-DLC 평가 프레임워크 개선에 참여해 주셔서 감사합니다.

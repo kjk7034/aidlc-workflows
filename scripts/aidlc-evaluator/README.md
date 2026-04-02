@@ -1,19 +1,19 @@
-# AI-DLC Workflows Evaluation & Reporting Framework
+# AI-DLC 워크플로 평가 및 보고 프레임워크
 
-Automated testing and reporting framework for validating changes to the [AI-DLC workflows](https://github.com/awslabs/aidlc-workflows) repository.
+[AI-DLC workflows](https://github.com/awslabs/aidlc-workflows) 저장소 변경을 검증하기 위한 자동화 테스트 및 보고 프레임워크입니다.
 
-## Overview
+## 개요
 
-This framework is organized around six major work streams ("big rocks"):
+이 프레임워크는 여섯 가지 주요 작업 흐름(“big rocks”)으로 구성됩니다.
 
-1. **Golden Test Case** — Curated baseline test cases (AIDLC docs + code output) used as reference inputs for all evaluations
-2. **Execution Framework** — Core orchestration that runs test cases through the evaluation pipeline
-3. **Semantic Evaluation** — AI-based evaluation of output correctness, completeness, and appropriateness (reported @k to account for non-determinism)
-4. **Code Evaluation** — Static analysis of generated code (linting, security scanning, duplication detection)
-5. **NFR Evaluation** — Non-functional requirements testing (token consumption, execution time, cross-model consistency)
-6. **GitHub CI/CD Integration & Management** — Automated pipelines that trigger evaluations on PRs and attach reports
+1. **골든 테스트 케이스** — 모든 평가의 참조 입력으로 사용되는, 선별된 기준 테스트 케이스(AIDLC 문서 + 코드 출력)
+2. **실행 프레임워크** — 테스트 케이스를 평가 파이프라인으로 실행하는 핵심 오케스트레이션
+3. **의미 평가** — 출력의 정확성·완전성·적절성에 대한 AI 기반 평가(비결정성을 고려해 @k로 보고)
+4. **코드 평가** — 생성 코드에 대한 정적 분석(린트, 보안 스캔, 중복 탐지)
+5. **NFR 평가** — 비기능 요구사항 테스트(토큰 소비, 실행 시간, 모델 간 일관성)
+6. **GitHub CI/CD 통합 및 관리** — PR에서 평가를 트리거하고 보고서를 첨부하는 자동 파이프라인
 
-## Quick Start
+## 빠른 시작
 
 ```bash
 # Install dependencies
@@ -44,20 +44,20 @@ uv run python run.py full \
     --openapi test_cases/sci-calc/openapi.yaml
 ```
 
-## Evaluation Pipeline
+## 평가 파이프라인
 
-The evaluation pipeline (`run.py full` or `scripts/run_evaluation.py`) orchestrates six stages:
+평가 파이프라인(`run.py full` 또는 `scripts/run_evaluation.py`)은 여섯 단계를 조율합니다.
 
-| Stage | Package | Description |
+| 단계 | 패키지 | 설명 |
 | ------- | --------- | ------------- |
-| 1. Execution | `packages/execution` | Runs the AIDLC two-agent workflow to produce docs + code |
-| 2. Post-Run | (inside execution) | Installs deps and runs the generated project's tests |
-| 3. Quantitative | `packages/quantitative` | Lints, security-scans, and duplication-checks generated code |
-| 4. Contract | `packages/contracttest` | Spins up the generated app and validates API endpoints |
-| 5. Qualitative | `packages/qualitative` | Compares generated docs against golden baseline via Bedrock LLM |
-| 6. Report | `packages/reporting` | Generates consolidated Markdown + HTML reports |
+| 1. 실행 | `packages/execution` | AIDLC 두 에이전트 워크플로를 실행해 문서 + 코드 생성 |
+| 2. 실행 후 | (실행 패키지 내부) | 의존성 설치 후 생성 프로젝트 테스트 실행 |
+| 3. 정량 | `packages/quantitative` | 생성 코드에 대해 린트, 보안 스캔, 중복 검사 |
+| 4. 계약 | `packages/contracttest` | 생성 앱을 띄우고 API 엔드포인트 검증 |
+| 5. 정성 | `packages/qualitative` | Bedrock LLM으로 생성 문서를 골든 기준선과 비교 |
+| 6. 보고 | `packages/reporting` | 통합 Markdown + HTML 보고서 생성 |
 
-Output for each run is written to a timestamped folder under `runs/`:
+각 실행의 출력은 `runs/` 아래 타임스탬프 폴더에 기록됩니다.
 
 ```txt
 runs/<timestamp>/
@@ -74,11 +74,11 @@ runs/<timestamp>/
   └── report.html                    # Consolidated HTML report
 ```
 
-## Configuration
+## 설정
 
-### Config file (`config/default.yaml`)
+### 설정 파일 (`config/default.yaml`)
 
-The main configuration file controls AWS settings, models, swarm parameters, timeouts, and tool paths. Edit this file to change defaults, or pass a custom config with `--config`:
+`default.yaml`은 AWS 설정, 모델, swarm 파라미터, 타임아웃, 도구 경로를 제어합니다. 기본값을 바꾸려면 이 파일을 수정하거나 `--config`로 사용자 정의 설정을 넘깁니다.
 
 ```yaml
 aws:
@@ -128,13 +128,13 @@ tools:
   pmd_path: null   # Path to PMD executable; if null, looks for 'pmd' on PATH
 ```
 
-Precedence: `CLI flags > YAML config > built-in defaults`
+우선순위: `CLI 플래그 > YAML 설정 > 내장 기본값`
 
-### Model-specific configs
+### 모델별 설정
 
-Per-model config files in `config/` override the executor model while inheriting everything else from `default.yaml`:
+`config/`의 모델별 파일은 `default.yaml`에서 나머지를 상속하면서 executor 모델만 덮어씁니다.
 
-| File | Model |
+| 파일 | 모델 |
 | ------ | ------- |
 | `config/opus-4-6.yaml` | Claude Opus 4.6 |
 | `config/opus-4-5.yaml` | Claude Opus 4.5 |
@@ -146,15 +146,15 @@ Per-model config files in `config/` override the executor model while inheriting
 | `config/mistral-large-3.yaml` | Mistral Large 3 (675B) |
 | `config/devstral-2.yaml` | Mistral Devstral 2 (123B, code-specialized) |
 
-### Docker Sandbox
+### Docker 샌드박스
 
-The evaluation framework runs AI-generated code inside an isolated Docker container to prevent untrusted code from affecting the host system. The sandbox image includes Python 3.13 + uv, Node.js 22 + npm, and common build tools, running as a non-root user.
+평가 프레임워크는 신뢰할 수 없는 AI 생성 코드가 호스트에 영향을 주지 않도록 격리된 Docker 컨테이너에서 실행합니다. 샌드박스 이미지에는 Python 3.13 + uv, Node.js 22 + npm, 일반 빌드 도구가 포함되며 비루트 사용자로 실행됩니다.
 
-#### Prerequisites
+#### 사전 요구사항
 
-Docker must be installed and running on the host machine.
+호스트에 Docker가 설치되어 실행 중이어야 합니다.
 
-#### Building the sandbox image
+#### 샌드박스 이미지 빌드
 
 ```bash
 # Build the image (one-time setup, or after Dockerfile changes)
@@ -164,11 +164,11 @@ Docker must be installed and running on the host machine.
 docker build -t aidlc-sandbox:latest docker/sandbox/
 ```
 
-This produces the `aidlc-sandbox:latest` image referenced by the default configuration.
+기본 설정에서 참조하는 `aidlc-sandbox:latest` 이미지가 생성됩니다.
 
-#### Configuration
+#### 설정
 
-Sandbox settings are in `config/default.yaml` under `execution.sandbox`:
+샌드박스 설정은 `config/default.yaml`의 `execution.sandbox`에 있습니다.
 
 ```yaml
 execution:
@@ -179,11 +179,11 @@ execution:
     cpus: 2                      # Container CPU limit
 ```
 
-When sandbox is enabled, post-run tests (stage 2) and contract test servers (stage 4) execute inside the container. The generated `workspace/` directory is mounted into the container at `/workspace`. If Docker is not available or `enabled` is set to `false`, commands run directly on the host.
+샌드박스가 켜져 있으면 실행 후 테스트(2단계)와 계약 테스트 서버(4단계)가 컨테이너 안에서 실행됩니다. 생성된 `workspace/` 디렉터리는 컨테이너의 `/workspace`에 마운트됩니다. Docker를 쓸 수 없거나 `enabled`가 `false`이면 명령은 호스트에서 직접 실행됩니다.
 
-### Tool configuration
+### 도구 설정
 
-**PMD (code duplication detection):** PMD CPD is used for copy-paste detection in stage 3. Configure the path in `config/default.yaml`:
+**PMD(코드 중복 탐지):** 3단계에서 복사-붙여넣기 탐지에 PMD CPD를 사용합니다. `config/default.yaml`에서 경로를 설정합니다.
 
 ```yaml
 tools:
@@ -191,9 +191,9 @@ tools:
   # pmd_path: null           # null = search PATH automatically
 ```
 
-If PMD is not found, duplication analysis is skipped with a note — it does not fail the evaluation.
+PMD를 찾지 못하면 중복 분석은 비고와 함께 건너뛰며 평가 자체는 실패하지 않습니다.
 
-### Pipeline CLI flags
+### 파이프라인 CLI 플래그
 
 ```bash
 uv run python run.py full \
@@ -209,34 +209,34 @@ uv run python run.py full \
     --report-format both
 ```
 
-Supported flags:
+지원 플래그:
 
-- `--config` — path to YAML config file (default: `config/default.yaml`)
-- `--test` — run unit tests only
-- `--vision`, `--tech-env` — execution inputs
-- `--evaluate-only` — score an existing `aidlc-docs` folder without re-running execution
-- `--golden` — reference baseline docs directory
-- `--openapi` — contract test spec
-- `--report-format` — `markdown`, `html`, or `both`
-- `--baseline` — override path to `golden.yaml` (otherwise auto-discovered next to `--golden`)
-- `--output-dir` — override run output folder
-- `--results` — write qualitative results YAML to custom path
-- `--profile`, `--region` — AWS credentials/region for Bedrock
-- `--executor-model` — execution model override
-- `--scorer-model` — qualitative scoring model override
-- `--rules-ref` — git ref (branch/tag/commit) for AIDLC rules
+- `--config` — YAML 설정 파일 경로(기본: `config/default.yaml`)
+- `--test` — 단위 테스트만 실행
+- `--vision`, `--tech-env` — 실행 입력
+- `--evaluate-only` — 실행을 다시 하지 않고 기존 `aidlc-docs` 폴더만 채점
+- `--golden` — 참조 기준선 문서 디렉터리
+- `--openapi` — 계약 테스트 스펙
+- `--report-format` — `markdown`, `html`, 또는 `both`
+- `--baseline` — `golden.yaml` 경로 재정의(지정하지 않으면 `--golden` 옆에서 자동 탐색)
+- `--output-dir` — 실행 출력 폴더 재정의
+- `--results` — 정성 결과 YAML을 사용자 지정 경로에 기록
+- `--profile`, `--region` — Bedrock용 AWS 자격 증명/리전
+- `--executor-model` — 실행 모델 재정의
+- `--scorer-model` — 정성 채점 모델 재정의
+- `--rules-ref` — AIDLC 규칙용 Git ref(브랜치/태그/커밋)
 
-## Batch Evaluation
+## 배치 평가
 
-Run the evaluation pipeline across multiple Bedrock models sequentially, then generate a cross-model comparison report.
+여러 Bedrock 모델에 대해 평가 파이프라인을 순차 실행한 뒤 모델 간 비교 보고서를 생성합니다.
 
-### List available models
+### 사용 가능한 모델 목록
 
 ```bash
 uv run python run.py batch --list
 ```
 
-### Run batch evaluation
+### 배치 평가 실행
 
 ```bash
 # Run all configured models
@@ -251,11 +251,11 @@ uv run python run.py batch --models all \
     --region us-east-1
 ```
 
-Each model run is stored under `runs/<model-name>/` with full evaluation artifacts. A `batch-summary.yaml` is written to the runs directory with timing and pass/fail status for each model.
+모델별 실행은 `runs/<model-name>/`에 전체 평가 산출물과 함께 저장됩니다. `batch-summary.yaml`이 runs 디렉터리에 기록되며 모델별 타이밍과 통과/실패 상태를 담습니다.
 
-### Generate cross-model comparison
+### 모델 간 비교 생성
 
-After batch evaluation completes, generate a comparison matrix:
+배치 평가가 끝난 뒤 비교 행렬을 생성합니다.
 
 ```bash
 # Compare all model runs found under runs/
@@ -267,21 +267,21 @@ uv run python run.py compare \
     --baseline test_cases/sci-calc/golden.yaml
 ```
 
-This produces `runs/comparison/comparison-report.md` and `runs/comparison/comparison-data.yaml` with side-by-side metrics across all models (unit tests, contract tests, code quality, qualitative scores, token usage, and timing).
+`runs/comparison/comparison-report.md`와 `runs/comparison/comparison-data.yaml`이 생성되며, 모든 모델에 대해 단위 테스트·계약 테스트·코드 품질·정성 점수·토큰 사용량·타이밍을 나란히 비교합니다.
 
-## CLI Evaluation
+## CLI 평가
 
-Run the AIDLC evaluation through CLI-based AI assistants (Claude Code, Kiro CLI) using the CLI harness (`packages/cli-harness`).
+CLI 기반 AI 어시스턴트(Claude Code, Kiro CLI)로 AIDLC 평가를 실행하려면 CLI 하네스(`packages/cli-harness`)를 사용합니다.
 
-### List available adapters
+### 사용 가능한 어댑터 목록
 
 ```bash
 uv run python run.py cli --list
 ```
 
-Supported adapters: `claude-code`, `kiro-cli`.
+지원 어댑터: `claude-code`, `kiro-cli`.
 
-### Run CLI evaluation
+### CLI 평가 실행
 
 ```bash
 # Run evaluation through Claude Code
@@ -299,21 +299,21 @@ uv run python run.py cli --cli kiro-cli \
 uv run python run.py cli --cli claude-code --check-only
 ```
 
-Output is written to `runs/<cli-name>-<timestamp>-<uuid>/`. The CLI harness runs the adapter, then invokes `scripts/run_evaluation.py --evaluate-only` for scoring (stages 2–6).
+출력은 `runs/<cli-name>-<timestamp>-<uuid>/`에 기록됩니다. CLI 하네스는 어댑터를 실행한 뒤 `scripts/run_evaluation.py --evaluate-only`로 채점(2–6단계)을 호출합니다.
 
-## IDE Evaluation
+## IDE 평가
 
-Run the AIDLC evaluation through third-party IDE AI assistants using the IDE harness (`packages/ide-harness`).
+서드파티 IDE AI 어시스턴트로 AIDLC 평가를 실행하려면 IDE 하네스(`packages/ide-harness`)를 사용합니다.
 
-### List available adapters
+### 사용 가능한 어댑터 목록
 
 ```bash
 uv run python run.py ide --list
 ```
 
-Supported adapters: Cursor, Cline, Copilot, Kiro, Windsurf, Antigravity.
+지원 어댑터: Cursor, Cline, Copilot, Kiro, Windsurf, Antigravity.
 
-### Run IDE evaluation
+### IDE 평가 실행
 
 ```bash
 # Run evaluation through Cursor
@@ -325,11 +325,11 @@ uv run python run.py ide --ide cursor \
 uv run python run.py ide --ide kiro --check-only
 ```
 
-Output is written to `runs/ide-<adapter-name>/`.
+출력은 `runs/ide-<adapter-name>/`에 기록됩니다.
 
-## Extension Hook Testing
+## 확장 훅 테스트
 
-Test the AIDLC workflow with different rules extension configurations. The extension hook feature allows progressive loading of extensions (security, performance, observability) based on opt-in questions.
+규칙 확장 설정이 다른 AIDLC 워크플로를 테스트합니다. 확장 훅 기능은 옵트인 질문에 따라 확장(보안, 성능, 관측 가능성)을 단계적으로 로드할 수 있습니다.
 
 ```bash
 # List available extension configurations
@@ -343,17 +343,17 @@ uv run python run.py ext-test --scenario sci-calc \
     --rules-ref feat/extension_hook_question_split
 ```
 
-This runs the evaluation twice:
-1. With all extension opt-ins answered "YES" (maximum guidance)
-2. With all extension opt-ins answered "NO" (baseline only)
+평가가 두 번 실행됩니다.
+1. 모든 확장 옵트인에 “YES”(최대 가이드)
+2. 모든 확장 옵트인에 “NO”(기준선만)
 
-Results are saved to `runs/<scenario>/extension-test/` with a comparison report showing the impact of different extension configurations.
+결과는 `runs/<scenario>/extension-test/`에 저장되며, 확장 설정별 영향을 보여 주는 비교 보고서가 포함됩니다.
 
-See [Extension Hook Testing Guide](./docs/extension-hook-testing.md) for detailed documentation.
+자세한 내용은 [확장 훅 테스트 가이드](./docs/extension-hook-testing.md)를 참고하세요.
 
-## Trend Reporting
+## 트렌드 보고
 
-Generate cross-release trend reports that track evaluation metrics over time. Fetches evaluation bundles from GitHub releases and Actions artifacts, then renders HTML, Markdown, and YAML reports.
+시간에 따른 평가 지표를 추적하는 릴리스 간 트렌드 보고서를 생성합니다. GitHub 릴리스와 Actions 아티팩트에서 평가 번들을 가져와 HTML, Markdown, YAML 보고서를 렌더링합니다.
 
 ```bash
 # Generate trend report (requires gh CLI authenticated)
@@ -370,22 +370,22 @@ uv run python run.py trend --baseline test_cases/sci-calc/golden.yaml \
 uv run python run.py trend --baseline test_cases/sci-calc/golden.yaml --gate
 ```
 
-The HTML executive summary displays six metric cards:
+HTML 요약에는 여섯 가지 지표 카드가 표시됩니다.
 
-- **Qualitative Score** — semantic quality vs golden baseline (higher is better)
-- **Contract Tests** — API pass rate as passed/total (higher is better)
-- **Unit Tests** — pass rate shown as percentage (higher is better)
-- **Lint Findings** — static analysis issues (lower is better)
-- **Execution Time** — generation duration (lower is better)
-- **Total Tokens** — LLM token consumption (lower is better)
+- **정성 점수** — 골든 기준선 대비 의미 품질(높을수록 좋음)
+- **계약 테스트** — API 통과율(통과/전체, 높을수록 좋음)
+- **단위 테스트** — 통과율을 백분율로 표시(높을수록 좋음)
+- **린트 발견** — 정적 분석 이슈(낮을수록 좋음)
+- **실행 시간** — 생성 소요 시간(낮을수록 좋음)
+- **총 토큰** — LLM 토큰 소비(낮을수록 좋음)
 
-Output is written to a timestamped folder under the output directory (default: `runs/`).
+출력은 출력 디렉터리(기본: `runs/`) 아래 타임스탬프 폴더에 기록됩니다.
 
-A sample HTML report is available at [`packages/trend-reports/examples/trend-report.html`](./packages/trend-reports/examples/trend-report.html).
+샘플 HTML 보고서는 [`packages/trend-reports/examples/trend-report.html`](./packages/trend-reports/examples/trend-report.html)에서 볼 수 있습니다.
 
-## Running the Execution Component Directly
+## 실행 컴포넌트 직접 실행
 
-For full execution-level controls you can run `aidlc-runner` directly:
+실행 수준 제어를 모두 쓰려면 `aidlc-runner`를 직접 실행할 수 있습니다.
 
 ```bash
 uv run aidlc-runner \
@@ -399,13 +399,13 @@ uv run aidlc-runner \
     --output-dir ./runs
 ```
 
-Execution-specific toggles:
+실행 전용 옵션:
 
-- `--rules-path <local-rules-dir>` — forces local rules source
-- `--no-exec` — disable in-workflow command execution
-- `--no-post-tests` — disable post-run tests
+- `--rules-path <local-rules-dir>` — 로컬 규칙 소스 강제
+- `--no-exec` — 워크플로 내 명령 실행 비활성화
+- `--no-post-tests` — 실행 후 테스트 비활성화
 
-## Repository Structure
+## 저장소 구조
 
 ```txt
 .
@@ -448,19 +448,19 @@ Execution-specific toggles:
 └── uv.lock                    # Dependency lock file
 ```
 
-## Documentation
+## 문서
 
-- [FAQ](./FAQ.md) — Common questions and answers
-- [Contributing](./CONTRIBUTING.md) — Guidelines for submitting changes
-- [Architecture](./ARCHITECTURE.md) — System design and implementation details
-- [Extension Hook Testing](./docs/extension-hook-testing.md) — Testing AIDLC with different extension configurations
-- [IDE Harness Design](./docs/ide-harness-design.md) — Architecture of the IDE adapter framework
-- [File Structure](./docs/file-structure.md) — Project file organization reference
+- [FAQ](./FAQ.md) — 자주 묻는 질문
+- [기여](./CONTRIBUTING.md) — 변경 제출 가이드
+- [아키텍처](./ARCHITECTURE.md) — 시스템 설계 및 구현 세부
+- [확장 훅 테스트](./docs/extension-hook-testing.md) — 확장 설정이 다른 AIDLC 테스트
+- [IDE 하네스 설계](./docs/ide-harness-design.md) — IDE 어댑터 프레임워크 구조
+- [파일 구조](./docs/file-structure.md) — 프로젝트 파일 구성 참고
 
-## Contributing
+## 기여
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines on submitting changes.
+변경 제출 가이드는 [CONTRIBUTING.md](./CONTRIBUTING.md)를 참고하세요.
 
-## License
+## 라이선스
 
 [License information to be added]

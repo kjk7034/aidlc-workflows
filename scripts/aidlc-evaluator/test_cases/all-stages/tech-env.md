@@ -1,210 +1,205 @@
-# Technical Environment: BookShelf Community Library API
+# 기술 환경: BookShelf 커뮤니티 도서관 API
 
-## Project Technical Summary
+## 프로젝트 기술 요약
 
-- **Project Name**: BookShelf
-- **Project Type**: Greenfield
-- **Primary Runtime Environment**: Cloud (AWS)
-- **Cloud Provider**: AWS
-- **Package Manager**: uv
-- **Team Size**: 1 (solo developer)
-- **Team Experience**: Strong Python backend experience. Familiar with FastAPI and pytest. Moderate AWS experience. Limited CDK experience.
+- **프로젝트 이름**: BookShelf
+- **프로젝트 유형**: Greenfield
+- **주요 런타임 환경**: 클라우드(AWS)
+- **클라우드 제공자**: AWS
+- **패키지 매니저**: uv
+- **팀 규모**: 1명(솔로 개발자)
+- **팀 경험**: Python 백엔드에 강함. FastAPI와 pytest에 익숙함. AWS는 중간 수준. CDK 경험은 제한적.
 
 ---
 
-## Programming Languages
+## 프로그래밍 언어
 
-### Required Languages
+### 필수 언어
 
-| Language | Version | Purpose | Rationale |
+| 언어 | 버전 | 용도 | 근거 |
 |----------|---------|---------|-----------|
-| Python | 3.13+ | API services, business logic, infrastructure as code | Primary language. Rich ecosystem. Fast development. |
+| Python | 3.13+ | API 서비스, 비즈니스 로직, 인프라 코드 | 주 언어. 풍부한 생태계. 빠른 개발. |
 
-### Permitted Languages
+### 허용 언어
 
-| Language | Conditions for Use |
+| 언어 | 사용 조건 |
 |----------|-------------------|
-| TypeScript | Approved for CDK infrastructure only, if developer prefers CDK in TypeScript over Python CDK |
+| TypeScript | CDK 인프라 전용으로만 허용, 개발자가 Python CDK 대신 TypeScript CDK를 선호하는 경우 |
 
-### Prohibited Languages
+### 금지 언어
 
-| Language | Reason |
+| 언어 | 이유 |
 |----------|--------|
-| Java | Excessive for this project scope |
-| Go | No team expertise |
-| Ruby | No team expertise |
+| Java | 이 프로젝트 범위에 비해 과함 |
+| Go | 팀 전문성 없음 |
+| Ruby | 팀 전문성 없음 |
 
 ---
 
-## Frameworks and Libraries
+## 프레임워크와 라이브러리
 
-### Required Frameworks
+### 필수 프레임워크
 
-| Framework/Library | Version | Domain | Rationale |
+| 프레임워크/라이브러리 | 버전 | 영역 | 근거 |
 |-------------------|---------|--------|-----------|
-| FastAPI | 0.115+ | REST API framework | Automatic validation, OpenAPI generation, async support |
-| Pydantic | 2.x | Request/response models | Type-safe data validation, JSON serialization |
-| uvicorn | 0.34+ | ASGI server (local dev) | Standard FastAPI server |
-| pytest | 8.x | Unit testing | Test runner |
-| pytest-asyncio | 0.24+ | Async test support | FastAPI test client requires async |
-| httpx | 0.28+ | Test HTTP client | Async test client for FastAPI |
-| pytest-cov | 6.x | Coverage reporting | Enforce coverage minimum |
-| ruff | 0.9+ | Linting and formatting | Single tool for lint + format |
-| AWS CDK | 2.x | Infrastructure as Code | All infrastructure defined in code |
+| FastAPI | 0.115+ | REST API 프레임워크 | 자동 검증, OpenAPI 생성, 비동기 지원 |
+| Pydantic | 2.x | 요청/응답 모델 | 타입 안전 데이터 검증, JSON 직렬화 |
+| uvicorn | 0.34+ | ASGI 서버(로컬 개발) | 표준 FastAPI 서버 |
+| pytest | 8.x | 단위 테스트 | 테스트 러너 |
+| pytest-asyncio | 0.24+ | 비동기 테스트 지원 | FastAPI 테스트 클라이언트에 비동기 필요 |
+| httpx | 0.28+ | 테스트 HTTP 클라이언트 | FastAPI용 비동기 테스트 클라이언트 |
+| pytest-cov | 6.x | 커버리지 보고 | 커버리지 하한 강제 |
+| ruff | 0.9+ | 린트 및 포맷 | 린트+포맷 단일 도구 |
+| AWS CDK | 2.x | 인프라 코드 | 모든 인프라를 코드로 정의 |
 
-### Prohibited Libraries
+### 금지 라이브러리
 
-| Library | Reason | Use Instead |
+| 라이브러리 | 이유 | 대안 |
 |---------|--------|-------------|
-| Flask, Django | Project uses FastAPI | FastAPI |
-| requests | Blocks async event loop | httpx |
-| pandas, numpy | Not needed for this project | Standard Python |
-| pip, poetry, pipenv | Project uses uv exclusively | uv |
-| black, flake8, isort | Replaced by ruff | ruff |
+| Flask, Django | 프로젝트는 FastAPI 사용 | FastAPI |
+| requests | 비동기 이벤트 루프 차단 | httpx |
+| pandas, numpy | 이 프로젝트에 불필요 | 표준 라이브러리 |
+| pip, poetry, pipenv | 프로젝트는 uv 전용 | uv |
+| black, flake8, isort | ruff로 대체 | ruff |
 
 ---
 
-## Cloud Environment
+## 클라우드 환경
 
-### Cloud Provider
+### 클라우드 제공자
 
-- **Primary Provider**: AWS
-- **Region**: us-east-1
+- **주 제공자**: AWS
+- **리전**: us-east-1
 
-### Approved Service Categories
+### 승인된 서비스 범주
 
-The following categories of AWS services are approved for use. The specific
-service choices within each category should be determined during the NFR
-Requirements and Infrastructure Design stages based on the system's actual
-performance, scalability, and cost requirements.
+다음 AWS 서비스 범주 사용이 승인됩니다. 범주 내 구체적 서비스 선택은 시스템의 실제 성능·확장성·비용 요구사항에 따라 NFR 요구사항 및 인프라 설계 단계에서 결정합니다.
 
-| Category | Guidance |
-|----------|----------|
-| Compute | Serverless preferred (Lambda) but containers (ECS Fargate) acceptable if cold-start latency or execution duration is a concern. Decision should be justified during Infrastructure Design. |
-| API Layer | API Gateway (HTTP API preferred over REST API for cost and simplicity) |
-| Data Storage | Choose based on access patterns determined during Functional Design. Options: DynamoDB (key-value/document), RDS PostgreSQL (relational queries). Each service must own its data. |
-| Messaging | Asynchronous inter-service communication required. Evaluate SQS, SNS, or EventBridge during Infrastructure Design based on messaging patterns. |
-| Authentication | AWS Cognito or application-level JWT — decide during NFR Requirements |
-| Monitoring | CloudWatch for logs, metrics, and alarms |
-| Secrets | AWS Secrets Manager for sensitive configuration |
-| IaC | AWS CDK (Python preferred) |
+| 범주 | 가이드 |
+|----------|--------|
+| 컴퓨트 | 서버리스(Lambda) 선호, 콜드 스타트 지연 또는 실행 시간이 문제면 컨테이너(ECS Fargate) 허용. 인프라 설계에서 근거 제시. |
+| API 계층 | API Gateway(비용·단순성상 HTTP API가 REST API보다 선호) |
+| 데이터 저장소 | 기능 설계에서 정한 접근 패턴에 따라 선택. 옵션: DynamoDB(키-값/문서), RDS PostgreSQL(관계 쿼리). 서비스마다 데이터 소유. |
+| 메시징 | 서비스 간 비동기 통신 필수. 메시징 패턴에 따라 인프라 설계에서 SQS, SNS, EventBridge 검토. |
+| 인증 | AWS Cognito 또는 애플리케이션 수준 JWT — NFR 요구사항에서 결정 |
+| 모니터링 | CloudWatch 로그, 메트릭, 알람 |
+| 시크릿 | 민감 설정은 AWS Secrets Manager |
+| IaC | AWS CDK(Python 선호) |
 
-### Service Disallow List
+### 서비스 사용 불가 목록
 
-| Service | Reason |
+| 서비스 | 이유 |
 |---------|--------|
-| Amazon EC2 (direct) | Prefer managed compute (Lambda or Fargate) |
-| AWS Elastic Beanstalk | Does not fit IaC workflow |
+| Amazon EC2(직접) | 관리형 컴퓨트(Lambda 또는 Fargate) 선호 |
+| AWS Elastic Beanstalk | IaC 워크플로에 맞지 않음 |
 
 ---
 
-## API Design Standards
+## API 설계 표준
 
-- **Style**: REST with JSON
-- **Versioning**: URL path prefix (`/api/v1/`)
-- **Naming Convention**: snake_case for JSON fields
+- **스타일**: JSON과 함께 REST
+- **버전 관리**: URL 경로 접두사(` /api/v1/`)
+- **명명 규칙**: JSON 필드는 snake_case
 
-### Response Envelope
+### 응답 래퍼
 
-**Success:**
+**성공:**
 ```json
 { "status": "ok", "data": { ... } }
 ```
 
-**Error:**
+**오류:**
 ```json
 { "status": "error", "error": { "code": "ERROR_CODE", "message": "Human-readable message" } }
 ```
 
-| Error Code | HTTP Status | Meaning |
+| 오류 코드 | HTTP 상태 | 의미 |
 |---|---|---|
-| `VALIDATION_ERROR` | 422 | Request body fails Pydantic validation |
-| `NOT_FOUND` | 404 | Resource does not exist |
-| `UNAUTHORIZED` | 401 | Missing or invalid JWT token |
-| `FORBIDDEN` | 403 | Valid token but insufficient role |
-| `CONFLICT` | 409 | Business rule violation (e.g., checkout limit exceeded, duplicate hold) |
-| `INTERNAL_ERROR` | 500 | Unexpected server error |
+| `VALIDATION_ERROR` | 422 | 요청 본문이 Pydantic 검증 실패 |
+| `NOT_FOUND` | 404 | 리소스 없음 |
+| `UNAUTHORIZED` | 401 | JWT 토큰 없음 또는 잘못됨 |
+| `FORBIDDEN` | 403 | 토큰은 유효하나 역할 부족 |
+| `CONFLICT` | 409 | 비즈니스 규칙 위반(예: 대출 한도 초과, 중복 홀드) |
+| `INTERNAL_ERROR` | 500 | 예상치 못한 서버 오류 |
 
 ---
 
-## Security Requirements
+## 보안 요구사항
 
-### Authentication and Authorization
+### 인증 및 권한
 
-- **Authorization Model**: Role-based access control (RBAC) with three roles:
-  - **Admin**: Full access to all endpoints
-  - **Librarian**: Catalog management, lending operations, reports
-  - **Member**: Self-service borrowing (own checkouts, holds, fees)
-- **Public Endpoints**: Registration, login, health check
-- **Authentication mechanism**: To be determined during NFR Requirements stage. Options include Cognito user pools or application-level JWT with PyJWT + passlib/bcrypt.
+- **권한 모델**: 세 가지 역할의 역할 기반 접근 제어(RBAC):
+  - **Admin**: 모든 엔드포인트 전체 접근
+  - **Librarian**: 카탈로그 관리, 대출 운영, 보고서
+  - **Member**: 셀프 서비스 대출(본인 대출, 홀드, 수수료)
+- **공개 엔드포인트**: 등록, 로그인, 헬스 체크
+- **인증 메커니즘**: NFR 요구사항 단계에서 결정. 옵션: Cognito 사용자 풀 또는 PyJWT + passlib/bcrypt를 사용한 애플리케이션 수준 JWT.
 
-### Data Protection
+### 데이터 보호
 
-- **Encryption at Rest**: Required for all data stores
-- **Encryption in Transit**: TLS 1.2+ required for all communications
-- **Password Storage**: Must use adaptive hashing (bcrypt or argon2). Never store plaintext.
-- **PII**: Member email and name are PII. Must not appear in log output.
+- **저장 시 암호화**: 모든 데이터 저장소에 필요
+- **전송 중 암호화**: 모든 통신에 TLS 1.2+ 필요
+- **비밀번호 저장**: 적응형 해싱(bcrypt 또는 argon2) 필수. 평문 저장 금지.
+- **PII**: 회원 이메일과 이름은 PII. 로그 출력에 포함 금지.
 
-### Input Validation
+### 입력 검증
 
-- **All inputs validated by Pydantic models** before reaching business logic
-- **String length limits**: enforce reasonable maximums on all string fields
-- **Numeric bounds**: enforce non-negative constraints on counts and amounts
+- **모든 입력은 비즈니스 로직에 도달하기 전에 Pydantic 모델로 검증**
+- **문자열 길이 제한**: 모든 문자열 필드에 합리적 상한 적용
+- **수치 범위**: 개수와 금액에 비음수 제약 적용
 
-### Secrets Management
+### 시크릿 관리
 
-- **No secrets in source code or environment variables**
-- **Use AWS Secrets Manager** for signing keys and sensitive config
+- **소스 코드나 환경 변수에 시크릿 금지**
+- **서명 키와 민감 설정은 AWS Secrets Manager 사용**
 
 ---
 
-## Testing Requirements
+## 테스트 요구사항
 
-### Test Strategy Overview
+### 테스트 전략 개요
 
-| Test Type | Required | Coverage Target | Tooling |
+| 테스트 유형 | 필수 | 커버리지 목표 | 도구 |
 |-----------|----------|----------------|---------|
-| Unit Tests | Yes | 90% line coverage minimum | pytest |
-| Integration Tests | Yes | All API endpoints per service | pytest + httpx AsyncClient |
-| Contract Tests | Yes | All endpoints in openapi.yaml | contracttest runner |
-| Load Tests | Recommended | Validate performance targets | k6 |
+| 단위 테스트 | 예 | 최소 90% 줄 커버리지 | pytest |
+| 통합 테스트 | 예 | 서비스별 모든 API 엔드포인트 | pytest + httpx AsyncClient |
+| 계약 테스트 | 예 | openapi.yaml의 모든 엔드포인트 | contracttest 러너 |
+| 부하 테스트 | 권장 | 성능 목표 검증 | k6 |
 
-### Unit Testing Standards
+### 단위 테스트 표준
 
-- **Coverage Minimum**: 90% line coverage
-- **Mocking Policy**: Mock external dependencies (databases, other services). Do not mock business logic.
-- **Naming Convention**: `test_{module}_{scenario}` (e.g., `test_checkout_exceeds_limit`)
-- **Test Location**: `tests/` directory at project root
+- **커버리지 하한**: 90% 줄 커버리지
+- **모킹 정책**: 외부 의존성(DB, 다른 서비스)만 모킹. 비즈니스 로직은 모킹하지 않음.
+- **명명 규칙**: `test_{module}_{scenario}` (예: `test_checkout_exceeds_limit`)
+- **테스트 위치**: 프로젝트 루트의 `tests/` 디렉터리
 
-### Integration Testing Standards
+### 통합 테스트 표준
 
-- **Scope**: Test all API endpoints via httpx AsyncClient
-- **Data Management**: Fresh isolated data store per test function
-- **Auth Testing**: Test both authorized and unauthorized access for each endpoint
+- **범위**: httpx AsyncClient로 모든 API 엔드포인트 테스트
+- **데이터 관리**: 테스트 함수마다 신선한 격리 데이터 저장소
+- **인증 테스트**: 엔드포인트마다 허용·비허용 접근 모두 테스트
 
 ---
 
-## Non-Functional Requirements
+## 비기능 요구사항
 
-These are business-level targets. The specific technical patterns and
-infrastructure choices to meet these targets should be determined during the
-NFR Requirements, NFR Design, and Infrastructure Design stages.
+다음은 비즈니스 수준 목표입니다. 이 목표를 달성하기 위한 구체적 기술 패턴과 인프라 선택은 NFR 요구사항, NFR 설계, 인프라 설계 단계에서 결정합니다.
 
-| Requirement | Target | Notes |
+| 요구사항 | 목표 | 비고 |
 |---|---|---|
-| Response latency (p95) | < 100ms | Applies to both services under normal load |
-| Concurrent users | 100 simultaneous | Both services must handle this without degradation |
-| API uptime | 99.9% | Requires redundancy and health monitoring |
-| Test coverage | >= 90% line coverage | Per service |
-| Catalog search latency | < 200ms for full-text search | May require specific data store indexing strategy |
-| Inter-service event processing | < 5 seconds end-to-end | From book return to hold status update |
-| Cold start tolerance | Acceptable if < 3 seconds | Influences compute choice (Lambda vs containers) |
-| Data isolation | Each service owns its data store | No shared databases between services |
-| Python version | 3.13.x | Enforced via `requires-python = ">=3.13"` |
+| 응답 지연(p95) | < 100ms | 정상 부하에서 두 서비스 모두에 적용 |
+| 동시 사용자 | 100명 동시 | 두 서비스 모두 저하 없이 처리 |
+| API 가동 시간 | 99.9% | 중복성과 헬스 모니터링 필요 |
+| 테스트 커버리지 | >= 90% 줄 커버리지 | 서비스별 |
+| 카탈로그 검색 지연 | 전문 검색 < 200ms | 특정 데이터 저장소 인덱싱 전략 필요할 수 있음 |
+| 서비스 간 이벤트 처리 | 종단 간 < 5초 | 도서 반납부터 홀드 상태 갱신까지 |
+| 콜드 스타트 허용 | 3초 미만이면 허용 | 컴퓨트 선택(Lambda vs 컨테이너)에 영향 |
+| 데이터 격리 | 서비스마다 자체 데이터 저장소 | 서비스 간 공유 DB 없음 |
+| Python 버전 | 3.13.x | `requires-python = ">=3.13"`로 강제 |
 
 ---
 
-## Development Workflow
+## 개발 워크플로
 
 ```bash
 uv sync

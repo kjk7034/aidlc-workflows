@@ -1,62 +1,62 @@
-# Requirements Verification Questions
+# 요구사항 검증 질문
 
-The vision document and technical environment document are remarkably thorough. The following questions address remaining ambiguities to ensure completeness before generating the formal requirements.
+비전 문서와 기술 환경 문서가 매우 상세합니다. 아래 질문은 공식 요구사항을 생성하기 전에 완전성을 보장하기 위해 남은 모호함을 다룹니다.
 
-Please answer each question by filling in the letter choice after the `[Answer]:` tag.
+각 질문에 `[Answer]:` 태그 뒤에 선택지 문자를 적어 답하세요.
 
 ---
 
-## Question 1
-The vision specifies structured error responses with specific error codes. Should the custom 422 handler also wrap Pydantic validation errors in the same envelope structure (`{"status": "error", "operation": "...", "inputs": {...}, "error": {"code": "INVALID_INPUT", "message": "..."}}`), or is a simpler format acceptable for validation errors?
+## 질문 1
+비전은 특정 오류 코드가 있는 구조화된 오류 응답을 명시합니다. 사용자 정의 422 핸들러도 Pydantic 검증 오류를 동일한 래퍼 구조(`{"status": "error", "operation": "...", "inputs": {...}, "error": {"code": "INVALID_INPUT", "message": "..."}}`)로 감싸야 하며, 검증 오류에 대해 더 단순한 형식이 허용됩니까?
 
-A) Use the exact same envelope structure for all errors including Pydantic validation errors
-B) Use a simplified envelope for Pydantic validation errors (omit `operation` and `inputs` fields)
-C) Other (please describe after [Answer]: tag below)
-
-[Answer]: A
-
-## Question 2
-For the statistics `mode` operation, the vision states "returns smallest mode on ties." Should `mode` return a single numeric value, or a list of values (with only the smallest returned on ties)?
-
-A) Always return a single numeric value (the smallest mode if there are ties)
-B) Return a list of all modes, sorted ascending
-C) Other (please describe after [Answer]: tag below)
+A) Pydantic 검증 오류를 포함한 모든 오류에 정확히 동일한 래퍼 구조 사용
+B) Pydantic 검증 오류에는 단순화된 래퍼 사용(`operation` 및 `inputs` 필드 생략)
+C) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: A
 
-## Question 3
-The vision mentions `OVERFLOW` as an error code. Python's `math` module returns `inf` for overflow cases (e.g., `math.exp(1000)`). Should the API return `inf` in the result field, or should it return an OVERFLOW error response?
+## 질문 2
+통계 `mode` 연산에 대해 비전은 "동점이면 가장 작은 최빈값을 반환"한다고 합니다. `mode`는 단일 숫자 값을 반환해야 합니까, 아니면 값 목록을 반환하고(동점일 때만 가장 작은 것을 반환) 합니까?
 
-A) Return an OVERFLOW error response whenever the result would be `inf` or `-inf`
-B) Return `inf`/`-inf` as valid results (only error on truly unrepresentable values)
-C) Return `inf`/`-inf` as valid results for `exp` but OVERFLOW error for other operations
-D) Other (please describe after [Answer]: tag below)
-
-[Answer]: A
-
-## Question 4
-For unit conversions, the vision lists specific units for each category. Should unknown `from_unit`/`to_unit` values return `INVALID_INPUT` (422) or a more specific error?
-
-A) Return `INVALID_INPUT` (422) for unknown units — consistent with other validation errors
-B) Return a specific `UNKNOWN_UNIT` error code with HTTP 400
-C) Other (please describe after [Answer]: tag below)
+A) 항상 단일 숫자 값 반환(동점이 있으면 가장 작은 최빈값)
+B) 모든 최빈값 목록 반환, 오름차순 정렬
+C) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: A
 
-## Question 5
-The tech-env specifies `uv run pytest` and `pytest-cov` with 90% coverage minimum. Should the `pyproject.toml` configure `pytest-cov` to enforce the 90% threshold (fail the test run if below 90%), or just report coverage?
+## 질문 3
+비전은 `OVERFLOW`를 오류 코드로 언급합니다. Python `math` 모듈은 오버플로 경우 `inf`를 반환합니다(예: `math.exp(1000)`). API는 결과 필드에 `inf`를 반환해야 합니까, 아니면 OVERFLOW 오류 응답을 반환해야 합니까?
 
-A) Enforce 90% minimum — tests fail if coverage drops below 90%
-B) Report coverage only — do not fail the test run based on coverage
-C) Other (please describe after [Answer]: tag below)
+A) 결과가 `inf` 또는 `-inf`가 될 때마다 OVERFLOW 오류 응답 반환
+B) `inf`/`-inf`를 유효한 결과로 반환(진짜 표현 불가한 값에서만 오류)
+C) `exp`에 대해서는 `inf`/`-inf`를 유효 결과로, 다른 연산은 OVERFLOW 오류
+D) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: A
 
-## Question 6
-The vision lists `nan` as a constant. Should operations that receive `NaN` as input (e.g., `add(NaN, 5)`) return `NaN` following IEEE 754 propagation, or return an `INVALID_INPUT` error?
+## 질문 4
+단위 변환에 대해 비전은 각 카테고리별 단위를 나열합니다. 알 수 없는 `from_unit`/`to_unit` 값은 `INVALID_INPUT`(422)을 반환해야 합니까, 아니면 더 구체적인 오류를 반환해야 합니까?
 
-A) Propagate NaN following IEEE 754 rules (return NaN in result)
-B) Reject NaN inputs with `INVALID_INPUT` error
-C) Other (please describe after [Answer]: tag below)
+A) 알 수 없는 단위는 `INVALID_INPUT`(422) — 다른 검증 오류와 일관
+B) HTTP 400으로 특정 `UNKNOWN_UNIT` 오류 코드 반환
+C) 기타(아래 `[Answer]:` 태그 뒤에 설명)
+
+[Answer]: A
+
+## 질문 5
+tech-env는 `uv run pytest`와 최소 90% 커버리지의 `pytest-cov`를 명시합니다. `pyproject.toml`이 90% 임계값을 강제(90% 미만이면 테스트 실행 실패)하도록 `pytest-cov`를 설정해야 합니까, 아니면 커버리지만 보고하면 됩니까?
+
+A) 90% 최소 강제 — 커버리지가 90% 미만이면 테스트 실패
+B) 커버리지만 보고 — 커버리지로 테스트 실행을 실패시키지 않음
+C) 기타(아래 `[Answer]:` 태그 뒤에 설명)
+
+[Answer]: A
+
+## 질문 6
+비전은 상수로 `nan`을 나열합니다. 입력으로 `NaN`을 받는 연산(예: `add(NaN, 5)`)은 IEEE 754 전파에 따라 `NaN`을 반환해야 합니까, 아니면 `INVALID_INPUT` 오류를 반환해야 합니까?
+
+A) IEEE 754 규칙에 따라 NaN 전파(결과에 NaN 반환)
+B) `INVALID_INPUT` 오류로 NaN 입력 거부
+C) 기타(아래 `[Answer]:` 태그 뒤에 설명)
 
 [Answer]: B

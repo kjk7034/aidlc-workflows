@@ -1,4 +1,4 @@
-## Code of Conduct
-This project has adopted the [Amazon Open Source Code of Conduct](https://aws.github.io/code-of-conduct).
-For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact
-opensource-codeofconduct@amazon.com with any additional questions or comments.
+## 행동 강령
+이 프로젝트는 [Amazon 오픈 소스 행동 강령](https://aws.github.io/code-of-conduct)을 채택했습니다.
+자세한 내용은 [행동 강령 FAQ](https://aws.github.io/code-of-conduct-faq)를 참고하거나
+추가 질문이나 의견이 있으면 opensource-codeofconduct@amazon.com으로 연락하세요.

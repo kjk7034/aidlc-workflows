@@ -1,230 +1,229 @@
-# Mid-Workflow Changes and Stage Management
+# 워크플로 중간 변경 및 단계 관리
 
-## Overview
+## 개요
 
-Users may request changes to the execution plan or stage execution during the workflow. This document provides guidance on handling these requests safely and effectively.
-
----
-
-## Types of Mid-Workflow Changes
-
-### 1. Adding a Skipped Stage
-
-**Scenario**: User wants to add a stage that was originally skipped
-
-**Example**: "Actually, I want to add user stories even though we skipped that stage"
-
-**Handling**:
-1. **Confirm Request**: "You want to add User Stories stage. This will create user stories and personas. Confirm?"
-2. **Check Dependencies**: Verify all prerequisite stages are complete
-3. **Update Execution Plan**: Add stage to `execution-plan.md` with rationale
-4. **Update State**: Mark stage as "PENDING" in `aidlc-state.md`
-5. **Execute Stage**: Follow normal stage execution process
-6. **Log Change**: Document in `audit.md` with timestamp and reason
-
-**Considerations**:
-- May need to update later stages that could benefit from new artifacts
-- Existing artifacts may need revision to incorporate new information
-- Timeline will be extended
+사용자가 실행 계획이나 단계 실행 중 변경을 요청할 수 있습니다. 이 문서는 이러한 요청을 안전하고 효과적으로 처리하는 방법을 안내합니다.
 
 ---
 
-### 2. Skipping a Planned Stage
+## 중간 변경 유형
 
-**Scenario**: User wants to skip a stage that was planned to execute
+### 1. 건너뛴 단계 추가
 
-**Example**: "Let's skip the NFR Design stage for now"
+**시나리오**: 원래 건너뛴 단계를 다시 넣고 싶음
 
-**Handling**:
-1. **Confirm Request**: "You want to skip NFR Design. This means no NFR patterns or logical components will be incorporated. Confirm?"
-2. **Warn About Impact**: Explain what will be missing and potential consequences
-3. **Get Explicit Confirmation**: User must explicitly confirm understanding of impact
-4. **Update Execution Plan**: Mark stage as "SKIPPED" with reason
-5. **Update State**: Mark stage as "SKIPPED" in `aidlc-state.md`
-6. **Adjust Later Stages**: Note that later stages may need manual setup
-7. **Log Change**: Document in `audit.md` with timestamp and reason
+**예**: "사실 user stories 단계를 추가하고 싶어요. 그 단계는 건너뛰었는데요"
 
-**Considerations**:
-- Later stages may fail or require manual intervention
-- User accepts responsibility for missing artifacts
-- Can be added back later if needed
+**처리**:
+1. **요청 확인**: "User Stories 단계를 추가합니다. user stories와 페르소나가 생성됩니다. 확인하시겠습니까?"
+2. **의존성 확인**: 선행 단계가 모두 완료되었는지 검증
+3. **실행 계획 갱신**: `execution-plan.md`에 단계를 근거와 함께 추가
+4. **상태 갱신**: `aidlc-state.md`에서 해당 단계를 "PENDING"으로 표시
+5. **단계 실행**: 일반 단계 실행 절차를 따름
+6. **변경 기록**: `audit.md`에 타임스탬프와 사유를 기록
 
----
-
-### 3. Restarting Current Stage
-
-**Scenario**: User is unhappy with current stage results and wants to redo it
-
-**Example**: "I don't like these user stories. Can we start over?"
-
-**Handling**:
-1. **Understand Concern**: "What specifically would you like to change about the stories?"
-2. **Offer Options**:
-   - **Option A**: Modify existing artifacts (faster, preserves some work)
-   - **Option B**: Complete restart (clean slate, more time)
-3. **If Restart Chosen**:
-   - Archive existing artifacts: `{artifact}.backup.{timestamp}`
-   - Reset stage checkboxes in plan file
-   - Mark stage as "IN PROGRESS" in `aidlc-state.md`
-   - Clear stage completion status
-   - Re-execute from beginning
-4. **Log Change**: Document reason for restart and what will change
-
-**Considerations**:
-- Existing work will be lost (but backed up)
-- May need to redo dependent stages
-- Timeline will be extended
+**고려 사항**:
+- 새 산출물이 이후 단계에 도움이 되도록 기존 산출물을 갱신해야 할 수 있음
+- 일정이 연장될 수 있음
 
 ---
 
-### 4. Restarting Previous Stage
+### 2. 계획된 단계 건너뛰기
 
-**Scenario**: User wants to go back and redo a completed stage
+**시나리오**: 실행 예정이던 단계를 건너뛰고 싶음
 
-**Example**: "I want to change the architectural decision we made earlier"
+**예**: "지금은 NFR Design 단계는 건너뛰고 싶어요"
 
-**Handling**:
-1. **Assess Impact**: Identify all stages that depend on the stage to be restarted
-2. **Warn User**: "Restarting Application Design will require redoing: Units Planning, Units Generation, per-unit design (all units), Code Generation. Confirm?"
-3. **Get Explicit Confirmation**: User must understand full impact
-4. **If Confirmed**:
-   - Archive all affected artifacts
-   - Reset all affected stages in `aidlc-state.md`
-   - Clear checkboxes in all affected plan files
-   - Return to the stage to restart
-   - Re-execute from that point forward
-5. **Log Change**: Document full impact and reason for restart
+**처리**:
+1. **요청 확인**: "NFR Design을 건너뜁니다. NFR 패턴이나 논리 컴포넌트는 반영되지 않습니다. 확인하시겠습니까?"
+2. **영향 경고**: 무엇이 빠지는지, 잠재적 결과 설명
+3. **명시적 확인**: 사용자가 영향을 이해했는지 명확히 확인
+4. **실행 계획 갱신**: 단계를 사유와 함께 "SKIPPED"로 표시
+5. **상태 갱신**: `aidlc-state.md`에서 해당 단계를 "SKIPPED"로 표시
+6. **이후 단계 조정**: 이후 단계에서 수동 설정이 필요할 수 있음을 기록
+7. **변경 기록**: `audit.md`에 타임스탬프와 사유를 기록
 
-**Considerations**:
-- Significant rework required
-- All dependent stages must be redone
-- Timeline will be significantly extended
-- Consider if modification is better than restart
+**고려 사항**:
+- 이후 단계가 실패하거나 수동 개입이 필요할 수 있음
+- 사용자가 빠진 산출물에 대한 책임을 인수
+- 필요 시 나중에 다시 추가 가능
 
 ---
 
-### 5. Changing Stage Depth
+### 3. 현재 단계 다시 시작
 
-**Scenario**: User wants to change the depth level of current or upcoming stage
+**시나리오**: 현재 단계 결과가 마음에 들지 않아 처음부터 다시 하고 싶음
 
-**Example**: "Let's do a comprehensive requirements analysis instead of standard"
+**예**: "이 user stories가 마음에 안 들어요. 처음부터 할 수 있을까요?"
 
-**Handling**:
-1. **Confirm Request**: "You want to change Requirements Analysis from Standard to Comprehensive depth. This will be more thorough but take longer. Confirm?"
-2. **Update Execution Plan**: Change depth level in `workflow-planning.md`
-3. **Adjust Approach**: Follow comprehensive depth guidelines for the stage
-4. **Update Estimates**: Inform user of new timeline estimate
-5. **Log Change**: Document depth change and reason
+**처리**:
+1. **우려 파악**: "스토리에서 구체적으로 무엇을 바꾸고 싶으신가요?"
+2. **옵션 제시**:
+   - **옵션 A**: 기존 산출물 수정(더 빠름, 일부 작업 유지)
+   - **옵션 B**: 완전 재시작(깨끗한 상태, 시간 더 소요)
+3. **재시작 선택 시**:
+   - 기존 산출물 보관: `{artifact}.backup.{timestamp}`
+   - 계획 파일의 단계 체크박스 초기화
+   - `aidlc-state.md`에서 해당 단계를 "IN PROGRESS"로 표시
+   - 단계 완료 상태 해제
+   - 처음부터 재실행
+4. **변경 기록**: 재시작 사유와 무엇이 바뀔지 기록
 
-**Considerations**:
-- More depth = more time but better quality
-- Less depth = faster but may miss details
-- Can only change before or during stage, not after completion
-
----
-
-### 6. Pausing Workflow
-
-**Scenario**: User needs to pause and resume later
-
-**Example**: "I need to stop for now and continue tomorrow"
-
-**Handling**:
-1. **Complete Current Step**: Finish the current step in progress if possible
-2. **Update Checkboxes**: Mark all completed steps with [x]
-3. **Update State**: Ensure `aidlc-state.md` reflects current status
-4. **Log Pause**: Document pause point in `audit.md`
-5. **Provide Resume Instructions**: "When you return, I'll detect your existing project and offer to continue from: [current stage, current step]"
-
-**On Resume**:
-1. **Detect Existing Project**: Check for `aidlc-state.md`
-2. **Load Context**: Read all artifacts from completed stages
-3. **Show Status**: Display current stage and next step
-4. **Offer Options**: Continue where left off or review previous work
-5. **Log Resume**: Document resume point in `audit.md`
+**고려 사항**:
+- 기존 작업은 사라지지만 백업됨
+- 의존 단계를 다시 해야 할 수 있음
+- 일정이 연장될 수 있음
 
 ---
 
-### 7. Changing Architectural Decision
+### 4. 이전 단계 다시 시작
 
-**Scenario**: User wants to change from monolith to microservices (or vice versa)
+**시나리오**: 완료된 단계로 돌아가 다시 하고 싶음
 
-**Example**: "Actually, let's do microservices instead of a monolith"
+**예**: "아까 내린 아키텍처 결정을 바꾸고 싶어요"
 
-**Handling**:
-1. **Assess Current Progress**: Determine how far into workflow
-2. **Explain Impact**: 
-   - If before Units Planning: Minimal impact, just update decision
-   - If after Units Planning: Must redo Units Planning, Units Generation, all per-unit design
-   - If after Code Generation: Significant rework required
-3. **Recommend Approach**:
-   - Early in workflow: Restart from Application Design stage
-   - Late in workflow: Consider if modification is feasible vs. restart
-4. **Get Confirmation**: User must understand full scope of change
-5. **Execute Change**: Follow restart procedures for affected stages
+**처리**:
+1. **영향 평가**: 다시 시작할 단계에 의존하는 모든 단계 식별
+2. **사용자 경고**: "Application Design을 다시 하면 다음을 다시 해야 합니다: Units Planning, Units Generation, 단위별 설계(모든 단위), Code Generation. 확인하시겠습니까?"
+3. **명시적 확인**: 전체 영향을 사용자가 이해했는지 확인
+4. **확인 시**:
+   - 영향받는 모든 산출물 보관
+   - `aidlc-state.md`에서 영향받는 모든 단계 초기화
+   - 영향받는 모든 계획 파일의 체크박스 초기화
+   - 다시 시작할 단계로 복귀
+   - 그 지점부터 앞으로 재실행
+5. **변경 기록**: 전체 영향과 재시작 사유 기록
 
-**Considerations**:
-- Architectural changes have cascading effects
-- Earlier in workflow = easier to change
-- Later in workflow = consider cost vs. benefit
-
----
-
-### 8. Adding/Removing Units
-
-**Scenario**: User wants to add or remove units after Units Generation
-
-**Example**: "We need to split the Payment unit into Payment and Billing"
-
-**Handling**:
-1. **Assess Impact**: Determine which units have completed design/code
-2. **Explain Consequences**:
-   - Adding unit: Need to do full design and code for new unit
-   - Removing unit: Need to redistribute functionality to other units
-   - Splitting unit: Need to redo design and code for both resulting units
-3. **Update Unit Artifacts**:
-   - Modify `unit-of-work.md`
-   - Update `unit-of-work-dependency.md`
-   - Revise `unit-of-work-story-map.md`
-4. **Reset Affected Units**: Mark affected units as needing redesign
-5. **Execute Changes**: Follow normal unit design and code process for affected units
-
-**Considerations**:
-- Affects all downstream stages for those units
-- May affect other units if dependencies change
-- Timeline impact depends on how many units affected
+**고려 사항**:
+- 상당한 재작업 필요
+- 의존하는 모든 단계를 다시 해야 함
+- 일정이 크게 연장될 수 있음
+- 재시작보다 수정이 나은지 검토
 
 ---
 
-## General Guidelines for Handling Changes
+### 5. 단계 깊이 변경
 
-### Before Making Changes
+**시나리오**: 현재 또는 예정 단계의 깊이 수준을 바꾸고 싶음
 
-1. **Understand the Request**: Ask clarifying questions about what user wants to change and why
-2. **Assess Impact**: Identify all affected stages, artifacts, and dependencies
-3. **Explain Consequences**: Clearly communicate what will need to be redone and timeline impact
-4. **Offer Alternatives**: Sometimes modification is better than restart
-5. **Get Explicit Confirmation**: User must understand and accept the impact
+**예**: "요구사항 분석을 standard 대신 comprehensive로 하고 싶어요"
 
-### During Changes
+**처리**:
+1. **요청 확인**: "Requirements Analysis를 Standard에서 Comprehensive 깊이로 바꿉니다. 더 철저하지만 시간이 더 걸립니다. 확인하시겠습니까?"
+2. **실행 계획 갱신**: `workflow-planning.md`에서 깊이 수준 변경
+3. **접근 조정**: 해당 단계의 comprehensive 깊이 지침을 따름
+4. **추정 갱신**: 새 일정 추정을 사용자에게 알림
+5. **변경 기록**: 깊이 변경과 사유 기록
 
-1. **Archive Existing Work**: Always backup before making destructive changes
-2. **Update All Tracking**: Keep `aidlc-state.md`, plan files, and `audit.md` in sync
-3. **Communicate Progress**: Keep user informed about what's happening
-4. **Validate Changes**: Ensure changes are consistent across all artifacts
-5. **Test Continuity**: Verify workflow can continue smoothly after changes
-
-### After Changes
-
-1. **Verify Consistency**: Check that all artifacts are aligned with changes
-2. **Update Documentation**: Ensure all references are updated
-3. **Log Completely**: Document full change history in `audit.md`
-4. **Confirm with User**: Verify changes meet user's expectations
-5. **Resume Workflow**: Continue with normal execution from new state
+**고려 사항**:
+- 깊이 증가 = 시간 증가, 품질 향상 가능
+- 깊이 감소 = 빠르지만 세부 누락 가능
+- 완료 전이나 진행 중에만 변경 가능, 완료 후에는 불가
 
 ---
 
-## Change Request Decision Tree
+### 6. 워크플로 일시 중지
+
+**시나리오**: 잠시 멈췄다가 나중에 이어가야 함
+
+**예**: "지금은 여기서 멈추고 내일 이어가고 싶어요"
+
+**처리**:
+1. **현재 단계 마무리**: 가능하면 진행 중인 단계의 현재 스텝을 완료
+2. **체크박스 갱신**: 완료한 스텝을 모두 [x]로 표시
+3. **상태 갱신**: `aidlc-state.md`가 현재 상태를 반영하는지 확인
+4. **일시 중지 기록**: `audit.md`에 중지 지점 기록
+5. **재개 안내 제공**: "돌아오시면 기존 프로젝트를 감지하고 다음에서 이어갈 수 있습니다: [현재 단계, 다음 스텝]"
+
+**재개 시**:
+1. **기존 프로젝트 감지**: `aidlc-state.md` 존재 여부 확인
+2. **컨텍스트 로드**: 완료된 단계의 산출물 모두 읽기
+3. **상태 표시**: 현재 단계와 다음 스텝 표시
+4. **옵션 제공**: 중단한 곳부터 이어가기 또는 이전 작업 검토
+5. **재개 기록**: `audit.md`에 재개 지점 기록
+
+---
+
+### 7. 아키텍처 결정 변경
+
+**시나리오**: 모놀리스에서 마이크로서비스로(또는 그 반대) 바꾸고 싶음
+
+**예**: "사실 마이크로서비스로 하고 싶어요, 모놀리스 말고요"
+
+**처리**:
+1. **현재 진행도 평가**: 워크플로에서 얼마나 진행했는지 판단
+2. **영향 설명**:
+   - Units Planning 이전: 영향 최소, 결정만 갱신
+   - Units Planning 이후: Units Planning, Units Generation, 모든 단위 설계를 다시 해야 함
+   - Code Generation 이후: 상당한 재작업 필요
+3. **권장 접근**:
+   - 워크플로 초기: Application Design 단계부터 재시작
+   - 워플로 후반: 수정이 가능한지 vs 재시작인지 검토
+4. **확인**: 변경 범위 전체를 사용자가 이해했는지 확인
+5. **변경 실행**: 영향받는 단계에 대해 재시작 절차 수행
+
+**고려 사항**:
+- 아키텍처 변경은 연쇄 효과가 있음
+- 워크플로가 이를수록 변경이 쉬움
+- 워크플로가 늦을수록 비용 대비 이익 검토
+
+---
+
+### 8. 단위 추가/제거
+
+**시나리오**: Units Generation 이후 단위를 추가하거나 제거하고 싶음
+
+**예**: "Payment 단위를 Payment와 Billing으로 나눠야 해요"
+
+**처리**:
+1. **영향 평가**: 설계/코드가 완료된 단위 파악
+2. **결과 설명**:
+   - 단위 추가: 새 단위에 대해 전체 설계와 코드 필요
+   - 단위 제거: 기능을 다른 단위에 재배치 필요
+   - 단위 분할: 결과 두 단위 모두 설계·코드 재작업 필요
+3. **단위 산출물 갱신**:
+   - `unit-of-work.md` 수정
+   - `unit-of-work-dependency.md` 갱신
+   - `unit-of-work-story-map.md` 수정
+4. **영향받는 단위 초기화**: 영향받는 단위를 재설계 필요로 표시
+5. **변경 실행**: 영향받는 단위에 대해 일반 단위 설계·코드 절차 수행
+
+**고려 사항**:
+- 해당 단위의 모든 하류 단계에 영향
+- 의존성이 바뀌면 다른 단위에도 영향 가능
+- 영향받는 단위 수에 따라 일정 영향이 달라짐
+
+---
+
+## 변경 처리 일반 지침
+
+### 변경 전
+
+1. **요청 이해**: 무엇을 왜 바꾸려는지 명확화 질문
+2. **영향 평가**: 영향받는 단계, 산출물, 의존성 식별
+3. **결과 설명**: 무엇을 다시 해야 하는지, 일정 영향을 명확히 전달
+4. **대안 제시**: 때로는 재시작보다 수정이 나음
+5. **명시적 확인**: 사용자가 영향을 이해하고 수용했는지 확인
+
+### 변경 중
+
+1. **기존 작업 보관**: 파괴적 변경 전 항상 백업
+2. **추적 전부 갱신**: `aidlc-state.md`, 계획 파일, `audit.md` 동기화
+3. **진행 상황 공유**: 무슨 일이 일어나는지 사용자에게 알림
+4. **변경 검증**: 산출물 전반에서 일관성 확인
+5. **연속성 테스트**: 변경 후 워크플로가 매끄럽게 이어지는지 확인
+
+### 변경 후
+
+1. **일관성 확인**: 모든 산출물이 변경과 맞는지 검증
+2. **문서 갱신**: 참조가 모두 갱신되었는지 확인
+3. **완전 기록**: `audit.md`에 변경 이력 전체 기록
+4. **사용자 확인**: 기대에 맞는지 사용자와 확인
+5. **워크플로 재개**: 새 상태에서 일반 실행으로 계속
+
+---
+
+## 변경 요청 의사결정 트리
 
 ```
 User requests change
@@ -254,9 +253,9 @@ User requests change
 
 ---
 
-## Logging Requirements
+## 로깅 요구사항
 
-### Change Request Log Format
+### 변경 요청 로그 형식
 
 ```markdown
 ## Change Request - [Stage Name]
@@ -273,13 +272,13 @@ User requests change
 
 ---
 
-## Best Practices
+## 모범 사례
 
-1. **Always Confirm**: Never make destructive changes without explicit user confirmation
-2. **Explain Impact**: Users need to understand consequences before deciding
-3. **Offer Options**: Sometimes there are multiple ways to handle a change
-4. **Archive First**: Always backup before making destructive changes
-5. **Update Everything**: Keep all tracking files in sync
-6. **Log Thoroughly**: Document all changes for audit trail
-7. **Validate After**: Ensure workflow can continue smoothly
-8. **Be Flexible**: Workflow should adapt to user needs, not force rigid process
+1. **항상 확인**: 명시적 사용자 확인 없이 파괴적 변경 금지
+2. **영향 설명**: 결정 전 사용자가 결과를 이해해야 함
+3. **옵션 제공**: 변경 처리 방법이 여러 가지일 수 있음
+4. **먼저 보관**: 파괴적 변경 전 항상 백업
+5. **전부 갱신**: 모든 추적 파일을 동기화
+6. **철저히 기록**: 감사 추적을 위해 모든 변경 기록
+7. **이후 검증**: 워크플로가 매끄럽게 계속되는지 확인
+8. **유연하게**: 사용자 요구에 맞추고 경직된 프로세스를 강요하지 않음

@@ -1,67 +1,67 @@
-# Contributing Guidelines
+# 기여 가이드
 
-Thank you for your interest in contributing to AI-DLC. Whether it's a bug report, new rule, correction, or documentation improvement, we value feedback and contributions from the community.
+AI-DLC에 기여해 주셔서 감사합니다. 버그 리포트, 새 규칙, 수정, 문서 개선 등 어떤 형태의 피드백과 기여도 소중히 받습니다.
 
-Please read through this document before submitting any issues or pull requests.
+이슈나 풀 리퀘스트를 제출하기 전에 이 문서를 읽어 주세요.
 
-## Tenets
+## 원칙
 
-Before contributing, familiarize yourself with our [tenets](README.md#tenets).
+기여하기 전에 [원칙](README.md#tenets)을 숙지해 주세요.
 
-## Contributing Rules
+## 기여 규칙
 
-AI-DLC rules live in `aidlc-rules/aws-aidlc-rule-details/`. When contributing:
+AI-DLC 규칙은 `aidlc-rules/aws-aidlc-rule-details/`에 있습니다. 기여 시 다음을 지켜 주세요.
 
-- **Be reproducible**: Changes should be consistently reproducible either via test case or a series of step
-- **Single source of truth**: Don't duplicate content. If guidance applies to multiple stages, put it in `common/` and reference it.
-- **Keep it agnostic**: The core methodology shouldn't assume specific IDEs, agents, or models. Tool-specific files are generated from the source.
+- **재현 가능**: 변경 사항은 테스트 케이스 또는 단계별 절차로 일관되게 재현 가능해야 합니다.
+- **단일 진실 공급원**: 내용을 중복하지 마세요. 여러 단계에 걸친 지침은 `common/`에 두고 참조하세요.
+- **도구 중립 유지**: 핵심 방법론은 특정 IDE, 에이전트, 모델을 가정하지 않아야 합니다. 도구별 파일은 원본에서 생성합니다.
 
-### Rule Structure
+### 규칙 구조
 
-Rules are organized by phase:
-- `common/` - Shared guidance across all phases
-- `inception/` - Planning and architecture rules
-- `construction/` - Design and implementation rules
-- `operations/` - Deployment and monitoring rules
+규칙은 단계별로 구성됩니다.
+- `common/` — 모든 단계에서 공유하는 지침
+- `inception/` — 계획 및 아키텍처 규칙
+- `construction/` — 설계 및 구현 규칙
+- `operations/` — 배포 및 모니터링 규칙
 
-### Testing Changes
+### 변경 사항 테스트
 
-Test your rule changes with at least one supported platform (Amazon Q Developer, Kiro, or other tools) before submitting. Describe what you tested in your PR.
+제출 전에 지원 플랫폼 중 하나(Amazon Q Developer, Kiro 또는 기타 도구)로 규칙 변경을 테스트하세요. PR에 무엇을 테스트했는지 적어 주세요.
 
-## Reporting Bugs/Feature Requests
+## 버그/기능 요청
 
-Use GitHub issues to report bugs or suggest features. Before filing, check existing issues to avoid duplicates.
+GitHub 이슈로 버그를 보고하거나 기능을 제안하세요. 등록 전에 기존 이슈를 확인해 중복을 피하세요.
 
-Include:
-- Which rule or stage is affected
-- Expected vs actual behavior
-- The platform/model you tested with
+포함할 내용:
+- 어떤 규칙 또는 단계가 영향을 받는지
+- 기대 동작과 실제 동작
+- 테스트한 플랫폼/모델
 
-## Contributing via Pull Requests
+## 풀 리퀘스트로 기여
 
-Before sending a pull request:
+풀 리퀘스트를 보내기 전에:
 
-1. Work against the latest `main` branch
-2. Check existing open and recently merged PRs
-3. Open an issue first for significant changes
+1. 최신 `main` 브랜치 기준으로 작업하세요.
+2. 열려 있거나 최근에 병합된 PR을 확인하세요.
+3. 큰 변경은 먼저 이슈를 열어 논의하세요.
 
-To submit:
+제출 절차:
 
-1. Fork the repository
-2. Make your changes (keep them focused)
-3. Use clear commit messages following [conventional commits](https://www.conventionalcommits.org/) (e.g., `feat:`, `fix:`, `docs:`)
-4. Submit the PR and respond to feedback
+1. 저장소를 포크합니다.
+2. 변경을 만듭니다(범위를 좁게 유지).
+3. [Conventional Commits](https://www.conventionalcommits.org/)에 맞는 명확한 커밋 메시지를 사용합니다(예: `feat:`, `fix:`, `docs:`).
+4. PR을 제출하고 피드백에 응답합니다.
 
-## Code of Conduct
+## 행동 강령
 
-This project has adopted the [Amazon Open Source Code of Conduct](https://aws.github.io/code-of-conduct).
+이 프로젝트는 [Amazon 오픈 소스 행동 강령](https://aws.github.io/code-of-conduct)을 채택했습니다.
 
-For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact opensource-codeofconduct@amazon.com with any additional questions or comments.
+자세한 내용은 [행동 강령 FAQ](https://aws.github.io/code-of-conduct-faq)를 참고하거나 추가 질문이 있으면 opensource-codeofconduct@amazon.com으로 연락하세요.
 
-## Security Issue Notifications
+## 보안 이슈 알림
 
-If you discover a potential security issue, notify AWS/Amazon Security via the [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do not create a public GitHub issue.
+잠재적 보안 문제를 발견한 경우 [취약점 신고 페이지](http://aws.amazon.com/security/vulnerability-reporting/)를 통해 AWS/Amazon Security에 알려 주세요. 공개 GitHub 이슈는 만들지 마세요.
 
-## Licensing
+## 라이선스
 
-See the [LICENSE](LICENSE) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
+프로젝트 라이선스는 [LICENSE](LICENSE) 파일을 참고하세요. 기여에 대한 라이선스 확인을 요청할 수 있습니다.

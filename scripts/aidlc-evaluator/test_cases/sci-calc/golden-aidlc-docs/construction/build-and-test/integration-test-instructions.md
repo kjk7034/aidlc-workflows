@@ -1,54 +1,54 @@
-# Integration Test Instructions
+# 통합 테스트 지침
 
-## Purpose
-Test the full request→route→engine→response pipeline across all 7 API domains.
+## 목적
+7개 API 도메인 전체에 요청→route→engine→response 파이프라인을 테스트합니다.
 
-## Test Scenarios
+## 테스트 시나리오
 
-### Scenario 1: Arithmetic Operations
-- **Endpoints**: POST `/api/v1/arithmetic/{add,subtract,multiply,divide,modulo,abs,negate}`
-- **Tests**: 12 integration tests
-- **Covers**: binary ops, unary ops, division-by-zero, invalid input, NaN rejection, 404
+### 시나리오 1: 산술 연산
+- **엔드포인트**: POST `/api/v1/arithmetic/{add,subtract,multiply,divide,modulo,abs,negate}`
+- **테스트**: 통합 테스트 12개
+- **포함**: 이항 연산, 단항 연산, 0으로 나눗셈, 잘못된 입력, NaN 거부, 404
 
-### Scenario 2: Powers & Roots
-- **Endpoints**: POST `/api/v1/powers/{power,sqrt,cbrt,square,nth_root}`
-- **Tests**: 9 integration tests
-- **Covers**: all operations, domain errors, overflow, 404
+### 시나리오 2: 거듭제곱과 루트
+- **엔드포인트**: POST `/api/v1/powers/{power,sqrt,cbrt,square,nth_root}`
+- **테스트**: 통합 테스트 9개
+- **포함**: 모든 연산, 정의역 오류, 오버플로, 404
 
-### Scenario 3: Trigonometry
-- **Endpoints**: POST `/api/v1/trigonometry/{sin,cos,tan,asin,acos,atan,atan2,sinh,cosh,tanh,asinh,acosh,atanh}`
-- **Tests**: 8 integration tests
-- **Covers**: radians/degrees, domain errors, hyperbolic functions, 404
+### 시나리오 3: 삼각함수
+- **엔드포인트**: POST `/api/v1/trigonometry/{sin,cos,tan,asin,acos,atan,atan2,sinh,cosh,tanh,asinh,acosh,atanh}`
+- **테스트**: 통합 테스트 8개
+- **포함**: 라디안/도, 정의역 오류, 쌍곡선 함수, 404
 
-### Scenario 4: Logarithmic
-- **Endpoints**: POST `/api/v1/logarithmic/{ln,log10,log2,log,exp}`
-- **Tests**: 9 integration tests
-- **Covers**: all operations, domain errors, overflow, 404
+### 시나리오 4: 로그
+- **엔드포인트**: POST `/api/v1/logarithmic/{ln,log10,log2,log,exp}`
+- **테스트**: 통합 테스트 9개
+- **포함**: 모든 연산, 정의역 오류, 오버플로, 404
 
-### Scenario 5: Statistics
-- **Endpoints**: POST `/api/v1/statistics/{mean,median,mode,stdev,variance,pstdev,pvariance,min,max,sum,count}`
-- **Tests**: 14 integration tests
-- **Covers**: all operations, domain errors, empty input validation, 404
+### 시나리오 5: 통계
+- **엔드포인트**: POST `/api/v1/statistics/{mean,median,mode,stdev,variance,pstdev,pvariance,min,max,sum,count}`
+- **테스트**: 통합 테스트 14개
+- **포함**: 모든 연산, 정의역 오류, 빈 입력 검증, 404
 
-### Scenario 6: Constants
-- **Endpoints**: GET `/api/v1/constants/` and GET `/api/v1/constants/{name}`
-- **Tests**: 4 integration tests
-- **Covers**: single constant retrieval, listing all, unknown constant 404
+### 시나리오 6: 상수
+- **엔드포인트**: GET `/api/v1/constants/` 및 GET `/api/v1/constants/{name}`
+- **테스트**: 통합 테스트 4개
+- **포함**: 단일 상수 조회, 전체 목록, 알 수 없는 상수 404
 
-### Scenario 7: Conversions & Health
-- **Endpoints**: POST `/api/v1/conversions/{angle,temperature,length,weight}`, GET `/health`
-- **Tests**: 7 integration tests
-- **Covers**: all conversion types, unknown category, unknown unit, health check
+### 시나리오 7: 변환 및 헬스
+- **엔드포인트**: POST `/api/v1/conversions/{angle,temperature,length,weight}`, GET `/health`
+- **테스트**: 통합 테스트 7개
+- **포함**: 모든 변환 유형, 알 수 없는 카테고리, 알 수 없는 단위, 헬스 체크
 
-## Run Integration Tests
+## 통합 테스트 실행
 ```bash
-# All integration tests are in the same test files alongside unit tests
-# They use the `client` fixture from conftest.py
+# 통합 테스트는 단위 테스트와 동일한 테스트 파일에 있음
+# conftest.py의 `client` fixture 사용
 set PYTHONPATH=src
 python -m pytest tests/ -v -k "API" -p no:anyio -p no:asyncio
 ```
 
-## Expected Results
-- **Total Integration Tests**: 63
-- **All passing**: ✅
-- **Response format validated**: status, operation, inputs, result (or error)
+## 예상 결과
+- **통합 테스트 총계**: 63
+- **모두 통과**: ✅
+- **응답 형식 검증**: status, operation, inputs, result(또는 error)

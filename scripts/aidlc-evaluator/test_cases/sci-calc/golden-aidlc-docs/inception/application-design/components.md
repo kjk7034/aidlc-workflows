@@ -1,64 +1,64 @@
-# Components
+# 컴포넌트
 
-## 1. Application Entry Point — `sci_calc/app.py`
-**Purpose**: FastAPI application factory, middleware, error handlers, router registration.
-**Responsibilities**:
-- Create FastAPI app instance with metadata (title, version)
-- Register all route modules
-- Override default validation error handler to use standard error envelope
-- Register global exception handlers (catch-all for unexpected errors)
-- Health check endpoint
+## 1. 애플리케이션 진입점 — `sci_calc/app.py`
+**목적**: FastAPI 애플리케이션 팩토리, 미들웨어, 오류 핸들러, 라우터 등록.
+**책임**:
+- 메타데이터(title, version)와 함께 FastAPI 앱 인스턴스 생성
+- 모든 라우트 모듈 등록
+- 표준 오류 래퍼를 쓰도록 기본 검증 오류 핸들러 재정의
+- 전역 예외 핸들러 등록(예상치 못한 오류용)
+- 헬스 체크 엔드포인트
 
-## 2. Routes Layer — `sci_calc/routes/`
+## 2. Routes 계층 — `sci_calc/routes/`
 
 ### 2.1 `arithmetic.py`
-**Purpose**: Handle arithmetic operation requests.
-**Responsibilities**: Parse input, delegate to engine, wrap results in success/error envelope.
+**목적**: 산술 연산 요청 처리.
+**책임**: 입력 파싱, 엔진에 위임, 성공/오류 래퍼로 결과 감싸기.
 
 ### 2.2 `powers.py`
-**Purpose**: Handle power and root operation requests.
-**Responsibilities**: Parse input, validate domain constraints, delegate to engine.
+**목적**: 거듭제곱 및 루트 연산 요청 처리.
+**책임**: 입력 파싱, 정의역 제약 검증, 엔진에 위임.
 
 ### 2.3 `trigonometry.py`
-**Purpose**: Handle trigonometric operation requests.
-**Responsibilities**: Parse input, handle angle_unit conversion, delegate to engine.
+**목적**: 삼각함수 연산 요청 처리.
+**책임**: 입력 파싱, angle_unit 변환 처리, 엔진에 위임.
 
 ### 2.4 `logarithmic.py`
-**Purpose**: Handle logarithmic operation requests.
-**Responsibilities**: Parse input, validate domain constraints, delegate to engine.
+**목적**: 로그 연산 요청 처리.
+**책임**: 입력 파싱, 정의역 제약 검증, 엔진에 위임.
 
 ### 2.5 `statistics.py`
-**Purpose**: Handle statistical operation requests.
-**Responsibilities**: Parse input, validate list size constraints, delegate to engine.
+**목적**: 통계 연산 요청 처리.
+**책임**: 입력 파싱, 리스트 크기 제약 검증, 엔진에 위임.
 
 ### 2.6 `constants.py`
-**Purpose**: Serve mathematical constants.
-**Responsibilities**: Return individual or all constants.
+**목적**: 수학 상수 제공.
+**책임**: 개별 또는 전체 상수 반환.
 
 ### 2.7 `conversions.py`
-**Purpose**: Handle unit conversion requests.
-**Responsibilities**: Parse input, validate units, delegate to engine.
+**목적**: 단위 변환 요청 처리.
+**책임**: 입력 파싱, 단위 검증, 엔진에 위임.
 
-## 3. Models Layer — `sci_calc/models/`
+## 3. Models 계층 — `sci_calc/models/`
 
 ### 3.1 `requests.py`
-**Purpose**: Pydantic v2 request models for all operations.
-**Responsibilities**: Input validation via Pydantic, type coercion, NaN rejection.
+**목적**: 모든 연산에 대한 Pydantic v2 요청 모델.
+**책임**: Pydantic을 통한 입력 검증, 타입 강제, NaN 거부.
 
 ### 3.2 `responses.py`
-**Purpose**: Pydantic v2 response models (success and error envelopes).
-**Responsibilities**: Define standard response structure, error codes enum.
+**목적**: Pydantic v2 응답 모델(성공 및 오류 래퍼).
+**책임**: 표준 응답 구조 정의, 오류 코드 열거형.
 
-## 4. Engine Layer — `sci_calc/engine/`
+## 4. Engine 계층 — `sci_calc/engine/`
 
 ### 4.1 `math_engine.py`
-**Purpose**: Pure computation logic — no HTTP/FastAPI dependencies.
-**Responsibilities**:
-- Arithmetic operations (add, subtract, multiply, divide, modulo, abs, negate)
-- Power operations (power, sqrt, cbrt, square, nth_root)
-- Trigonometric operations (all 14 trig functions with angle unit support)
-- Logarithmic operations (ln, log10, log2, log, exp)
-- Statistical operations (mean, median, mode, stdev, variance, etc.)
-- Constants retrieval
-- Unit conversions (angle, temperature, length, weight)
-- Raise domain-specific exceptions (DomainError, DivisionByZeroError, OverflowError)
+**목적**: 순수 계산 로직 — HTTP/FastAPI 의존성 없음.
+**책임**:
+- 산술 연산(add, subtract, multiply, divide, modulo, abs, negate)
+- 거듭제곱 연산(power, sqrt, cbrt, square, nth_root)
+- 삼각함수 연산(각도 단위 지원을 포함한 삼각함수 14개 전부)
+- 로그 연산(ln, log10, log2, log, exp)
+- 통계 연산(mean, median, mode, stdev, variance 등)
+- 상수 조회
+- 단위 변환(각도, 온도, 길이, 무게)
+- 정의역별 예외 발생(DomainError, DivisionByZeroError, OverflowError)

@@ -1,83 +1,83 @@
-# Execution Plan
+# 실행 계획
 
-## Detailed Analysis Summary
+## 상세 분석 요약
 
-### Change Impact Assessment
-- **User-facing changes**: Yes — all 27 API endpoints serve three user roles
-- **Structural changes**: Yes — two independent microservices with inter-service communication
-- **Data model changes**: Yes — new data models for books, members, checkouts, holds, fees
-- **API changes**: Yes — complete REST API design for both services
-- **NFR impact**: Yes — performance targets, security (RBAC, JWT), scalability requirements
+### 변경 영향 평가
+- **사용자 대면 변경**: 예 — API 엔드포인트 27개가 세 가지 사용자 역할에 제공됨
+- **구조적 변경**: 예 — 서비스 간 통신이 있는 두 개의 독립 마이크로서비스
+- **데이터 모델 변경**: 예 — 도서, 회원, 대출, 예약, 수수료에 대한 새 데이터 모델
+- **API 변경**: 예 — 두 서비스에 대한 완전한 REST API 설계
+- **NFR 영향**: 예 — 성능 목표, 보안(RBAC, JWT), 확장성 요구사항
 
-### Risk Assessment
-- **Risk Level**: Medium — complex business rules but well-defined requirements
-- **Rollback Complexity**: Easy (greenfield, no existing system to break)
-- **Testing Complexity**: Complex — two services, RBAC boundaries, lending policy edge cases
+### 위험 평가
+- **위험 수준**: 보통 — 복잡한 비즈니스 규칙이나 요구사항이 잘 정의됨
+- **롤백 복잡도**: 쉬움 (greenfield, 깨뜨릴 기존 시스템 없음)
+- **테스트 복잡도**: 복잡 — 두 서비스, RBAC 경계, 대출 정책 엣지 케이스
 
-## Workflow Visualization
+## 워크플로 시각화
 
 ```
 Phase 1: INCEPTION
-  - Stage 1: Workspace Detection (COMPLETED)
-  - Stage 2: Reverse Engineering (SKIPPED - greenfield)
-  - Stage 3: Requirements Analysis (COMPLETED)
-  - Stage 4: User Stories (COMPLETED)
-  - Stage 5: Workflow Planning (IN PROGRESS)
-  - Stage 6: Application Design (EXECUTE)
-  - Stage 7: Units Generation (EXECUTE)
+  - Stage 1: 워크스페이스 탐지 (완료)
+  - Stage 2: 리버스 엔지니어링 (생략 - greenfield)
+  - Stage 3: 요구사항 분석 (완료)
+  - Stage 4: 사용자 스토리 (완료)
+  - Stage 5: 워크플로 계획 (진행 중)
+  - Stage 6: 애플리케이션 설계 (실행)
+  - Stage 7: 유닛 생성 (실행)
 
 Phase 2: CONSTRUCTION
-  - Stage 8: Functional Design (EXECUTE)
-  - Stage 9: NFR Requirements (EXECUTE)
-  - Stage 10: NFR Design (SKIP)
-  - Stage 11: Infrastructure Design (SKIP)
-  - Stage 12: Code Generation (EXECUTE)
-  - Stage 13: Build and Test (EXECUTE)
+  - Stage 8: 기능 설계 (실행)
+  - Stage 9: NFR 요구사항 (실행)
+  - Stage 10: NFR 설계 (생략)
+  - Stage 11: 인프라 설계 (생략)
+  - Stage 12: 코드 생성 (실행)
+  - Stage 13: 빌드 및 테스트 (실행)
 
 Phase 3: OPERATIONS
-  - Operations (PLACEHOLDER)
+  - Operations (플레이스홀더)
 ```
 
-## Phases to Execute
+## 실행할 단계
 
-### INCEPTION PHASE
-- [x] Workspace Detection (COMPLETED)
-- [x] Reverse Engineering (SKIPPED — greenfield project)
-- [x] Requirements Analysis (COMPLETED)
-- [x] User Stories (COMPLETED)
-- [x] Workflow Planning (IN PROGRESS)
-- [ ] Application Design — EXECUTE
-  - **Rationale**: Two services need component identification, service boundaries, and dependency mapping. Critical for defining how Catalog and Lending services interact.
-- [ ] Units Generation — EXECUTE
-  - **Rationale**: System decomposes into two services (Catalog + Lending). Units define the build order and dependency sequence.
+### INCEPTION 단계
+- [x] 워크스페이스 탐지 (완료)
+- [x] 리버스 엔지니어링 (생략 — greenfield 프로젝트)
+- [x] 요구사항 분석 (완료)
+- [x] 사용자 스토리 (완료)
+- [x] 워크플로 계획 (진행 중)
+- [ ] 애플리케이션 설계 — 실행
+  - **근거**: 두 서비스에 컴포넌트 식별, 서비스 경계, 의존성 매핑이 필요함. Catalog와 Lending 서비스 상호작용 정의에 중요함.
+- [ ] 유닛 생성 — 실행
+  - **근거**: 시스템이 두 서비스(Catalog + Lending)로 분해됨. 유닛이 빌드 순서와 의존 시퀀스를 정의함.
 
-### CONSTRUCTION PHASE
-- [ ] Functional Design — EXECUTE
-  - **Rationale**: Complex business rules (checkout limits, hold queues, fee calculation, renewal rules) need detailed entity and domain model specification before code generation.
-- [ ] NFR Requirements — EXECUTE
-  - **Rationale**: Database choice (DynamoDB vs PostgreSQL), authentication approach (PyJWT + bcrypt), and performance patterns need to be decided. Tech-env lists options but defers decisions.
-- [ ] NFR Design — SKIP
-  - **Rationale**: NFR patterns will be captured sufficiently in NFR Requirements. Given app-code-only scope (no CDK), a separate NFR Design stage would add minimal value.
-- [ ] Infrastructure Design — SKIP
-  - **Rationale**: CDK infrastructure deferred per stakeholder decision. Application code focuses on in-memory/SQLite for local dev with database abstraction layer. No cloud infrastructure to design.
-- [ ] Code Generation — EXECUTE (ALWAYS)
-  - **Rationale**: Generate complete application code for both services.
-- [ ] Build and Test — EXECUTE (ALWAYS)
-  - **Rationale**: Install dependencies, run tests, verify coverage.
+### CONSTRUCTION 단계
+- [ ] 기능 설계 — 실행
+  - **근거**: 복잡한 비즈니스 규칙(대출 한도, 예약 대기열, 수수료 계산, 갱신 규칙)은 코드 생성 전 상세 엔티티 및 도메인 모델 명세가 필요함.
+- [ ] NFR 요구사항 — 실행
+  - **근거**: DB 선택(DynamoDB vs PostgreSQL), 인증 방식(PyJWT + bcrypt), 성능 패턴을 결정해야 함. tech-env는 옵션을 나열하나 결정은 연기함.
+- [ ] NFR 설계 — 생략
+  - **근거**: NFR 패턴은 NFR 요구사항에 충분히 담김. 앱 코드만 범위(CDK 없음)에서 별도 NFR 설계 단계는 추가 가치가 적음.
+- [ ] 인프라 설계 — 생략
+  - **근거**: 이해관계자 결정에 따라 CDK 인프라가 연기됨. 애플리케이션 코드는 메모리 내/SQLite 로컬 개발 및 DB 추상화 계층에 집중. 설계할 클라우드 인프라 없음.
+- [ ] 코드 생성 — 실행 (항상)
+  - **근거**: 두 서비스에 대한 완전한 애플리케이션 코드 생성.
+- [ ] 빌드 및 테스트 — 실행 (항상)
+  - **근거**: 의존성 설치, 테스트 실행, 커버리지 검증.
 
-### OPERATIONS PHASE
-- [ ] Operations — PLACEHOLDER
+### OPERATIONS 단계
+- [ ] Operations — 플레이스홀더
 
-## Success Criteria
-- **Primary Goal**: Two independently runnable FastAPI services (Catalog + Lending) with complete business logic
-- **Key Deliverables**:
-  - Catalog Service with book CRUD, search, availability tracking
-  - Lending Service with auth, checkouts, returns, renewals, holds, fees, reports
-  - Unit and integration tests with >= 90% coverage
-  - OpenAPI-compatible endpoint documentation
-- **Quality Gates**:
-  - All tests pass
-  - >= 90% line coverage
-  - RBAC enforced on all endpoints
-  - Business rules verified (checkout limits, hold queues, fees, renewals)
-  - Security extensions (SECURITY-01 through SECURITY-15) compliance verified
+## 성공 기준
+- **주요 목표**: 완전한 비즈니스 로직을 갖춘 독립 실행 가능한 FastAPI 서비스 두 개(Catalog + Lending)
+- **주요 산출물**:
+  - 도서 CRUD, 검색, 가용성 추적이 있는 Catalog Service
+  - 인증, 대출, 반납, 갱신, 예약, 수수료, 보고가 있는 Lending Service
+  - 커버리지 90% 이상의 단위 및 통합 테스트
+  - OpenAPI 호환 엔드포인트 문서
+- **품질 게이트**:
+  - 모든 테스트 통과
+  - 라인 커버리지 90% 이상
+  - 모든 엔드포인트에 RBAC 적용
+  - 비즈니스 규칙 검증(대출 한도, 예약 대기열, 수수료, 갱신)
+  - 보안 확장(SECURITY-01 ~ SECURITY-15) 준수 검증

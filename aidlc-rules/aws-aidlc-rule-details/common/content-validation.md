@@ -1,31 +1,31 @@
-# Content Validation Rules
+# 콘텐츠 검증 규칙
 
-## MANDATORY: Content Validation Before File Creation
+## 필수: 파일 생성 전 콘텐츠 검증
 
-**CRITICAL**: All generated content MUST be validated before writing to files to prevent parsing errors.
+**중요**: 파싱 오류를 막기 위해 생성된 모든 콘텐츠는 파일에 쓰기 전에 검증해야 합니다.
 
-## ASCII Diagram Standards
+## ASCII 다이어그램 표준
 
-**CRITICAL**: Before creating ANY file with ASCII diagrams:
+**중요**: ASCII 다이어그램이 있는 **어떤** 파일을 만들기 전에:
 
-1. **LOAD** `common/ascii-diagram-standards.md`
-2. **VALIDATE** each diagram:
-   - Count characters per line (all lines MUST be same width)
-   - Use ONLY: `+` `-` `|` `^` `v` `<` `>` and spaces
-   - NO Unicode box-drawing characters
-   - Spaces only (NO tabs)
-3. **TEST** alignment by verifying box corners align vertically
+1. **로드** `common/ascii-diagram-standards.md`
+2. **검증** 각 다이어그램:
+   - 줄당 문자 수(모든 줄은 **같은 너비**여야 함)
+   - **오직** 사용: `+` `-` `|` `^` `v` `<` `>` 및 공백
+   - 유니코드 박스 그리기 문자 없음
+   - 공백만(탭 없음)
+3. **테스트** 박스 모서리가 수직으로 맞는지 정렬 확인
 
-**See `common/ascii-diagram-standards.md` for patterns and validation checklist.**
+**패턴과 검증 체크리스트는 `common/ascii-diagram-standards.md`를 참고하세요.**
 
-## Mermaid Diagram Validation
+## Mermaid 다이어그램 검증
 
-### Required Validation Steps
-1. **Syntax Check**: Validate Mermaid syntax before file creation
-2. **Character Escaping**: Ensure special characters are properly escaped
-3. **Fallback Content**: Provide text alternative if Mermaid fails validation
+### 필수 검증 단계
+1. **문법 검사**: 파일 생성 전 Mermaid 문법 검증
+2. **문자 이스케이프**: 특수 문자가 올바르게 이스케이프되었는지 확인
+3. **대체 콘텐츠**: Mermaid 검증 실패 시 텍스트 대안 제공
 
-### Mermaid Validation Rules
+### Mermaid 검증 규칙
 ```markdown
 ## BEFORE creating any file with Mermaid diagrams:
 
@@ -37,7 +37,7 @@
 ## FALLBACK: If Mermaid validation fails, use text-based workflow representation
 ```
 
-### Implementation Pattern
+### 구현 패턴
 ```markdown
 ## Workflow Visualization
 
@@ -54,25 +54,25 @@ Phase 1: INCEPTION
 [continue with text representation]
 ```
 
-## General Content Validation
+## 일반 콘텐츠 검증
 
-### Pre-Creation Validation Checklist
-- [ ] Validate embedded code blocks (Mermaid, JSON, YAML)
-- [ ] Check special character escaping
-- [ ] Verify markdown syntax correctness
-- [ ] Test content parsing compatibility
-- [ ] Include fallback content for complex elements
+### 생성 전 검증 체크리스트
+- [ ] 임베디드 코드 블록(Mermaid, JSON, YAML) 검증
+- [ ] 특수 문자 이스케이프 확인
+- [ ] 마크다운 문법 정확성 확인
+- [ ] 콘텐츠 파싱 호환성 테스트
+- [ ] 복잡한 요소에 대한 대체 콘텐츠 포함
 
-### Error Prevention Rules
-1. **Always validate before using tools/commands to write files**: Never write unvalidated content
-2. **Escape special characters**: Particularly in diagrams and code blocks
-3. **Provide alternatives**: Include text versions of visual content
-4. **Test syntax**: Validate complex content structures
+### 오류 방지 규칙
+1. **파일 쓰기 도구·명령 사용 전 항상 검증**: 검증되지 않은 콘텐츠는 쓰지 않음
+2. **특수 문자 이스케이프**: 특히 다이어그램과 코드 블록
+3. **대안 제공**: 시각 콘텐츠의 텍스트 버전 포함
+4. **문법 테스트**: 복잡한 콘텐츠 구조 검증
 
-## Validation Failure Handling
+## 검증 실패 처리
 
-### When Validation Fails
-1. **Log the error**: Record what failed validation
-2. **Use fallback content**: Switch to text-based alternative
-3. **Continue workflow**: Don't block on content validation failures
-4. **Inform user**: Mention simplified content was used due to parsing constraints
+### 검증이 실패할 때
+1. **오류 기록**: 무엇이 검증에 실패했는지 기록
+2. **대체 콘텐츠 사용**: 텍스트 기반 대안으로 전환
+3. **워크플로 계속**: 콘텐츠 검증 실패로 워크플로를 막지 않음
+4. **사용자 안내**: 파싱 제약으로 인해 단순화된 콘텐츠를 사용했다고 알림

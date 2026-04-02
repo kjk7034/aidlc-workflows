@@ -4,7 +4,7 @@
 
 ## Opt-In Prompt
 
-The following question is automatically included in the Requirements Analysis clarifying questions when this extension is loaded:
+이 확장이 로드되면 다음 질문이 Requirements Analysis 명확화 질문에 자동으로 포함됩니다:
 
 ```markdown
 ## Question: Security Extensions

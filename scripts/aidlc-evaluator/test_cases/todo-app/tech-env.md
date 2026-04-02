@@ -1,38 +1,38 @@
-# Technical Environment: Todo List Application
+# 기술 환경: 할 일 목록 애플리케이션
 
-## Language and Package Manager
+## 언어 및 패키지 관리자
 
 - **Node.js 22** (LTS)
-- **npm** for package management
-- `package.json` for project and script configuration
+- 패키지 관리에 **npm**
+- 프로젝트 및 스크립트 설정은 `package.json`
 
-## Backend Framework
+## 백엔드 프레임워크
 
-- **Express.js** for the REST API server
-- In-memory data store (plain JavaScript Map/Array) — no database required for MVP
-- **uuid** package for generating todo IDs
+- REST API 서버에 **Express.js**
+- 메모리 내 데이터 저장(일반 JavaScript Map/Array) — MVP에 DB 불필요
+- todo ID 생성에 **uuid** 패키지
 
-## Frontend Framework
+## 프론트엔드 프레임워크
 
-- **React 19** with functional components and hooks
-- **Vite** as the build tool and dev server
-- Plain CSS (no CSS framework required)
+- 함수형 컴포넌트와 훅이 있는 **React 19**
+- 빌드 도구 및 개발 서버로 **Vite**
+- 순수 CSS(CSS 프레임워크 불필요)
 
-## Project Structure
+## 프로젝트 구조
 
 ```
 todo-app/
 ├── package.json
 ├── server/
-│   ├── index.js          # Express server entry point
+│   ├── index.js          # Express 서버 진입점
 │   ├── routes/
-│   │   └── todos.js      # Todo CRUD routes
-│   └── store.js          # In-memory todo store
+│   │   └── todos.js      # Todo CRUD 라우트
+│   └── store.js          # 메모리 내 todo 저장소
 ├── client/
 │   ├── index.html
 │   ├── src/
-│   │   ├── main.jsx      # React entry point
-│   │   ├── App.jsx       # Root component
+│   │   ├── main.jsx      # React 진입점
+│   │   ├── App.jsx       # 루트 컴포넌트
 │   │   ├── components/
 │   │   │   ├── TodoInput.jsx
 │   │   │   ├── TodoList.jsx
@@ -45,19 +45,19 @@ todo-app/
 │   └── vite.config.js
 └── tests/
     ├── server/
-    │   └── todos.test.js  # API integration tests
+    │   └── todos.test.js  # API 통합 테스트
     └── client/
-        └── App.test.jsx   # Component tests
+        └── App.test.jsx   # 컴포넌트 테스트
 ```
 
-## Testing
+## 테스트
 
-- **Vitest** for both server and client tests
-- **React Testing Library** for component tests
-- **supertest** for API integration tests
-- Tests run via `npm test`
+- 서버·클라이언트 테스트 모두 **Vitest**
+- 컴포넌트 테스트에 **React Testing Library**
+- API 통합 테스트에 **supertest**
+- `npm test`로 테스트 실행
 
-## Development Scripts
+## 개발 스크립트
 
 ```json
 {
@@ -72,10 +72,10 @@ todo-app/
 }
 ```
 
-## Conventions
+## 규칙
 
-- ES modules (`"type": "module"` in package.json)
-- Server listens on port 3001, proxied from Vite dev server on port 5173
-- All API routes prefixed with `/api/`
-- Health endpoint at `/health` (no `/api/` prefix)
-- Standard HTTP status codes: 200, 201, 400, 404, 500
+- ES 모듈(`package.json`에 `"type": "module"`)
+- 서버는 포트 3001에서 수신, Vite 개발 서버 포트 5173에서 프록시
+- 모든 API 라우트는 `/api/` 접두사
+- 헬스 엔드포인트는 `/health`(`/api/` 접두사 없음)
+- 표준 HTTP 상태 코드: 200, 201, 400, 404, 500

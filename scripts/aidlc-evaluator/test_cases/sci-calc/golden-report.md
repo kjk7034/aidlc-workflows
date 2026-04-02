@@ -1,117 +1,117 @@
-# AIDLC Evaluation Report
+# AIDLC 평가 보고서
 
-> **Run:** `20260218T125810-b84d042dff254a72b4ffec926fe5ea99`
-> **Generated:** 2026-02-18T13:45:16+00:00
+> **실행:** `20260218T125810-b84d042dff254a72b4ffec926fe5ea99`
+> **생성:** 2026-02-18T13:45:16+00:00
 
-## Verdict
+## 판정
 
-| Dimension | Result |
+| 차원 | 결과 |
 |-----------|--------|
-| Unit Tests | ✅ **192/192** passed |
-| Contract Tests | ✅ **88/88** passed |
-| Code Quality | ❌ 18 findings (5 errors) |
-| Qualitative Score | 🟢 **0.89** |
+| 단위 테스트 | ✅ **192/192** 통과 |
+| 계약 테스트 | ✅ **88/88** 통과 |
+| 코드 품질 | ❌ 발견 18건 (오류 5건) |
+| 정성 점수 | 🟢 **0.89** |
 
-## Run Overview
+## 실행 개요
 
-| Property | Value |
+| 속성 | 값 |
 |----------|-------|
-| Status | `Status.COMPLETED` |
-| Executor Model | `global.anthropic.claude-opus-4-6-v1` |
-| Simulator Model | `us.anthropic.claude-sonnet-4-5-20250929-v1:0` |
-| Region | `us-west-2` |
-| Wall Clock | 24.1m |
-| Handoffs | 3 (executor → simulator → executor) |
-| Started | 2026-02-18T12:58:13.159285+00:00 |
-| Completed | 2026-02-18T13:22:44.249897+00:00 |
+| 상태 | `Status.COMPLETED` |
+| 실행기 모델 | `global.anthropic.claude-opus-4-6-v1` |
+| 시뮬레이터 모델 | `us.anthropic.claude-sonnet-4-5-20250929-v1:0` |
+| 리전 | `us-west-2` |
+| 실제 경과 시간 | 24.1분 |
+| 핸드오프 | 3회 (executor → simulator → executor) |
+| 시작 | 2026-02-18T12:58:13.159285+00:00 |
+| 완료 | 2026-02-18T13:22:44.249897+00:00 |
 
-## Token Usage
+## 토큰 사용량
 
-| Agent | Input | Output | Total |
+| 에이전트 | 입력 | 출력 | 합계 |
 |-------|------:|-------:|------:|
 | Executor | 5.7M | 77K | 5.7M |
 | Simulator | 180K | 2K | 182K |
-| **Total** | **9.7M** | **140K** | **9.8M** |
+| **합계** | **9.7M** | **140K** | **9.8M** |
 
-## Handoff Timeline
+## 핸드오프 타임라인
 
-| # | Agent | Duration |
+| # | 에이전트 | 소요 시간 |
 |--:|-------|----------|
-| 1 | executor | 16.3m |
-| 2 | simulator | 1.1m |
-| 3 | executor | 6.7m |
+| 1 | executor | 16.3분 |
+| 2 | simulator | 1.1분 |
+| 3 | executor | 6.7분 |
 
-## Generated Artifacts
+## 생성된 산출물
 
-| Category | Count |
+| 범주 | 개수 |
 |----------|------:|
-| Source files | 17 |
-| Test files | 18 |
-| Config files | 4 |
-| Total files | 72 |
-| Lines of code | 3,522 |
-| AIDLC docs (inception) | 8 |
-| AIDLC docs (construction) | 5 |
-| AIDLC docs total | 15 |
+| 소스 파일 | 17 |
+| 테스트 파일 | 18 |
+| 설정 파일 | 4 |
+| 파일 합계 | 72 |
+| 코드 줄 수 | 3,522 |
+| AIDLC 문서 (inception) | 8 |
+| AIDLC 문서 (construction) | 5 |
+| AIDLC 문서 합계 | 15 |
 
-## Unit Tests
+## 단위 테스트
 
-**✅ 192 passed** / 192 total
+**✅ 192 통과** / 192 전체
 
-**Coverage:** 91.3%
+**커버리지:** 91.3%
 
-## Contract Tests (API Specification)
+## 계약 테스트 (API 명세)
 
-**✅ 88/88** endpoints validated
+**✅ 88/88** 엔드포인트 검증됨
 
 ### Health ✅ 1/1
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
-| ✅ health check | GET | `/health` | 200 | 14ms |
+| ✅ 헬스 체크 | GET | `/health` | 200 | 14ms |
 
 
 ### Arithmetic ✅ 15/15
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
-| ✅ add positive integers | POST | `/api/v1/arithmetic/add` | 200 | 4ms |
-| ✅ add negative numbers | POST | `/api/v1/arithmetic/add` | 200 | 2ms |
-| ✅ add floats | POST | `/api/v1/arithmetic/add` | 200 | 2ms |
-| ✅ add missing field â†’ 422 | POST | `/api/v1/arithmetic/add` | 422 | 2ms |
-| ✅ subtract | POST | `/api/v1/arithmetic/subtract` | 200 | 2ms |
-| ✅ multiply | POST | `/api/v1/arithmetic/multiply` | 200 | 2ms |
-| ✅ multiply by zero | POST | `/api/v1/arithmetic/multiply` | 200 | 2ms |
-| ✅ divide | POST | `/api/v1/arithmetic/divide` | 200 | 3ms |
-| ✅ divide by zero â†’ error | POST | `/api/v1/arithmetic/divide` | 400 | 2ms |
-| ✅ modulo | POST | `/api/v1/arithmetic/modulo` | 200 | 2ms |
-| ✅ modulo by zero â†’ error | POST | `/api/v1/arithmetic/modulo` | 400 | 2ms |
-| ✅ abs negative | POST | `/api/v1/arithmetic/abs` | 200 | 2ms |
-| ✅ abs positive | POST | `/api/v1/arithmetic/abs` | 200 | 1ms |
-| ✅ negate positive | POST | `/api/v1/arithmetic/negate` | 200 | 1ms |
-| ✅ negate negative | POST | `/api/v1/arithmetic/negate` | 200 | 2ms |
+| ✅ 양의 정수 덧셈 | POST | `/api/v1/arithmetic/add` | 200 | 4ms |
+| ✅ 음수 덧셈 | POST | `/api/v1/arithmetic/add` | 200 | 2ms |
+| ✅ 부동소수 덧셈 | POST | `/api/v1/arithmetic/add` | 200 | 2ms |
+| ✅ 필드 누락 → 422 | POST | `/api/v1/arithmetic/add` | 422 | 2ms |
+| ✅ 뺄셈 | POST | `/api/v1/arithmetic/subtract` | 200 | 2ms |
+| ✅ 곱셈 | POST | `/api/v1/arithmetic/multiply` | 200 | 2ms |
+| ✅ 0 곱하기 | POST | `/api/v1/arithmetic/multiply` | 200 | 2ms |
+| ✅ 나눗셈 | POST | `/api/v1/arithmetic/divide` | 200 | 3ms |
+| ✅ 0으로 나눗셈 → 오류 | POST | `/api/v1/arithmetic/divide` | 400 | 2ms |
+| ✅ 나머지 | POST | `/api/v1/arithmetic/modulo` | 200 | 2ms |
+| ✅ 0으로 나머지 → 오류 | POST | `/api/v1/arithmetic/modulo` | 400 | 2ms |
+| ✅ 음수 절댓값 | POST | `/api/v1/arithmetic/abs` | 200 | 2ms |
+| ✅ 양수 절댓값 | POST | `/api/v1/arithmetic/abs` | 200 | 1ms |
+| ✅ 양수 부호 반전 | POST | `/api/v1/arithmetic/negate` | 200 | 1ms |
+| ✅ 음수 부호 반전 | POST | `/api/v1/arithmetic/negate` | 200 | 2ms |
 
 
 ### Powers ✅ 11/11
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
 | ✅ 2^10 | POST | `/api/v1/powers/power` | 200 | 3ms |
 | ✅ 5^0 | POST | `/api/v1/powers/power` | 200 | 1ms |
 | ✅ sqrt(16) | POST | `/api/v1/powers/sqrt` | 200 | 1ms |
 | ✅ sqrt(0) | POST | `/api/v1/powers/sqrt` | 200 | 1ms |
-| ✅ sqrt(-1) â†’ domain error | POST | `/api/v1/powers/sqrt` | 400 | 2ms |
+| ✅ sqrt(-1) → 정의역 오류 | POST | `/api/v1/powers/sqrt` | 400 | 2ms |
 | ✅ cbrt(27) | POST | `/api/v1/powers/cbrt` | 200 | 2ms |
 | ✅ cbrt(-8) | POST | `/api/v1/powers/cbrt` | 200 | 2ms |
 | ✅ square(5) | POST | `/api/v1/powers/square` | 200 | 2ms |
 | ✅ square(-3) | POST | `/api/v1/powers/square` | 200 | 1ms |
-| ✅ 4th root of 16 | POST | `/api/v1/powers/nth_root` | 200 | 2ms |
-| ✅ nth_root negative even â†’ domain error | POST | `/api/v1/powers/nth_root` | 400 | 1ms |
+| ✅ 16의 4제곱근 | POST | `/api/v1/powers/nth_root` | 200 | 2ms |
+| ✅ nth_root 음수·짝수근 → 정의역 오류 | POST | `/api/v1/powers/nth_root` | 400 | 1ms |
 
 
 ### Trigonometry ✅ 20/20
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
 | ✅ sin(0) | POST | `/api/v1/trigonometry/sin` | 200 | 4ms |
 | ✅ sin(90 deg) | POST | `/api/v1/trigonometry/sin` | 200 | 2ms |
@@ -119,9 +119,9 @@
 | ✅ tan(0) | POST | `/api/v1/trigonometry/tan` | 200 | 2ms |
 | ✅ asin(0) | POST | `/api/v1/trigonometry/asin` | 200 | 2ms |
 | ✅ asin(1) | POST | `/api/v1/trigonometry/asin` | 200 | 1ms |
-| ✅ asin(2) â†’ domain error | POST | `/api/v1/trigonometry/asin` | 400 | 1ms |
+| ✅ asin(2) → 정의역 오류 | POST | `/api/v1/trigonometry/asin` | 400 | 1ms |
 | ✅ acos(1) | POST | `/api/v1/trigonometry/acos` | 200 | 2ms |
-| ✅ acos(2) â†’ domain error | POST | `/api/v1/trigonometry/acos` | 400 | 2ms |
+| ✅ acos(2) → 정의역 오류 | POST | `/api/v1/trigonometry/acos` | 400 | 2ms |
 | ✅ atan(0) | POST | `/api/v1/trigonometry/atan` | 200 | 2ms |
 | ✅ atan2(0, 1) | POST | `/api/v1/trigonometry/atan2` | 200 | 2ms |
 | ✅ atan2(1, 0) | POST | `/api/v1/trigonometry/atan2` | 200 | 1ms |
@@ -130,35 +130,35 @@
 | ✅ tanh(0) | POST | `/api/v1/trigonometry/tanh` | 200 | 2ms |
 | ✅ asinh(0) | POST | `/api/v1/trigonometry/asinh` | 200 | 2ms |
 | ✅ acosh(1) | POST | `/api/v1/trigonometry/acosh` | 200 | 1ms |
-| ✅ acosh(0.5) â†’ domain error | POST | `/api/v1/trigonometry/acosh` | 400 | 1ms |
+| ✅ acosh(0.5) → 정의역 오류 | POST | `/api/v1/trigonometry/acosh` | 400 | 1ms |
 | ✅ atanh(0) | POST | `/api/v1/trigonometry/atanh` | 200 | 2ms |
-| ✅ atanh(1) â†’ domain error | POST | `/api/v1/trigonometry/atanh` | 400 | 1ms |
+| ✅ atanh(1) → 정의역 오류 | POST | `/api/v1/trigonometry/atanh` | 400 | 1ms |
 
 
 ### Logarithmic ✅ 11/11
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
 | ✅ ln(1) | POST | `/api/v1/logarithmic/ln` | 200 | 3ms |
 | ✅ ln(e) | POST | `/api/v1/logarithmic/ln` | 200 | 2ms |
-| ✅ ln(0) â†’ domain error | POST | `/api/v1/logarithmic/ln` | 400 | 2ms |
-| ✅ ln(-1) â†’ domain error | POST | `/api/v1/logarithmic/ln` | 400 | 1ms |
+| ✅ ln(0) → 정의역 오류 | POST | `/api/v1/logarithmic/ln` | 400 | 2ms |
+| ✅ ln(-1) → 정의역 오류 | POST | `/api/v1/logarithmic/ln` | 400 | 1ms |
 | ✅ log10(100) | POST | `/api/v1/logarithmic/log10` | 200 | 1ms |
 | ✅ log10(1) | POST | `/api/v1/logarithmic/log10` | 200 | 2ms |
 | ✅ log2(8) | POST | `/api/v1/logarithmic/log2` | 200 | 2ms |
 | ✅ log(8, base=2) | POST | `/api/v1/logarithmic/log` | 200 | 2ms |
-| ✅ log base 1 â†’ domain error | POST | `/api/v1/logarithmic/log` | 400 | 2ms |
+| ✅ 밑 1 로그 → 정의역 오류 | POST | `/api/v1/logarithmic/log` | 400 | 2ms |
 | ✅ exp(0) | POST | `/api/v1/logarithmic/exp` | 200 | 2ms |
 | ✅ exp(1) | POST | `/api/v1/logarithmic/exp` | 200 | 1ms |
 
 
 ### Statistics ✅ 12/12
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
 | ✅ mean | POST | `/api/v1/statistics/mean` | 200 | 4ms |
-| ✅ median odd count | POST | `/api/v1/statistics/median` | 200 | 2ms |
-| ✅ median even count | POST | `/api/v1/statistics/median` | 200 | 2ms |
+| ✅ 중앙값 홀수 개수 | POST | `/api/v1/statistics/median` | 200 | 2ms |
+| ✅ 중앙값 짝수 개수 | POST | `/api/v1/statistics/median` | 200 | 2ms |
 | ✅ mode | POST | `/api/v1/statistics/mode` | 200 | 2ms |
 | ✅ stdev | POST | `/api/v1/statistics/stdev` | 200 | 2ms |
 | ✅ variance | POST | `/api/v1/statistics/variance` | 200 | 2ms |
@@ -172,83 +172,83 @@
 
 ### Constants ✅ 10/10
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
-| ✅ get all constants | GET | `/api/v1/constants` | 200 | 3ms |
-| ✅ get pi | GET | `/api/v1/constants/pi` | 200 | 2ms |
-| ✅ get e | GET | `/api/v1/constants/e` | 200 | 1ms |
-| ✅ get tau | GET | `/api/v1/constants/tau` | 200 | 2ms |
-| ✅ get golden_ratio | GET | `/api/v1/constants/golden_ratio` | 200 | 3ms |
-| ✅ get sqrt2 | GET | `/api/v1/constants/sqrt2` | 200 | 2ms |
-| ✅ get ln2 | GET | `/api/v1/constants/ln2` | 200 | 2ms |
-| ✅ get ln10 | GET | `/api/v1/constants/ln10` | 200 | 2ms |
-| ✅ get inf | GET | `/api/v1/constants/inf` | 200 | 1ms |
-| ✅ get nan | GET | `/api/v1/constants/nan` | 200 | 2ms |
+| ✅ 모든 상수 조회 | GET | `/api/v1/constants` | 200 | 3ms |
+| ✅ pi 조회 | GET | `/api/v1/constants/pi` | 200 | 2ms |
+| ✅ e 조회 | GET | `/api/v1/constants/e` | 200 | 1ms |
+| ✅ tau 조회 | GET | `/api/v1/constants/tau` | 200 | 2ms |
+| ✅ golden_ratio 조회 | GET | `/api/v1/constants/golden_ratio` | 200 | 3ms |
+| ✅ sqrt2 조회 | GET | `/api/v1/constants/sqrt2` | 200 | 2ms |
+| ✅ ln2 조회 | GET | `/api/v1/constants/ln2` | 200 | 2ms |
+| ✅ ln10 조회 | GET | `/api/v1/constants/ln10` | 200 | 2ms |
+| ✅ inf 조회 | GET | `/api/v1/constants/inf` | 200 | 1ms |
+| ✅ nan 조회 | GET | `/api/v1/constants/nan` | 200 | 2ms |
 
 
 ### Conversions ✅ 7/7
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
-| ✅ 180 degrees to radians | POST | `/api/v1/conversions/angle` | 200 | 3ms |
-| ✅ boiling point C to F | POST | `/api/v1/conversions/temperature` | 200 | 2ms |
-| ✅ freezing point C to K | POST | `/api/v1/conversions/temperature` | 200 | 2ms |
-| ✅ 1 meter to feet | POST | `/api/v1/conversions/length` | 200 | 2ms |
-| ✅ 1 mile to kilometers | POST | `/api/v1/conversions/length` | 200 | 2ms |
-| ✅ 1 kg to pounds | POST | `/api/v1/conversions/weight` | 200 | 1ms |
-| ✅ 1 stone to kilograms | POST | `/api/v1/conversions/weight` | 200 | 1ms |
+| ✅ 180도를 라디안으로 | POST | `/api/v1/conversions/angle` | 200 | 3ms |
+| ✅ 끓는점 C→F | POST | `/api/v1/conversions/temperature` | 200 | 2ms |
+| ✅ 어는점 C→K | POST | `/api/v1/conversions/temperature` | 200 | 2ms |
+| ✅ 1미터를 피트로 | POST | `/api/v1/conversions/length` | 200 | 2ms |
+| ✅ 1마일을 킬로미터로 | POST | `/api/v1/conversions/length` | 200 | 2ms |
+| ✅ 1kg를 파운드로 | POST | `/api/v1/conversions/weight` | 200 | 1ms |
+| ✅ 1스톤을 킬로그램으로 | POST | `/api/v1/conversions/weight` | 200 | 1ms |
 
 
 ### Nonexistent ✅ 1/1
 
-| Test | Method | Path | Status | Latency |
+| 테스트 | 메서드 | 경로 | 상태 | 지연 |
 |------|--------|------|:------:|--------:|
-| ✅ unknown endpoint â†’ 404 | GET | `/api/v1/nonexistent` | 404 | 1ms |
+| ✅ 알 수 없는 엔드포인트 → 404 | GET | `/api/v1/nonexistent` | 404 | 1ms |
 
 
-## Code Quality
+## 코드 품질
 
-**❌ 18 findings** (5 errors, 13 warnings)
+**❌ 발견 18건** (오류 5건, 경고 13건)
 
 **Linter:** ruff 0.15.1
 
-| File | Line | Code | Message | Severity |
+| 파일 | 줄 | 코드 | 메시지 | 심각도 |
 |------|-----:|------|---------|----------|
-| `app.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `math_engine.py` | 7 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `math_engine.py` | 12 | `F401` | `typing.Any` imported but unused | 🟡 warning |
-| `arithmetic.py` | 65 | `E501` | Line too long (101 > 100) | 🔴 error |
-| `arithmetic.py` | 78 | `E501` | Line too long (107 > 100) | 🔴 error |
-| `logarithmic.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `logarithmic.py` | 72 | `E501` | Line too long (108 > 100) | 🔴 error |
-| `powers.py` | 74 | `E501` | Line too long (103 > 100) | 🔴 error |
-| `trigonometry.py` | 75 | `E501` | Line too long (109 > 100) | 🔴 error |
-| `conftest.py` | 8 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `test_arithmetic.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `test_arithmetic.py` | 9 | `F401` | `sci_calc.engine.math_engine.MathOverflowError` imported but unused | 🟡 warning |
-| `test_constants.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `test_conversions.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `test_logarithmic.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `test_powers.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `test_statistics.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
-| `test_trigonometry.py` | 3 | `I001` | Import block is un-sorted or un-formatted | 🟡 warning |
+| `app.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `math_engine.py` | 7 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `math_engine.py` | 12 | `F401` | `typing.Any`가 import되었으나 미사용 | 🟡 경고 |
+| `arithmetic.py` | 65 | `E501` | 줄이 너무 김 (101 > 100) | 🔴 오류 |
+| `arithmetic.py` | 78 | `E501` | 줄이 너무 김 (107 > 100) | 🔴 오류 |
+| `logarithmic.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `logarithmic.py` | 72 | `E501` | 줄이 너무 김 (108 > 100) | 🔴 오류 |
+| `powers.py` | 74 | `E501` | 줄이 너무 김 (103 > 100) | 🔴 오류 |
+| `trigonometry.py` | 75 | `E501` | 줄이 너무 김 (109 > 100) | 🔴 오류 |
+| `conftest.py` | 8 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `test_arithmetic.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `test_arithmetic.py` | 9 | `F401` | `sci_calc.engine.math_engine.MathOverflowError`가 import되었으나 미사용 | 🟡 경고 |
+| `test_constants.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `test_conversions.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `test_logarithmic.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `test_powers.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `test_statistics.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
+| `test_trigonometry.py` | 3 | `I001` | import 블록이 정렬·포맷되지 않음 | 🟡 경고 |
 
-*Security scanner (bandit) was not available.*
+*보안 스캐너(bandit)를 사용할 수 없었습니다.*
 
-## Qualitative Evaluation (Semantic Similarity)
+## 정성 평가(의미 유사도)
 
-**Overall Score: 🟢 0.8910**
+**전체 점수: 🟢 0.8910**
 
-### Inception Phase
+### Inception 단계
 
-| Dimension | Score |
+| 차원 | 점수 |
 |-----------|------:|
-| Intent | 0.90 |
-| Design | 0.89 |
-| Completeness | 0.88 |
-| **Overall** | **0.89** |
+| 의도 | 0.90 |
+| 설계 | 0.89 |
+| 완전성 | 0.88 |
+| **전체** | **0.89** |
 
-| Document | Intent | Design | Complete | Overall |
+| 문서 | 의도 | 설계 | 완전성 | 전체 |
 |----------|-------:|-------:|---------:|--------:|
 | `component-dependency.md` | 1.00 | 0.95 | 0.90 | 0.96 |
 | `component-methods.md` | 1.00 | 0.95 | 0.85 | 0.95 |
@@ -261,62 +261,62 @@
 
 <details><summary><code>component-dependency.md</code> — 0.96</summary>
 
-Both documents capture identical intent: documenting component dependencies for a FastAPI math service with clear separation of concerns. Design is nearly identical with same architecture (routes, models, engine), same dependency patterns, and same key constraints (engine has zero framework dependencies, routes are thin adapters). Minor differences: CANDIDATE uses file paths (.py extensions) vs module notation, includes data flow diagram instead of dependency flow diagram, and omits external dependencies table and exception handler registration details. CANDIDATE adds clarification on synchronous calls and no async/database/queues. Overall highly aligned with trivial presentation differences.
+두 문서 모두 동일한 의도를 담습니다: 관심사가 분리된 FastAPI 수학 서비스의 컴포넌트 의존성을 문서화합니다. 설계는 거의 동일하며 동일한 아키텍처(routes, models, engine), 동일한 의존 패턴, 동일한 핵심 제약(엔진은 프레임워크 의존성 제로, 라우트는 얇은 어댑터)을 갖습니다. 사소한 차이: 후보는 모듈 표기 대신 파일 경로(.py 확장자)를 쓰고, 의존성 흐름도 대신 데이터 흐름도를 포함하며, 외부 의존성 표와 예외 핸들러 등록 세부는 생략합니다. 후보는 동기 호출 및 async/DB/큐 없음에 대한 설명을 추가합니다. 전반적으로 사소한 표현 차이만 있는 높은 일치입니다.
 
 </details>
 
 <details><summary><code>component-methods.md</code> — 0.95</summary>
 
-Intent is identical: both define the same mathematical operations, request/response models, and API structure. Design is nearly identical with same layered architecture (routes, models, engine), same function signatures, and same exception handling approach. Minor differences: CANDIDATE uses slightly different model names (BinaryOperationRequest vs TwoOperandRequest, UnaryOperationRequest vs SingleOperandRequest) and omits detailed route path/method tables. CANDIDATE lacks the detailed routing table with HTTP methods and paths, and doesn't explicitly document the create_app() function or custom exception classes as separate entities, though the functionality is implied. Overall very strong alignment with minor organizational differences.
+의도는 동일합니다: 동일한 수학 연산, 요청/응답 모델, API 구조를 정의합니다. 설계는 거의 동일하며 동일한 계층 아키텍처(routes, models, engine), 동일한 함수 시그니처, 동일한 예외 처리 방식을 갖습니다. 사소한 차이: 후보는 모델 이름이 약간 다르고(BinaryOperationRequest vs TwoOperandRequest 등) 상세 라우트 경로/메서드 표는 생략합니다. HTTP 메서드와 경로가 있는 상세 라우팅 표가 없고 create_app() 함수나 사용자 정의 예외 클래스를 별도 엔티티로 명시하지 않으나 기능은 함축되어 있습니다. 조직적 차이만 있는 매우 강한 일치입니다.
 
 </details>
 
 <details><summary><code>components.md</code> — 1.00</summary>
 
-Both documents describe identical component architectures with the same four-layer structure (app entry point, routes, models, engine). All seven route modules are present and match in purpose. The models layer distinguishes requests and responses identically. The engine layer responsibilities are equivalent, including pure function design, stdlib-only dependencies, and domain-specific exceptions. Minor stylistic differences exist (formatting, level of detail in operation enumeration), but the architectural intent, design decisions, and topic coverage are functionally identical.
+두 문서 모두 동일한 컴포넌트 아키텍처를 설명하며 동일한 네 계층(앱 진입점, routes, models, engine) 구조를 갖습니다. 라우트 모듈 일곱 개가 모두 있고 목적이 일치합니다. models 계층은 요청과 응답을 동일하게 구분합니다. engine 계층 책임은 순수 함수 설계, 표준 라이브러리만 의존, 정의역별 예외를 포함해 동등합니다. 스타일 차이(포맷, 연산 나열의 상세도)는 있으나 아키텍처 의도, 설계 결정, 주제 범위는 기능적으로 동일합니다.
 
 </details>
 
 <details><summary><code>services.md</code> — 0.91</summary>
 
-Both documents describe the same thin service architecture with direct route-to-engine delegation and no separate service layer. Intent is nearly identical. Design is very similar with same error handling flow and patterns, though CANDIDATE adds 404 handling and omits CORS middleware details. CANDIDATE is slightly less complete as it doesn't mention CORS configuration but adds health check details not in REFERENCE.
+두 문서 모두 별도 서비스 계층 없이 라우트에서 엔진으로 직접 위임하는 얇은 서비스 아키텍처를 설명합니다. 의도는 거의 동일합니다. 설계는 동일한 오류 처리 흐름과 패턴으로 매우 유사하나, 후보는 404 처리를 추가하고 CORS 미들웨어 세부는 생략합니다. 후보는 CORS 설정을 언급하지 않지만 참조에 없는 헬스 체크 세부를 추가해 약간 덜 완전할 수 있습니다.
 
 </details>
 
 <details><summary><code>application-design-plan.md</code> — 1.00</summary>
 
-Both documents capture identical intent: a three-layer architecture (Routes, Models, Engine) for a Scientific Calculator API with FastAPI and Pydantic v2. Both explicitly state no design questions are needed due to fully specified tech-env. Both include the same deliverables (components.md, component-methods.md, services.md, component-dependency.md) and validation steps. The candidate provides slightly more context detail but maintains complete alignment with the reference.
+두 문서 모두 동일한 의도를 담습니다: FastAPI와 Pydantic v2를 쓰는 Scientific Calculator API의 3계층(Routes, Models, Engine) 아키텍처. tech-env가 완전히 명시되어 설계 질문이 불필요하다고 둘 다 명시합니다. 동일한 산출물(components.md 등)과 검증 단계를 포함합니다. 후보가 맥락 설명을 약간 더 제공하나 참조와 완전히 정렬됩니다.
 
 </details>
 
 <details><summary><code>execution-plan.md</code> — 0.97</summary>
 
-Both documents have identical intent and goals, capturing the same requirements and execution strategy. Design approaches are nearly identical with same component structure and skip/execute decisions. Minor differences: REFERENCE includes more detailed success criteria (1 ULP precision, HTTP status codes, structured envelope) and slightly different workflow visualization format. CANDIDATE is slightly more concise but covers all major topics. Overall extremely high alignment.
+두 문서 모두 동일한 의도와 목표를 가지며 동일한 요구사항과 실행 전략을 담습니다. 설계 접근은 컴포넌트 구조와 생략/실행 결정이 동일해 거의 같습니다. 사소한 차이: 참조는 성공 기준이 더 상세함(1 ULP 정밀도, HTTP 상태 코드, 구조화 래퍼)이고 워크플로 시각화 형식이 약간 다릅니다. 후보는 더 간결하나 주요 주제는 모두 다룹니다. 전반적으로 매우 높은 일치입니다.
 
 </details>
 
 <details><summary><code>requirement-verification-questions.md</code> — 0.38</summary>
 
-Both documents aim to clarify ambiguities before requirements finalization, but they address almost entirely different concerns. REFERENCE focuses on floating-point handling, array limits, CORS, NaN serialization, precision, and API docs. CANDIDATE focuses on error envelope structure, mode return format, overflow handling, unknown units, coverage enforcement, and NaN input handling. Only Questions 1 (floating-point/overflow) and 4 (NaN handling) have thematic overlap, but ask different specific questions. Both documents have 6 questions and similar structure (partial completeness), but the substantive content differs significantly, indicating different areas of uncertainty were identified in each inception run.
+두 문서 모두 요구사항 확정 전 모호함을 줄이려 하지만 거의 다른 관심사를 다룹니다. 참조는 부동소수점 처리, 배열 한계, CORS, NaN 직렬화, 정밀도, API 문서에 초점을 둡니다. 후보는 오류 래퍼 구조, mode 반환 형식, 오버플로 처리, 알 수 없는 단위, 커버리지 강제, NaN 입력 처리에 초점을 둡니다. 질문 1(부동소수점/오버플로)과 4(NaN 처리)만 주제가 겹치나 구체적 질문은 다릅니다. 둘 다 질문 6개와 유사한 구조이나 실질 내용은 크게 달라 각 inception 실행에서 다른 불확실 영역이 식별되었음을 시사합니다.
 
 </details>
 
 <details><summary><code>requirements.md</code> — 0.95</summary>
 
-Both documents capture nearly identical intent, requirements, and technical approach for a scientific calculator API. Minor differences: REFERENCE has FR-011 (NaN/Infinity serialization as strings) and FR-013 (explicit CORS requirement) which CANDIDATE omits. CANDIDATE has FR-10.3/10.4 (overflow/NaN input handling) more explicitly stated. CANDIDATE uses sub-numbered FR format (FR-1.1, FR-2.1) vs REFERENCE's FR-001 style, but content is equivalent. Both specify same operations, error codes, tech stack, and constraints. CANDIDATE omits explicit mention of CORS and special NaN/Infinity serialization format, which are minor but notable gaps.
+두 문서 모두 과학 계산기 API에 대해 거의 동일한 의도, 요구사항, 기술 접근을 담습니다. 사소한 차이: 참조는 FR-011(NaN/Infinity 문자열 직렬화), FR-013(명시적 CORS)이 있으나 후보는 생략합니다. 후보는 FR-10.3/10.4(오버플로/NaN 입력 처리)를 더 명시합니다. 후보는 FR-1.1 형식, 참조는 FR-001 형식이나 내용은 동등합니다. 연산, 오류 코드, 기술 스택, 제약은 동일합니다. 후보는 CORS와 특수 NaN/Infinity 직렬화 형식을 명시하지 않아 사소하나 눈에 띄는 공백이 있습니다.
 
 </details>
 
-### Construction Phase
+### Construction 단계
 
-| Dimension | Score |
+| 차원 | 점수 |
 |-----------|------:|
-| Intent | 0.93 |
-| Design | 0.85 |
-| Completeness | 0.90 |
-| **Overall** | **0.89** |
+| 의도 | 0.93 |
+| 설계 | 0.85 |
+| 완전성 | 0.90 |
+| **전체** | **0.89** |
 
-| Document | Intent | Design | Complete | Overall |
+| 문서 | 의도 | 설계 | 완전성 | 전체 |
 |----------|-------:|-------:|---------:|--------:|
 | `build-and-test-summary.md` | 0.95 | 0.90 | 0.95 | 0.93 |
 | `build-instructions.md` | 0.85 | 0.75 | 0.80 | 0.80 |
@@ -326,94 +326,94 @@ Both documents capture nearly identical intent, requirements, and technical appr
 
 <details><summary><code>build-and-test-summary.md</code> — 0.93</summary>
 
-Both documents capture the same core intent: summarizing build and test results for the sci-calc project with all tests passing and ready for deployment. Design approaches are nearly identical (FastAPI, hatchling, pytest, same module structure). Minor differences: CANDIDATE has 192 tests vs REFERENCE 187 tests (likely test refinements), CANDIDATE includes detailed bug fix documentation (NaN validator), and CANDIDATE uses custom SyncTestClient workaround for Windows asyncio issue. CANDIDATE provides more granular test breakdown by module. Both meet quality gates and declare deployment readiness. Coverage reporting differs (REFERENCE: 95.20% measured, CANDIDATE: deferred to CI). File counts slightly differ (REFERENCE: 16+9 files, CANDIDATE: 13+7 files) but core structure is equivalent. Overall highly similar with minor implementation variations.
+두 문서 모두 동일한 핵심 의도를 담습니다: sci-calc 프로젝트의 빌드·테스트 결과를 요약하고 모든 테스트 통과 및 배포 준비 완료를 나타냅니다. 설계 접근은 거의 동일합니다(FastAPI, hatchling, pytest, 동일 모듈 구조). 사소한 차이: 후보는 테스트 192개, 참조 187개(테스트 정제 가능), 후보는 NaN 검증기 수정 등 버그 수정 문서가 상세하며 Windows asyncio 문제용 SyncTestClient 우회를 사용합니다. 후보는 모듈별 테스트 분해가 더 세분화됩니다. 둘 다 품질 게이트를 충족하고 배포 준비를 선언합니다. 커버리지 보고는 다름(참조: 95.20% 측정, 후보: CI로 연기). 파일 수는 약간 다르나 핵심 구조는 동등합니다. 구현 변형만 있는 매우 유사한 문서입니다.
 
 </details>
 
 <details><summary><code>build-instructions.md</code> — 0.80</summary>
 
-Both documents share the core intent of providing build instructions for the sci-calc project using Python 3.13+ and uv. The candidate includes additional detail on build backends (hatchling), explicit dependency versions, package building steps, and troubleshooting sections not present in the reference. The reference focuses on simpler verification and development workflow. Design approaches are similar (uv-based, FastAPI/uvicorn stack) but candidate adds more build tooling detail. Candidate covers all major reference topics (prerequisites, install, verify, run server, linting) plus extras, though some reference elements like the health check curl command are missing.
+두 문서 모두 Python 3.13+와 uv로 sci-calc 프로젝트 빌드 지침을 제공한다는 동일한 핵심 의도를 공유합니다. 후보는 빌드 백엔드(hatchling), 명시적 의존성 버전, 패키지 빌드 단계, 문제 해결 절 등 참조에 없는 추가 세부를 포함합니다. 참조는 더 단순한 검증과 개발 워크플로에 초점을 둡니다. 설계는 유사하나(uv 기반, FastAPI/uvicorn) 후보가 빌드 도구 세부를 더합니다. 후보는 참조의 주요 주제(사전 요구사항, 설치, 검증, 서버 실행, 린트)를 모두 다루고 추가 항목도 있으나 헬스 체크 curl 명령 등 일부 참조 요소는 없습니다.
 
 </details>
 
 <details><summary><code>integration-test-instructions.md</code> — 0.82</summary>
 
-Both documents describe integration testing for the same FastAPI calculator application with similar goals (testing HTTP request/response cycles, validation, error handling). The candidate provides more granular detail with 63 tests across 7 domains vs reference's 5 general scenarios. Design approach is similar (httpx.AsyncClient, ASGI transport, co-located tests) though candidate adds specific endpoint paths and test counts. Candidate covers all reference scenarios plus additional domains (constants, conversions, health). Minor differences in run commands but both use pytest. Overall strong alignment with enhanced detail in candidate.
+두 문서 모두 동일한 FastAPI 계산기 애플리케이션의 통합 테스트를 설명하며 유사한 목표(HTTP 요청/응답 주기, 검증, 오류 처리)를 갖습니다. 후보는 7개 도메인에 63개 테스트로 더 세분화되고 참조는 5개 일반 시나리오입니다. 설계는 유사하나(httpx.AsyncClient, ASGI 전송, 동일 위치 테스트) 후보가 구체적 경로와 테스트 수를 추가합니다. 후보는 참조 시나리오 전부와 상수·변환·헬스 등 추가 도메인을 포함합니다. 실행 명령은 약간 다르나 둘 다 pytest를 사용합니다. 후보가 세부를 강화한 강한 일치입니다.
 
 </details>
 
 <details><summary><code>unit-test-instructions.md</code> — 0.95</summary>
 
-Both documents share identical intent: providing unit test execution instructions for the sci_calc project with pytest and coverage targets ≥90%. Design is highly similar with pytest/coverage commands, though CANDIDATE adds Windows asyncio workaround and more detailed test architecture breakdown. CANDIDATE has 192 tests vs REFERENCE's 187 (minor evolution), and adds fallback test client documentation. REFERENCE includes detailed coverage breakdown table by module (95.20% achieved), while CANDIDATE focuses on test count breakdown by module. Both are complete construction phase test instructions with only minor structural differences.
+두 문서 모두 동일한 의도를 공유합니다: pytest와 ≥90% 커버리지 목표로 sci_calc 단위 테스트 실행 지침을 제공합니다. 설계는 pytest/커버리지 명령으로 매우 유사하나 후보는 Windows asyncio 우회와 테스트 아키텍처 분해를 더 상세히 합니다. 후보는 테스트 192개, 참조 187개이며 대체 테스트 클라이언트 문서를 추가합니다. 참조는 모듈별 커버리지 표(95.20% 달성)가 있고 후보는 모듈별 테스트 개수 분해에 초점을 둡니다. 둘 다 construction 단계 테스트 지침으로 완전하며 구조 차이만 사소합니다.
 
 </details>
 
 <details><summary><code>sci-calc-code-generation-plan.md</code> — 0.96</summary>
 
-Both documents target the same scientific calculator API with identical goals and requirements. Design is nearly identical with same layered architecture (engine/models/routes), same FastAPI framework, and same component breakdown. Candidate provides more granular implementation details (e.g., breaking engine into sub-steps by operation type, explicit error handling steps) while reference uses broader steps. Candidate consolidates some files (conftest in step 1 vs separate step 7) and adds more explicit testing details. Minor structural differences in step organization but covers all reference topics with additional implementation specificity.
+두 문서 모두 동일한 과학 계산기 API를 대상으로 하며 목표와 요구사항이 동일합니다. 설계는 거의 동일하며 동일한 계층 아키텍처(engine/models/routes), FastAPI, 컴포넌트 분해를 갖습니다. 후보는 연산 유형별 엔진 하위 단계, 명시적 오류 처리 등 구현 세부가 더 세분화되고 참조는 더 넓은 단계를 사용합니다. 후보는 일부 파일을 통합(conftest를 1단계에)하고 테스트 세부를 더 명시합니다. 단계 구성은 약간 다르나 참조 주제를 모두 다루며 구현 특정성을 추가합니다.
 
 </details>
 
-## Baseline Comparison
+## 기준선 비교
 
-> Compared against golden baseline: `20260218T125810-b84d042dff254a72b4ffec926fe5ea99`
-> Promoted: 2026-02-18T13:45:06+00:00
+> 골든 기준선 대비: `20260218T125810-b84d042dff254a72b4ffec926fe5ea99`
+> 승격: 2026-02-18T13:45:06+00:00
 
-| | Count |
+| | 개수 |
 |---|------:|
-| 🟢 Improved | 0 |
-| 🔴 Regressed | 0 |
-| ⚪ Unchanged | 20 |
+| 🟢 개선 | 0 |
+| 🔴 퇴보 | 0 |
+| ⚪ 변경 없음 | 20 |
 
-### Unit Tests
+### 단위 테스트
 
-| Metric | Golden | Current | Delta | Change |
+| 지표 | 골든 | 현재 | 델타 | 변경 |
 |--------|-------:|--------:|------:|--------|
-| Tests Passed | 192 | 192 | ⚪ 0 | unchanged |
-| Tests Failed | 0 | 0 | ⚪ 0 | unchanged |
-| Tests Total | 192 | 192 | ⚪ 0 | unchanged |
-| Coverage % | 91 | 91 | ⚪ 0 | unchanged |
+| 테스트 통과 | 192 | 192 | ⚪ 0 | 변경 없음 |
+| 테스트 실패 | 0 | 0 | ⚪ 0 | 변경 없음 |
+| 테스트 합계 | 192 | 192 | ⚪ 0 | 변경 없음 |
+| 커버리지 % | 91 | 91 | ⚪ 0 | 변경 없음 |
 
-### Contract Tests
+### 계약 테스트
 
-| Metric | Golden | Current | Delta | Change |
+| 지표 | 골든 | 현재 | 델타 | 변경 |
 |--------|-------:|--------:|------:|--------|
-| Contract Passed | 88 | 88 | ⚪ 0 | unchanged |
-| Contract Failed | 0 | 0 | ⚪ 0 | unchanged |
-| Contract Total | 88 | 88 | ⚪ 0 | unchanged |
+| 계약 통과 | 88 | 88 | ⚪ 0 | 변경 없음 |
+| 계약 실패 | 0 | 0 | ⚪ 0 | 변경 없음 |
+| 계약 합계 | 88 | 88 | ⚪ 0 | 변경 없음 |
 
-### Code Quality
+### 코드 품질
 
-| Metric | Golden | Current | Delta | Change |
+| 지표 | 골든 | 현재 | 델타 | 변경 |
 |--------|-------:|--------:|------:|--------|
-| Lint Errors | 5 | 5 | ⚪ 0 | unchanged |
-| Lint Warnings | 13 | 13 | ⚪ 0 | unchanged |
-| Lint Total | 18 | 18 | ⚪ 0 | unchanged |
+| 린트 오류 | 5 | 5 | ⚪ 0 | 변경 없음 |
+| 린트 경고 | 13 | 13 | ⚪ 0 | 변경 없음 |
+| 린트 합계 | 18 | 18 | ⚪ 0 | 변경 없음 |
 
-### Qualitative
+### 정성
 
-| Metric | Golden | Current | Delta | Change |
+| 지표 | 골든 | 현재 | 델타 | 변경 |
 |--------|-------:|--------:|------:|--------|
-| Qualitative Score | 0.8910 | 0.8910 | ⚪ 0 | unchanged |
-| Inception Score | 0.8900 | 0.8900 | ⚪ 0 | unchanged |
-| Construction Score | 0.8920 | 0.8920 | ⚪ 0 | unchanged |
+| 정성 점수 | 0.8910 | 0.8910 | ⚪ 0 | 변경 없음 |
+| Inception 점수 | 0.8900 | 0.8900 | ⚪ 0 | 변경 없음 |
+| Construction 점수 | 0.8920 | 0.8920 | ⚪ 0 | 변경 없음 |
 
-### Artifacts
+### 산출물
 
-| Metric | Golden | Current | Delta | Change |
+| 지표 | 골든 | 현재 | 델타 | 변경 |
 |--------|-------:|--------:|------:|--------|
-| Source Files | 17 | 17 | ⚪ 0 | unchanged |
-| Test Files | 18 | 18 | ⚪ 0 | unchanged |
-| Lines of Code | 3,522 | 3,522 | ⚪ 0 | unchanged |
-| Doc Files | 15 | 15 | ⚪ 0 | unchanged |
+| 소스 파일 | 17 | 17 | ⚪ 0 | 변경 없음 |
+| 테스트 파일 | 18 | 18 | ⚪ 0 | 변경 없음 |
+| 코드 줄 수 | 3,522 | 3,522 | ⚪ 0 | 변경 없음 |
+| 문서 파일 | 15 | 15 | ⚪ 0 | 변경 없음 |
 
-### Execution
+### 실행
 
-| Metric | Golden | Current | Delta | Change |
+| 지표 | 골든 | 현재 | 델타 | 변경 |
 |--------|-------:|--------:|------:|--------|
-| Total Tokens | 9,835,935 | 9,835,935 | ⚪ 0 | unchanged |
-| Wall Clock (ms) | 1,445,460 | 1,445,460 | ⚪ 0 | unchanged |
-| Handoffs | 3 | 3 | ⚪ 0 | unchanged |
+| 토큰 합계 | 9,835,935 | 9,835,935 | ⚪ 0 | 변경 없음 |
+| 실제 경과(ms) | 1,445,460 | 1,445,460 | ⚪ 0 | 변경 없음 |
+| 핸드오프 | 3 | 3 | ⚪ 0 | 변경 없음 |
 
 ---
-*Report generated by aidlc-reporting v0.1.0*
+*aidlc-reporting v0.1.0으로 생성된 보고서*

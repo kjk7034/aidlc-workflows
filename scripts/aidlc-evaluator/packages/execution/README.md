@@ -1,81 +1,81 @@
 # aidlc-runner
 
-A two-agent orchestrator that drives the full AI-DLC (AI-Driven Development Life Cycle) workflow. Given a vision document and an optional technical environment document, aidlc-runner coordinates an **Executor** agent and a **Human Simulator** agent to carry a software project from requirements through code generation, producing all documentation artifacts and working application code.
+전체 AI-DLC(AI 주도 개발 수명 주기) 워크플로를 구동하는 두 에이전트 오케스트레이터입니다. 비전 문서와 선택적 기술 환경 문서가 주어지면 aidlc-runner는 **Executor** 에이전트와 **Human Simulator** 에이전트를 조율해 요구사항부터 코드 생성까지 소프트웨어 프로젝트를 이끌며, 모든 문서 산출물과 동작하는 애플리케이션 코드를 생성합니다.
 
-## How It Works
+## 동작 방식
 
-aidlc-runner creates a [Strands Agents](https://github.com/strands-agents) swarm with two agents that hand off to each other:
+aidlc-runner는 서로 핸드오프하는 두 에이전트로 [Strands Agents](https://github.com/strands-agents) swarm을 만듭니다.
 
-1. **Executor** — Drives the AIDLC workflow stage-by-stage. It loads the relevant rule file for each stage, produces artifacts (requirements, designs, code), and hands off to the simulator whenever human input is needed.
-2. **Human Simulator** — Acts as a knowledgeable human stakeholder. It answers clarifying questions, approves documents, and reviews generated code based on the vision and technical environment documents, then hands back to the executor.
+1. **Executor** — AIDLC 워크플로를 단계별로 진행합니다. 각 단계에 맞는 규칙 파일을 로드하고, 산출물(요구사항, 설계, 코드)을 만들며, 인간 입력이 필요할 때 시뮬레이터로 넘깁니다.
+2. **Human Simulator** — 지식 있는 인간 이해관계자 역할을 합니다. 비전과 기술 환경 문서를 바탕으로 명확화 질문에 답하고, 문서를 승인하고, 생성 코드를 검토한 뒤 executor로 다시 넘깁니다.
 
-The agents repeat this handoff loop through all Inception and Construction phases until the full application is generated.
+에이전트는 전체 Inception·Construction 단계를 거쳐 전체 애플리케이션이 생성될 때까지 이 핸드오프 루프를 반복합니다.
 
-### Workflow Stages
+### 워크플로 단계
 
-**Inception Phase** — what to build and why:
+**Inception 단계** — 무엇을 만들고 왜 만드는지:
 
-| Stage | Condition |
+| 단계 | 조건 |
 |---|---|
-| Workspace Detection | Always |
-| Reverse Engineering | Brownfield only |
-| Requirements Analysis | Always |
-| User Stories | If complexity warrants |
-| Workflow Planning | Always |
-| Application Design | Conditional |
-| Units Generation | Conditional |
+| Workspace Detection | 항상 |
+| Reverse Engineering | Brownfield만 |
+| Requirements Analysis | 항상 |
+| User Stories | 복잡도에 따라 |
+| Workflow Planning | 항상 |
+| Application Design | 조건부 |
+| Units Generation | 조건부 |
 
-**Construction Phase** — how to build it (runs per unit of work):
+**Construction 단계** — 어떻게 만들지(작업 단위마다 실행):
 
-| Stage | Condition |
+| 단계 | 조건 |
 |---|---|
-| Functional Design | Conditional |
-| NFR Requirements | Conditional |
-| NFR Design | Conditional |
-| Infrastructure Design | Conditional |
-| Code Generation | Always |
-| Build and Test | Always |
+| Functional Design | 조건부 |
+| NFR Requirements | 조건부 |
+| NFR Design | 조건부 |
+| Infrastructure Design | 조건부 |
+| Code Generation | 항상 |
+| Build and Test | 항상 |
 
-## Prerequisites
+## 사전 요구사항
 
 - Python 3.13+
 - [uv](https://github.com/astral-sh/uv)
-- Git (for cloning AIDLC rules; not needed if using `--rules-path`)
-- AWS CLI configured with a profile that has Amazon Bedrock access
+- Git(AIDLC 규칙 클론용; `--rules-path` 사용 시 불필요)
+- Amazon Bedrock 접근 권한이 있는 프로파일로 구성된 AWS CLI
 
-## Installation
+## 설치
 
-From the repository root:
+저장소 루트에서:
 
 ```bash
 cd aidlc-runner
 uv sync
 ```
 
-## Usage
+## 사용법
 
 ```bash
 uv run aidlc-runner --vision <path-to-vision-file> [--tech-env <path-to-tech-env-file>] [options]
 ```
 
-The only required argument is `--vision`, which points to a markdown file describing what to build. Optionally, `--tech-env` provides a technical environment document that defines how to build it (languages, frameworks, security controls, testing standards). See the [input document guide](GUIDE_TO_WRITING_VISION_DOCS.md) for details on writing these documents.
+필수 인자는 `--vision`뿐이며, 만들 내용을 설명하는 마크다운 파일 경로입니다. 선택적으로 `--tech-env`로 어떻게 만들지(언어, 프레임워크, 보안 통제, 테스트 표준)를 정의하는 기술 환경 문서를 줄 수 있습니다. 문서 작성 방법은 [입력 문서 가이드](GUIDE_TO_WRITING_VISION_DOCS.md)를 참고하세요.
 
-### Examples
+### 예시
 
-Minimal — uses all defaults:
+최소 — 기본값만 사용:
 
 ```bash
 uv run aidlc-runner --vision ./my-project-vision.md
 ```
 
-With a technical environment document:
+기술 환경 문서 포함:
 
 ```bash
 uv run aidlc-runner --vision ./my-project-vision.md \
   --tech-env ./my-project-tech-env.md
 ```
 
-Custom AWS profile and region:
+사용자 정의 AWS 프로파일과 리전:
 
 ```bash
 uv run aidlc-runner --vision ./my-project-vision.md \
@@ -83,14 +83,14 @@ uv run aidlc-runner --vision ./my-project-vision.md \
   --aws-region us-east-1
 ```
 
-Use a local copy of the AIDLC rules instead of cloning from GitHub:
+GitHub 대신 로컬 AIDLC 규칙 사용:
 
 ```bash
 uv run aidlc-runner --vision ./my-project-vision.md \
   --rules-path /opt/aidlc-workflows
 ```
 
-Custom output directory and config file:
+출력 디렉터리와 설정 파일 지정:
 
 ```bash
 uv run aidlc-runner --vision ./my-project-vision.md \
@@ -98,7 +98,7 @@ uv run aidlc-runner --vision ./my-project-vision.md \
   --output-dir ./my-runs
 ```
 
-Override model IDs:
+모델 ID 재정의:
 
 ```bash
 uv run aidlc-runner --vision ./my-project-vision.md \
@@ -106,29 +106,29 @@ uv run aidlc-runner --vision ./my-project-vision.md \
   --simulator-model us.anthropic.claude-opus-4-20250514-v1:0
 ```
 
-### CLI Reference
+### CLI 참고
 
-| Flag | Required | Default | Description |
+| 플래그 | 필수 | 기본값 | 설명 |
 |---|---|---|---|
-| `--vision PATH` | Yes | — | Path to the vision/constraints markdown file |
-| `--tech-env PATH` | No | — | Path to the technical environment markdown file |
-| `--config PATH` | No | Built-in default | Path to a YAML configuration file |
-| `--aws-profile TEXT` | No | `default` | AWS profile name |
-| `--aws-region TEXT` | No | `us-west-2` | AWS region for Bedrock |
-| `--executor-model TEXT` | No | Claude Opus 4 | Model ID for the executor agent |
-| `--simulator-model TEXT` | No | Claude Sonnet 4.5 | Model ID for the simulator agent |
-| `--output-dir PATH` | No | `../runs` | Directory where run folders are created |
-| `--rules-path PATH` | No | Cloned from Git | Path to a local AIDLC rules directory |
-| `--no-exec` | No | Enabled | Disable in-workflow command execution |
-| `--no-post-tests` | No | Enabled | Disable post-run test execution |
+| `--vision PATH` | 예 | — | 비전/제약 마크다운 파일 경로 |
+| `--tech-env PATH` | 아니오 | — | 기술 환경 마크다운 파일 경로 |
+| `--config PATH` | 아니오 | 내장 기본값 | YAML 설정 파일 경로 |
+| `--aws-profile TEXT` | 아니오 | `default` | AWS 프로파일 이름 |
+| `--aws-region TEXT` | 아니오 | `us-west-2` | Bedrock용 AWS 리전 |
+| `--executor-model TEXT` | 아니오 | Claude Opus 4 | Executor 에이전트 모델 ID |
+| `--simulator-model TEXT` | 아니오 | Claude Sonnet 4.5 | Simulator 에이전트 모델 ID |
+| `--output-dir PATH` | 아니오 | `../runs` | 실행 폴더가 생성되는 디렉터리 |
+| `--rules-path PATH` | 아니오 | Git에서 클론 | 로컬 AIDLC 규칙 디렉터리 경로 |
+| `--no-exec` | 아니오 | 활성화 | 워크플로 내 명령 실행 비활성화 |
+| `--no-post-tests` | 아니오 | 활성화 | 실행 후 테스트 비활성화 |
 
-## Configuration
+## 설정
 
-Settings are resolved in order of precedence: **CLI flags > YAML config > built-in defaults**.
+설정은 **CLI 플래그 > YAML 설정 > 내장 기본값** 순으로 적용됩니다.
 
-### YAML Config File
+### YAML 설정 파일
 
-Create a YAML file and pass it via `--config`. Any value not specified falls back to the built-in default.
+YAML 파일을 만들고 `--config`로 넘깁니다. 지정하지 않은 값은 내장 기본값으로 떨어집니다.
 
 ```yaml
 aws:
@@ -158,13 +158,13 @@ runs:
   output_dir: "../runs"
 ```
 
-### Built-in Defaults
+### 내장 기본값
 
-The built-in defaults match the file above. The default config ships at `aidlc-runner/config/default.yaml`.
+내장 기본값은 위와 동일합니다. 기본 설정은 `aidlc-runner/config/default.yaml`에 포함됩니다.
 
-## Run Output
+## 실행 출력
 
-Each invocation creates a timestamped run folder under the output directory:
+각 호출은 출력 디렉터리 아래에 타임스탬프 실행 폴더를 만듭니다.
 
 ```
 runs/
@@ -189,24 +189,24 @@ runs/
         └── ...
 ```
 
-`run-meta.yaml` records the full execution context — start/end times, status, total handoffs, node history, and the config snapshot used. `run-metrics.yaml` captures NFR metrics — token usage (total and per-agent), handoff timing and patterns, generated artifact counts and lines of code, and error/retry events.
+`run-meta.yaml`에는 전체 실행 맥락이 기록됩니다 — 시작/종료 시각, 상태, 총 핸드오프 수, 노드 이력, 사용된 설정 스냅샷. `run-metrics.yaml`에는 NFR 메트릭이 담깁니다 — 토큰 사용량(총·에이전트별), 핸드오프 타이밍과 패턴, 생성 산출물 수와 코드 줄 수, 오류/재시도 이벤트.
 
-## Development
+## 개발
 
-### Running Tests
+### 테스트 실행
 
 ```bash
 cd aidlc-runner
 uv run pytest
 ```
 
-### Linting
+### 린트
 
 ```bash
 uv run ruff check . && uv run ruff format .
 ```
 
-### Project Structure
+### 프로젝트 구조
 
 ```
 aidlc-runner/
@@ -237,16 +237,16 @@ aidlc-runner/
 └── pyproject.toml
 ```
 
-### Key Modules
+### 주요 모듈
 
-- **cli.py** — Parses CLI arguments (including `--vision` and optional `--tech-env`), loads config, and calls `runner.run()`.
-- **config.py** — Defines `RunnerConfig` and nested dataclasses (`AwsConfig`, `ModelConfig`, `SwarmConfig`, etc.). Merges defaults, YAML, and CLI overrides.
-- **runner.py** — Creates the run folder, copies the vision and optional tech-env files, sets up rules, builds both agents, creates a `Swarm`, executes it, and writes metrics.
-- **metrics.py** — `MetricsCollector` accumulates handoff timings and error events during execution, then assembles token usage, artifact counts, and handoff patterns post-run into `run-metrics.yaml`.
-- **progress.py** — `AgentProgressHandler` prints tool invocations and detects error events per agent. `SwarmProgressHook` tracks node-level handoff timing via Strands hook events.
-- **post_run.py** — Post-run test evaluation: detects the project type in `workspace/`, installs dependencies, runs tests, and writes `test-results.yaml`.
-- **agents/executor.py** — Builds the executor `Agent` with file-ops tools, a rule-loader tool, and an optional `run_command` tool. The system prompt encodes the complete AIDLC stage sequence and handoff protocol.
-- **agents/simulator.py** — Builds the simulator `Agent` with file-ops tools. The system prompt is dynamically generated to embed the vision document content and, when provided, the technical environment document.
-- **tools/file_ops.py** — `make_file_tools(run_folder)` returns sandboxed `read_file`, `write_file`, and `list_files` functions scoped to the run folder with path-traversal prevention.
-- **tools/rule_loader.py** — `make_rule_loader(rules_dir)` returns a `load_rule` function that resolves shorthand paths (e.g., `"inception/requirements-analysis"`) to full rule file paths.
-- **tools/run_command.py** — `make_run_command(run_folder)` returns a sandboxed `run_command` function for executing shell commands within the run folder during Build and Test.
+- **cli.py** — CLI 인자 파싱(`--vision`, 선택적 `--tech-env` 포함), 설정 로드, `runner.run()` 호출.
+- **config.py** — `RunnerConfig`와 중첩 dataclass(`AwsConfig`, `ModelConfig`, `SwarmConfig` 등) 정의. 기본값, YAML, CLI 재정의 병합.
+- **runner.py** — 실행 폴더 생성, 비전·선택적 tech-env 복사, 규칙 설정, 두 에이전트 빌드, `Swarm` 생성·실행, 메트릭 기록.
+- **metrics.py** — `MetricsCollector`가 실행 중 핸드오프 타이밍과 오류 이벤트를 누적하고, 실행 후 토큰 사용량·산출물 수·핸드오프 패턴을 `run-metrics.yaml`로 조립.
+- **progress.py** — `AgentProgressHandler`가 도구 호출을 출력하고 에이전트별 오류 이벤트를 감지. `SwarmProgressHook`이 Strands 훅 이벤트로 노드 단위 핸드오프 타이밍을 추적.
+- **post_run.py** — 실행 후 테스트 평가: `workspace/`에서 프로젝트 유형 감지, 의존성 설치, 테스트 실행, `test-results.yaml` 기록.
+- **agents/executor.py** — 파일 도구, 규칙 로더 도구, 선택적 `run_command` 도구로 executor `Agent` 구축. 시스템 프롬프트에 전체 AIDLC 단계 순서와 핸드오프 프로토콜 인코딩.
+- **agents/simulator.py** — 파일 도구로 simulator `Agent` 구축. 시스템 프롬프트에 비전 문서 내용을 동적으로 삽입하고, 제공 시 기술 환경 문서도 포함.
+- **tools/file_ops.py** — `make_file_tools(run_folder)`가 실행 폴더로 범위가 제한된 `read_file`, `write_file`, `list_files`를 반환하며 경로 순회 탐지 방지.
+- **tools/rule_loader.py** — `make_rule_loader(rules_dir)`가 `load_rule`을 반환해 축약 경로(예: `"inception/requirements-analysis"`)를 전체 규칙 파일 경로로 해석.
+- **tools/run_command.py** — `make_run_command(run_folder)`가 Build and Test 중 실행 폴더 내 셸 명령용 샌드박스 `run_command`를 반환.

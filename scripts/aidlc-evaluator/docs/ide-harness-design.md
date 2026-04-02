@@ -1,33 +1,29 @@
-# IDE Test Harness — Architecture Design
+# IDE 테스트 하네스 — 아키텍처 설계
 
-## Problem
+## 문제
 
-The AIDLC evaluation framework runs via a two-agent Strands swarm on Bedrock. To evaluate
-IDE-based AI coding assistants, we need to drive the same AIDLC process through each IDE's
-AI chat interface and capture the outputs in a format compatible with the existing evaluation
-pipeline (stages 2–6).
+AIDLC 평가 프레임워크는 Bedrock에서 두 에이전트 Strands swarm으로 실행됩니다. IDE 기반 AI 코딩 어시스턴트를 평가하려면 각 IDE의 AI 채팅 인터페이스로 동일한 AIDLC 프로세스를 구동하고, 기존 평가 파이프라인(2–6단계)과 호환되는 형식으로 출력을 수집해야 합니다.
 
-## Input/Output Contract
+## 입출력 계약
 
-### Inputs (provided to each IDE adapter)
-- `vision.md` — the application vision document
-- `tech-env.md` — technical environment specification
-- AIDLC rules — the full AIDLC workflow rules (from `aidlc-workflows` repo)
-- Initial prompt template — instructions for the IDE AI to follow the AIDLC process
+### 입력(각 IDE 어댑터에 제공)
+- `vision.md` — 애플리케이션 비전 문서
+- `tech-env.md` — 기술 환경 사양
+- AIDLC 규칙 — 전체 AIDLC 워크플로 규칙(`aidlc-workflows` 저장소에서)
+- 초기 프롬프트 템플릿 — IDE AI가 AIDLC 프로세스를 따르도록 하는 지시
 
-### Outputs (captured from each IDE adapter)
-- `aidlc-docs/` — generated AIDLC documentation (same structure as Strands runs)
+### 출력(각 IDE 어댑터에서 수집)
+- `aidlc-docs/` — 생성된 AIDLC 문서(Strands 실행과 동일한 구조)
   - `inception/requirements/`, `inception/plans/`, `inception/application-design/`
   - `construction/plans/`, `construction/build-and-test/`
   - `aidlc-state.md`, `audit.md`
-- `workspace/` — generated application source code and tests
-- `run-meta.yaml` — run metadata (adapter-generated, matches collector schema)
-- `test-results.yaml` — post-run test results (adapter runs tests after IDE completes)
+- `workspace/` — 생성된 애플리케이션 소스와 테스트
+- `run-meta.yaml` — 실행 메타데이터(어댑터 생성, collector 스키마와 일치)
+- `test-results.yaml` — 실행 후 테스트 결과(IDE 완료 후 어댑터가 테스트 실행)
 
-### Output Normalization
+### 출력 정규화
 
-IDE outputs will not match the Strands run folder layout exactly. Each adapter must
-normalize its output to match the expected structure:
+IDE 출력은 Strands run 폴더 레이아웃과 정확히 일치하지 않습니다. 각 어댑터는 기대 구조에 맞게 출력을 정규화해야 합니다.
 
 ```
 <run-folder>/
@@ -38,9 +34,9 @@ normalize its output to match the expected structure:
   workspace/             # extracted/copied from IDE workspace
 ```
 
-This allows `run_evaluation.py --evaluate-only <run-folder>/aidlc-docs` to score the output.
+이렇게 하면 `run_evaluation.py --evaluate-only <run-folder>/aidlc-docs`로 출력을 채점할 수 있습니다.
 
-## Adapter Interface
+## 어댑터 인터페이스
 
 ```python
 from abc import ABC, abstractmethod
@@ -101,7 +97,7 @@ class IDEAdapter(ABC):
         ...
 ```
 
-## Run Orchestration
+## 실행 오케스트레이션
 
 ```
 run_ide_evaluation.py
@@ -113,47 +109,47 @@ run_ide_evaluation.py
   └── run_evaluation.py --evaluate-only <result.aidlc_docs_dir> --golden <golden>
 ```
 
-The orchestrator script:
-1. Instantiates the adapter for the target IDE
-2. Runs the adapter to generate outputs
-3. Runs post-generation tests (install deps + pytest/npm test)
-4. Invokes the existing evaluation pipeline in evaluate-only mode
+오케스트레이터 스크립트는:
+1. 대상 IDE용 어댑터를 인스턴스화
+2. 어댑터를 실행해 출력 생성
+3. 생성 후 테스트 실행(의존성 설치 + pytest/npm test)
+4. evaluate-only 모드로 기존 평가 파이프라인 호출
 
-## Adapter Implementation Strategy
+## 어댑터 구현 전략
 
-### Category A: CLI-scriptable IDEs
-IDEs with CLI or API support for sending prompts and receiving responses.
+### 범주 A: CLI로 스크립트 가능한 IDE
+프롬프트 전송·응답 수신을 위한 CLI 또는 API 지원이 있는 IDE.
 
-- **Cursor** — Has CLI (`cursor` command). May support `--chat` or similar.
-- **Kiro** — AWS IDE, likely has Bedrock integration. Check for CLI.
+- **Cursor** — CLI(`cursor` 명령). `--chat` 등 지원 가능.
+- **Kiro** — AWS IDE, Bedrock 연동 가능성. CLI 확인.
 
-Approach: Subprocess invocation, parse stdout/stderr, monitor workspace for output files.
+접근: 서브프로세스 호출, stdout/stderr 파싱, 출력 파일을 위해 워크스페이스 모니터링.
 
-### Category B: VS Code extension IDEs
-IDEs that run as VS Code extensions with no independent CLI.
+### 범주 B: VS Code 확장 IDE
+독립 CLI 없이 VS Code 확장으로 동작하는 IDE.
 
-- **Cline** — VS Code extension. Must automate VS Code.
-- **GitHub CoPilot** — VS Code extension. Chat panel automation needed.
+- **Cline** — VS Code 확장. VS Code 자동화 필요.
+- **GitHub CoPilot** — VS Code 확장. 채팅 패널 자동화 필요.
 
-Approach: Use `@vscode/test-electron` or Playwright-based VS Code automation.
+접근: `@vscode/test-electron` 또는 Playwright 기반 VS Code 자동화.
 
-### Category C: VS Code fork IDEs
-Standalone IDE forks of VS Code with built-in AI.
+### 범주 C: VS Code 포크 IDE
+내장 AI가 있는 VS Code 포크 단독 IDE.
 
-- **Windsurf** — Codeium's fork. Electron app, VS Code internals.
-- **Antigravity** — AI coding assistant.
+- **Windsurf** — Codeium 포크. Electron 앱, VS Code 내부.
+- **Antigravity** — AI 코딩 어시스턴트.
 
-Approach: Electron automation via Playwright or native extension API.
+접근: Playwright 또는 네이티브 확장 API로 Electron 자동화.
 
-### Common Post-Run Steps (all adapters)
-1. Scan workspace for `aidlc-docs/` directory structure
-2. Identify generated source code under `workspace/` or project root
-3. Normalize file layout to match expected schema
-4. Detect project type (Python/Node/Rust/Go)
-5. Install dependencies and run tests
-6. Generate `run-meta.yaml` and `run-metrics.yaml`
+### 공통 실행 후 단계(모든 어댑터)
+1. 워크스페이스에서 `aidlc-docs/` 디렉터리 구조 스캔
+2. `workspace/` 또는 프로젝트 루트 아래 생성 소스 코드 식별
+3. 기대 스키마에 맞게 파일 레이아웃 정규화
+4. 프로젝트 유형 감지(Python/Node/Rust/Go)
+5. 의존성 설치 및 테스트 실행
+6. `run-meta.yaml` 및 `run-metrics.yaml` 생성
 
-## Package Structure
+## 패키지 구조
 
 ```
 packages/ide-harness/
@@ -178,9 +174,9 @@ packages/ide-harness/
     test_orchestrator.py
 ```
 
-## Prompt Template
+## 프롬프트 템플릿
 
-The prompt sent to each IDE AI must instruct it to follow the AIDLC process:
+각 IDE AI에 보내는 프롬프트는 AIDLC 프로세스를 따르도록 지시해야 합니다.
 
 ```
 You are tasked with building an application following the AIDLC (AI Development
@@ -205,20 +201,19 @@ Please read the vision document at `vision.md` and follow the complete AIDLC pro
 Follow every AIDLC rule precisely. Do not skip phases or documents.
 ```
 
-## Open Questions
+## 열린 질문
 
-1. **Completion detection**: How to detect when the IDE AI has finished all AIDLC phases?
-   - File-based: watch for `aidlc-state.md` indicating construction complete
-   - Time-based: timeout after N minutes
-   - Prompt-based: ask the IDE AI to signal completion
+1. **완료 감지**: IDE AI가 모든 AIDLC 단계를 끝냈는지 어떻게 감지할까?
+   - 파일 기반: `aidlc-state.md`로 construction 완료 표시까지 감시
+   - 시간 기반: N분 후 타임아웃
+   - 프롬프트 기반: IDE AI에 완료 신호 요청
 
-2. **Multi-turn interaction**: The AIDLC process involves human simulator handoffs.
-   For IDEs, should we:
-   - Send a single comprehensive prompt and let the IDE handle everything?
-   - Script multi-turn interaction (approve each phase transition)?
-   - Use a semi-automated approach (human monitors, scripts capture)?
+2. **다중 턴 상호작용**: AIDLC에는 인간 시뮬레이터 핸드오프가 포함됩니다. IDE에서는:
+   - 단일 포괄 프롬프트를 보내 IDE가 모두 처리하게 할까?
+   - 다중 턴 상호작용을 스크립트(단계 전환마다 승인)할까?
+   - 반자동(사람이 모니터링, 스크립트가 수집)할까?
 
-3. **Token tracking**: Most IDEs don't expose token usage. Options:
-   - Estimate from output size
-   - Capture Bedrock CloudWatch metrics (if IDE uses Bedrock)
-   - Accept "N/A" for token metrics on IDE runs
+3. **토큰 추적**: 대부분의 IDE는 토큰 사용량을 노출하지 않습니다. 선택지:
+   - 출력 크기로 추정
+   - Bedrock CloudWatch 메트릭 수집(IDE가 Bedrock 사용 시)
+   - IDE 실행에서는 토큰 메트릭을 “N/A”로 수용

@@ -1,24 +1,24 @@
-# AI-DLC Welcome Message
+# AI-DLC 환영 메시지
 
-**Purpose**: This file contains the user-facing welcome message that should be displayed ONCE at the start of any AI-DLC workflow.
+**목적**: AI-DLC 워크플로 시작 시 **한 번만** 표시해야 하는 사용자 대면 환영 메시지가 이 파일에 있습니다.
 
 ---
 
-# 👋 Welcome to AI-DLC (AI-Driven Development Life Cycle)! 👋
+# 👋 AI-DLC(AI-Driven Development Life Cycle)에 오신 것을 환영합니다! 👋
 
-I'll guide you through an adaptive software development workflow that intelligently tailors itself to your specific needs.
+귀하의 요구에 맞게 지능적으로 조정되는 적응형 소프트웨어 개발 워크플로를 안내합니다.
 
-## What is AI-DLC?
+## AI-DLC란?
 
-AI-DLC is a structured yet flexible software development process that adapts to your project's needs. Think of it as having an experienced software architect who:
+AI-DLC는 프로젝트 요구에 맞춰 조정되는 구조적이면서도 유연한 소프트웨어 개발 프로세스입니다. 경험 많은 소프트웨어 아키텍트와 함께하는 것처럼 생각할 수 있습니다:
 
-- **Analyzes your requirements** and asks clarifying questions when needed
-- **Plans the optimal approach** based on complexity and risk
-- **Skips unnecessary steps** for simple changes while providing comprehensive coverage for complex projects
-- **Documents everything** so you have a complete record of decisions and rationale
-- **Guides you through each phase** with clear checkpoints and approval gates
+- **요구사항을 분석**하고 필요 시 명확화 질문을 합니다
+- **복잡도와 위험**을 바탕으로 최적의 접근을 **계획**합니다
+- 단순한 변경에는 **불필요한 단계를 건너뛰고**, 복잡한 프로젝트에는 **포괄적으로** 다룹니다
+- **모든 것을 문서화**하여 결정과 근거의 완전한 기록을 남깁니다
+- **각 단계마다** 명확한 검문소와 승인 게이트로 안내합니다
 
-## The Three-Phase Lifecycle
+## 세 가지 단계 생명주기
 
 ```
                          User Request
@@ -63,47 +63,47 @@ AI-DLC is a structured yet flexible software development process that adapts to 
                           Complete
 ```
 
-### Phase Breakdown:
+### 단계 구성:
 
-**INCEPTION PHASE** - *Planning & Application Design*
-- **Purpose**: Determines WHAT to build and WHY
-- **Activities**: Understanding requirements, analyzing existing code (if any), planning the approach
-- **Output**: Clear requirements, execution plan, decisions on the number of units of work for parallel development
-- **Your Role**: Answer questions, review plans, approve direction
+**INCEPTION 단계** — *계획 및 애플리케이션 설계*
+- **목적**: 무엇을 만들지(WHAT), 왜 만들지(WHY)를 결정합니다
+- **활동**: 요구사항 이해, (해당 시) 기존 코드 분석, 접근 방식 계획
+- **산출물**: 명확한 요구사항, 실행 계획, 병렬 개발을 위한 작업 단위 수에 대한 결정
+- **역할**: 질문에 답하고, 계획을 검토하고, 방향을 승인합니다
 
-**CONSTRUCTION PHASE** - *Detailed Design, Implementation & Test*
-- **Purpose**: Determines HOW to build it
-- **Activities**: Detailed design (when needed), code generation, comprehensive testing
-- **Output**: Working code, tests, build instructions
-- **Your Role**: Review designs, approve implementation plans, validate results
+**CONSTRUCTION 단계** — *상세 설계, 구현 및 테스트*
+- **목적**: 어떻게 만들지(HOW)를 결정합니다
+- **활동**: (필요 시) 상세 설계, 코드 생성, 포괄적 테스트
+- **산출물**: 동작하는 코드, 테스트, 빌드 지침
+- **역할**: 설계를 검토하고, 구현 계획을 승인하고, 결과를 검증합니다
 
-**OPERATIONS PHASE** - *Deployment & Monitoring (Future)*
-- **Purpose**: How to DEPLOY and RUN it
-- **Status**: Placeholder for future deployment and monitoring workflows
-- **Current State**: Build and test activities handled in CONSTRUCTION phase
+**OPERATIONS 단계** — *배포 및 모니터링(향후)*
+- **목적**: 배포·실행 방법
+- **상태**: 향후 배포·모니터링 워크플로를 위한 자리 표시자
+- **현재**: 빌드·테스트 활동은 CONSTRUCTION 단계에서 처리됩니다
 
-## Key Principles:
+## 핵심 원칙:
 
-- ⚡ **Fully Adaptive**: Each stage independently evaluated based on your needs
-- 🎯 **Efficient**: Simple changes execute only essential stages
-- 📋 **Comprehensive**: Complex changes get full treatment with all safeguards
-- 🔍 **Transparent**: You see and approve the execution plan before work begins
-- 📝 **Documented**: Complete audit trail of all decisions and changes
-- 🎛️ **User Control**: You can request stages be included or excluded
+- ⚡ **완전 적응형**: 각 단계는 요구에 따라 독립적으로 평가됩니다
+- 🎯 **효율**: 단순한 변경은 필수 단계만 실행합니다
+- 📋 **포괄**: 복잡한 변경은 모든 안전장치를 갖춘 전체 절차를 거칩니다
+- 🔍 **투명**: 작업 시작 전 실행 계획을 보고 승인합니다
+- 📝 **문서화**: 모든 결정과 변경의 완전한 감사 추적
+- 🎛️ **사용자 제어**: 단계 포함·제외를 요청할 수 있습니다
 
-## What Happens Next:
+## 이후 진행:
 
-1. **I'll analyze your workspace** to understand if this is a new or existing project
-2. **I'll gather requirements** and ask clarifying questions if needed
-3. **I'll create an execution plan** showing which stages I propose to run and why
-4. **You'll review and approve** the plan (or request changes)
-5. **We'll execute the plan** with checkpoints at each major stage
-6. **You'll get working code** with complete documentation and tests
+1. **워크스페이스를 분석**해 신규 프로젝트인지 기존 프로젝트인지 파악합니다
+2. **요구사항을 수집**하고 필요 시 명확화 질문을 합니다
+3. **실행 계획**을 만들어 어떤 단계를 제안하는지와 이유를 보여 줍니다
+4. **검토하고 승인**합니다(또는 변경을 요청합니다)
+5. **계획을 실행**하며 주요 단계마다 검문소가 있습니다
+6. **문서와 테스트가 갖춰진 동작 코드**를 받습니다
 
-The AI-DLC process adapts to:
-- 📋 Your intent clarity and complexity
-- 🔍 Existing codebase state
-- 🎯 Scope and impact of changes
-- ⚡ Risk and quality requirements
+AI-DLC 프로세스는 다음에 맞춰 조정됩니다:
+- 📋 의도의 명확성과 복잡도
+- 🔍 기존 코드베이스 상태
+- 🎯 변경의 범위와 영향
+- ⚡ 위험과 품질 요구사항
 
-Let's begin!
+시작해 봅시다!

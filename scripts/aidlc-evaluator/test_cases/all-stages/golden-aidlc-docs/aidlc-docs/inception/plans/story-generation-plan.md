@@ -1,20 +1,20 @@
-# Story Generation Plan
+# 스토리 생성 계획
 
-## Methodology
-- **Approach**: Feature-Based with Persona mapping
-- **Story Format**: "As a [role], I want to [action], so that [benefit]"
-- **Acceptance Criteria Format**: Given/When/Then
-- **INVEST Compliance**: All stories verified against INVEST criteria
+## 방법론
+- **접근**: 페르소나 매핑이 있는 기능 기반
+- **스토리 형식**: "[역할]로서, [행동]을 원한다 [이유] 때문에"
+- **인수 기준 형식**: Given/When/Then
+- **INVEST 준수**: 모든 스토리를 INVEST 기준으로 검증
 
-## Execution Steps
+## 실행 단계
 
-- [x] Step 1: Define user personas (Admin, Librarian, Member)
-- [x] Step 2: Generate Catalog Service stories (Book CRUD, Search, Availability)
-- [x] Step 3: Generate Authentication stories (Registration, Login, JWT)
-- [x] Step 4: Generate Lending stories (Checkout, Return, Renewal)
-- [x] Step 5: Generate Hold Management stories (Place, Cancel, Queue, Fulfill)
-- [x] Step 6: Generate Fee Management stories (Track, Pay)
-- [x] Step 7: Generate Reporting stories (Overdue, Collection Summary)
-- [x] Step 8: Generate Health Check stories
-- [x] Step 9: Map personas to stories
-- [x] Step 10: Verify INVEST criteria compliance
+- [x] 1단계: 사용자 페르소나 정의(Admin, Librarian, Member)
+- [x] 2단계: Catalog Service 스토리 생성(Book CRUD, Search, Availability)
+- [x] 3단계: 인증 스토리 생성(등록, 로그인, JWT)
+- [x] 4단계: Lending 스토리 생성(대출, 반납, 갱신)
+- [x] 5단계: 예약 관리 스토리 생성(등록, 취소, 대기열, 이행)
+- [x] 6단계: 수수료 관리 스토리 생성(추적, 납부)
+- [x] 7단계: 보고 스토리 생성(연체, 장서 요약)
+- [x] 8단계: 헬스 체크 스토리 생성
+- [x] 9단계: 페르소나를 스토리에 매핑
+- [x] 10단계: INVEST 기준 준수 검증

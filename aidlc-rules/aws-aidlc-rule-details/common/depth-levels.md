@@ -1,73 +1,73 @@
-# Adaptive Depth
+# 적응형 깊이
 
-**Purpose**: Explain how AI-DLC adapts detail level to problem complexity
+**목적**: AI-DLC가 문제 복잡도에 따라 세부 수준을 어떻게 조절하는지 설명합니다
 
-## Core Principle
+## 핵심 원칙
 
-**When a stage executes, ALL its defined artifacts are created. The "depth" refers to the level of detail and rigor within those artifacts, which adapts to the problem's complexity.**
+**단계가 실행되면 해당 단계에 정의된 모든 산출물이 생성됩니다. "깊이"는 그 산출물 안의 상세도와 엄밀성을 가리키며, 문제의 복잡도에 맞춰 조절됩니다.**
 
-## Stage Selection vs Detail Level
+## 단계 선택 vs 상세 수준
 
-### Stage Selection (Binary)
-- **Workflow Planning** decides: EXECUTE or SKIP for each stage
-- **If EXECUTE**: Stage runs and creates ALL its defined artifacts
-- **If SKIP**: Stage doesn't run at all
+### 단계 선택(이진)
+- **Workflow Planning**이 각 단계에 대해 EXECUTE 또는 SKIP을 결정합니다
+- **EXECUTE**이면: 단계가 실행되고 정의된 **모든** 산출물이 생성됩니다
+- **SKIP**이면: 단계는 전혀 실행되지 않습니다
 
-### Detail Level (Adaptive)
-- **Simple problems**: Concise artifacts with essential detail
-- **Complex problems**: Comprehensive artifacts with extensive detail
-- **Model decides**: Based on problem characteristics, not prescriptive rules
+### 상세 수준(적응형)
+- **단순한 문제**: 필수 세부만 담은 간결한 산출물
+- **복잡한 문제**: 광범위한 세부를 담은 포괄적 산출물
+- **모델이 결정**: 규정적 규칙이 아니라 문제 특성을 기준으로 합니다
 
-## Factors Influencing Detail Level
+## 상세 수준에 영향을 주는 요소
 
-The model considers these factors when determining appropriate detail:
+모델은 적절한 상세도를 정할 때 다음을 고려합니다:
 
-1. **Request Clarity**: How clear and complete is the user's request?
-2. **Problem Complexity**: How intricate is the solution space?
-3. **Scope**: Single file, component, multiple components, or system-wide?
-4. **Risk Level**: What's the impact of errors or omissions?
-5. **Available Context**: Greenfield vs brownfield, existing documentation
-6. **User Preferences**: Has user expressed preference for brevity or detail?
+1. **요청 명확성**: 사용자 요청이 얼마나 명확하고 완전한가?
+2. **문제 복잡도**: 해 공간이 얼마나 복잡한가?
+3. **범위**: 단일 파일, 컴포넌트, 여러 컴포넌트, 시스템 전체?
+4. **위험 수준**: 오류나 누락의 영향은?
+5. **사용 가능한 맥락**: Greenfield vs brownfield, 기존 문서
+6. **사용자 선호**: 간결함 또는 상세함을 표현했는가?
 
-## Example: Requirements Analysis Artifacts
+## 예: Requirements Analysis 산출물
 
-**All scenarios create the same artifacts**:
-- `requirement-verification-questions.md` (if needed)
+**모든 시나리오에서 동일한 산출물**:
+- `requirement-verification-questions.md` (필요 시)
 - `requirements.md`
 
-**Note**: User's initial request is captured in `audit.md` (no separate user-intent.md needed)
+**참고**: 사용자의 초기 요청은 `audit.md`에 캡처됩니다(별도 user-intent.md 불필요)
 
-**Detail level varies by complexity**:
+**복잡도에 따라 상세 수준은 달라집니다**:
 
-### Simple Scenario (Bug Fix)
-- **requirement-verification-questions.md**: necessary clarifying questions
-- **requirements.md**: Concise functional requirement, minimal sections
+### 단순 시나리오(버그 수정)
+- **requirement-verification-questions.md**: 필요한 명확화 질문
+- **requirements.md**: 간결한 기능 요구사항, 최소 섹션
 
-### Complex Scenario (System Migration)
-- **requirement-verification-questions.md**: Multiple rounds, 10+ questions
-- **requirements.md**: Comprehensive functional + non-functional requirements, traceability, acceptance criteria
+### 복잡 시나리오(시스템 마이그레이션)
+- **requirement-verification-questions.md**: 여러 라운드, 10개 이상 질문
+- **requirements.md**: 포괄적 기능·비기능 요구사항, 추적 가능성, 수락 기준
 
-## Example: Application Design Artifacts
+## 예: Application Design 산출물
 
-**All scenarios create the same artifacts**:
+**모든 시나리오에서 동일한 산출물**:
 - `application-design.md`
 - `component-diagram.md`
 
-**Detail level varies by complexity**:
+**복잡도에 따라 상세 수준은 달라집니다**:
 
-### Simple Scenario (Single Component)
-- **application-design.md**: Basic component description, key methods
-- **component-diagram.md**: Simple diagram with essential relationships
+### 단순 시나리오(단일 컴포넌트)
+- **application-design.md**: 기본 컴포넌트 설명, 주요 메서드
+- **component-diagram.md**: 필수 관계만 있는 단순 다이어그램
 
-### Complex Scenario (Multi-Component System)
-- **application-design.md**: Detailed component responsibilities, all methods with signatures, design patterns, alternatives considered
-- **component-diagram.md**: Comprehensive diagram with all relationships, data flows, integration points
+### 복잡 시나리오(다중 컴포넌트 시스템)
+- **application-design.md**: 상세 컴포넌트 책임, 서명이 있는 모든 메서드, 디자인 패턴, 검토한 대안
+- **component-diagram.md**: 모든 관계, 데이터 흐름, 통합 지점을 담은 포괄적 다이어그램
 
-## Guiding Principle for Model
+## 모델을 위한 지침
 
-**"Create exactly the detail needed for the problem at hand - no more, no less."**
+**"당면 문제에 필요한 만큼만 상세히 작성한다 — 많지도 적지도 않게."**
 
-- Don't artificially inflate simple problems with unnecessary detail
-- Don't shortchange complex problems by omitting critical detail
-- Let problem characteristics drive detail level naturally
-- All required artifacts are always created when stage executes
+- 단순한 문제를 불필요한 세부로 부풀리지 않음
+- 복잡한 문제에서 중요한 세부를 빼먹지 않음
+- 문제 특성이 상세 수준을 자연스럽게 이끌도록 함
+- 단계가 실행되면 필요한 산출물은 항상 모두 생성됨

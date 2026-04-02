@@ -1,21 +1,21 @@
-# ASCII Diagram Standards
+# ASCII 다이어그램 표준
 
-## MANDATORY: Use Basic ASCII Only
+## 필수: 기본 ASCII만 사용
 
-**CRITICAL**: ALWAYS use basic ASCII characters for diagrams (maximum compatibility).
+**중요**: 다이어그램에는 항상 기본 ASCII 문자를 사용합니다(최대 호환성).
 
-### ✅ ALLOWED: `+` `-` `|` `^` `v` `<` `>` and alphanumeric text
+### ✅ 허용: `+` `-` `|` `^` `v` `<` `>` 및 영숫자 텍스트
 
-### ❌ FORBIDDEN: Unicode box-drawing characters
-- NO: `┌` `─` `│` `└` `┐` `┘` `├` `┤` `┬` `┴` `┼` `▼` `▲` `►` `◄`
-- Reason: Inconsistent rendering across fonts/platforms
+### ❌ 금지: 유니코드 박스 그리기 문자
+- 사용 금지: `┌` `─` `│` `└` `┐` `┘` `├` `┤` `┬` `┴` `┼` `▼` `▲` `►` `◄`
+- 이유: 글꼴·플랫폼마다 렌더링이 일관되지 않음
 
-## Standard ASCII Diagram Patterns
+## 표준 ASCII 다이어그램 패턴
 
-### CRITICAL: Character Width Rule
-**Every line in a box MUST have EXACTLY the same character count (including spaces)**
+### 중요: 문자 너비 규칙
+**박스 안의 모든 줄은 공백 포함 문자 수가 정확히 같아야 합니다**
 
-✅ CORRECT (all lines = 67 chars):
+✅ 올바름(모든 줄 = 67자):
 ```
 +---------------------------------------------------------------+
 |                      Component Name                           |
@@ -23,7 +23,7 @@
 +---------------------------------------------------------------+
 ```
 
-❌ WRONG (inconsistent widths):
+❌ 잘못됨(너비 불일치):
 ```
 +---------------------------------------------------------------+
 |                      Component Name                           |
@@ -31,7 +31,7 @@
 +---------------------------------------------------------------+
 ```
 
-### Box Pattern
+### 박스 패턴
 ```
 +-----------------------------------------------------+
 |                                                     |
@@ -43,7 +43,7 @@
 +-----------------------------------------------------+
 ```
 
-### Nested Boxes
+### 중첩 박스
 ```
 +-------------------------------------------------------+
 |              Web Server (PHP Runtime)                 |
@@ -58,7 +58,7 @@
 +-------------------------------------------------------+
 ```
 
-### Arrows and Connections
+### 화살표와 연결
 ```
 +----------+
 |  Source  |
@@ -71,14 +71,14 @@
 +----------+
 ```
 
-### Horizontal Flow
+### 수평 흐름
 ```
 +-------+     +-------+     +-------+
 | Step1 | --> | Step2 | --> | Step3 |
 +-------+     +-------+     +-------+
 ```
 
-### Vertical Flow with Labels
+### 레이블이 있는 수직 흐름
 ```
 User Action Flow:
     |
@@ -100,17 +100,16 @@ User Action Flow:
 +----------+
 ```
 
-## Validation
+## 검증
 
-Before creating diagrams:
-- [ ] Basic ASCII only: `+` `-` `|` `^` `v` `<` `>`
-- [ ] No Unicode box-drawing
-- [ ] Spaces (not tabs) for alignment
-- [ ] Corners use `+`
-- [ ] **ALL box lines same character width** (count characters including spaces)
-- [ ] Test: Verify corners align vertically in monospace font
+다이어그램을 만들기 전에:
+- [ ] 기본 ASCII만: `+` `-` `|` `^` `v` `<` `>`
+- [ ] 유니코드 박스 그리기 없음
+- [ ] 정렬에는 공백(탭 아님)
+- [ ] 모서리는 `+`
+- [ ] **모든 박스 줄의 문자 너비 동일**(공백 포함 문자 수)
+- [ ] 테스트: 등폭 글꼴에서 모서리가 수직으로 맞는지 확인
 
-## Alternative
+## 대안
 
-For complex diagrams, use Mermaid (see `content-validation.md`)
-
+복잡한 다이어그램은 Mermaid를 사용합니다(`content-validation.md` 참고)

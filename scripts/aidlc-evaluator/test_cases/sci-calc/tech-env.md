@@ -1,17 +1,17 @@
-# Technical Environment: Scientific Calculator API
+# 기술 환경: Scientific Calculator API
 
-## Language and Package Manager
+## 언어 및 패키지 관리자
 
 - **Python 3.13**
-- **uv** for all package management (no pip, poetry, or conda)
-- `pyproject.toml` for project and tool configuration
+- 모든 패키지 관리에 **uv** 사용 (pip, poetry, conda 없음)
+- 프로젝트 및 도구 설정은 `pyproject.toml`
 
-## Web Framework
+## 웹 프레임워크
 
-- **FastAPI** with Pydantic v2 for request/response validation
-- **uvicorn** as the ASGI server
+- 요청/응답 검증에 **FastAPI**와 Pydantic v2
+- ASGI 서버로 **uvicorn**
 
-## Project Structure
+## 프로젝트 구조
 
 ```
 sci-calc/
@@ -48,46 +48,46 @@ sci-calc/
     └── test_conversions.py
 ```
 
-## Testing
+## 테스트
 
-- **pytest** with pytest-asyncio and httpx (async test client)
-- **pytest-cov** with 90% line coverage minimum
-- Unit tests exercise `math_engine.py` directly with known-value tables
-- Integration tests use `httpx.AsyncClient` with FastAPI TestClient
-- Boundary tests verify every domain constraint produces the correct error code
-- Run command: `uv run pytest`
+- **pytest**와 pytest-asyncio, httpx(비동기 테스트 클라이언트)
+- **pytest-cov**, 라인 커버리지 최소 90%
+- 단위 테스트는 `math_engine.py`를 알려진 값 테이블로 직접 검증
+- 통합 테스트는 FastAPI TestClient와 `httpx.AsyncClient` 사용
+- 경계 테스트로 모든 정의역 제약이 올바른 오류 코드를 내는지 검증
+- 실행 명령: `uv run pytest`
 
-## Linting and Formatting
+## 린트 및 포맷
 
-- **ruff** (line-length 100, target py313)
+- **ruff** (줄 길이 100, 대상 py313)
 
-## Build Backend
+## 빌드 백엔드
 
 - **hatchling**
 
-## Do NOT Use
+## 사용하지 말 것
 
-| Prohibited | Reason | Use Instead |
+| 금지 | 이유 | 대신 사용 |
 |-----------|--------|-------------|
-| Flask, Django | Project uses FastAPI | FastAPI |
-| requests | Blocks async event loop | httpx |
-| sympy | Too heavy for this scope | Python `math` stdlib |
-| pandas, numpy | Not needed for single calculations | Standard Python |
-| pip, poetry, pipenv | Project uses uv exclusively | uv |
-| black, flake8, isort | Replaced by ruff | ruff |
+| Flask, Django | 프로젝트는 FastAPI 사용 | FastAPI |
+| requests | 비동기 이벤트 루프를 블로킹 | httpx |
+| sympy | 이 범위에는 과함 | Python `math` 표준 라이브러리 |
+| pandas, numpy | 단일 계산에는 불필요 | 표준 Python |
+| pip, poetry, pipenv | 프로젝트는 uv만 사용 | uv |
+| black, flake8, isort | ruff로 대체 | ruff |
 
-## Non-Functional Requirements
+## 비기능 요구사항
 
-| Requirement | Target |
+| 요구사항 | 목표 |
 |---|---|
-| Startup time | < 2 seconds |
-| Response latency (p95) | < 50ms for any single operation |
-| Test coverage | >= 90% line coverage |
-| Floating-point agreement | Results match Python `math` stdlib to <= 1 ULP |
-| Max request body size | 1 MB |
-| Python version | 3.13.x (enforced via `requires-python = ">=3.13"`) |
+| 시작 시간 | 2초 미만 |
+| 응답 지연(p95) | 단일 연산당 50ms 미만 |
+| 테스트 커버리지 | 라인 커버리지 90% 이상 |
+| 부동소수점 일치 | 결과가 Python `math` 표준 라이브러리와 1 ULP 이내 |
+| 최대 요청 본문 크기 | 1 MB |
+| Python 버전 | 3.13.x (`requires-python = ">=3.13"`로 강제) |
 
-## Development Workflow
+## 개발 워크플로
 
 ```bash
 uv sync

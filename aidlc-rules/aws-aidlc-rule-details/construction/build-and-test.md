@@ -1,29 +1,29 @@
 # Build and Test
 
-**Purpose**: Build all units and execute comprehensive testing strategy
+**목적**: 모든 단위를 빌드하고 포괄적인 테스트 전략을 실행합니다
 
-## Prerequisites
-- Code Generation must be complete for all units
-- All code artifacts must be generated
-- Project is ready for build and testing
-
----
-
-## Step 1: Analyze Testing Requirements
-
-Analyze the project to determine appropriate testing strategy:
-- **Unit tests**: Already generated per unit during code generation
-- **Integration tests**: Test interactions between units/services
-- **Performance tests**: Load, stress, and scalability testing
-- **End-to-end tests**: Complete user workflows
-- **Contract tests**: API contract validation between services
-- **Security tests**: Vulnerability scanning, penetration testing
+## 전제 조건
+- 모든 단위에 대해 Code Generation이 완료되어야 함
+- 모든 코드 산출물이 생성되어야 함
+- 프로젝트가 빌드 및 테스트 준비가 되어 있어야 함
 
 ---
 
-## Step 2: Generate Build Instructions
+## Step 1: 테스트 요구사항 분석
 
-Create `aidlc-docs/construction/build-and-test/build-instructions.md`:
+프로젝트를 분석해 적절한 테스트 전략을 결정합니다:
+- **Unit tests**: 코드 생성 중 단위별로 이미 생성됨
+- **Integration tests**: 단위/서비스 간 상호작용 테스트
+- **Performance tests**: 부하, 스트레스, 확장성 테스트
+- **End-to-end tests**: 전체 사용자 워크플로
+- **Contract tests**: 서비스 간 API 계약 검증
+- **Security tests**: 취약점 스캔, 침투 테스트
+
+---
+
+## Step 2: 빌드 지침 생성
+
+`aidlc-docs/construction/build-and-test/build-instructions.md` 생성:
 
 ```markdown
 # Build Instructions
@@ -72,9 +72,9 @@ Create `aidlc-docs/construction/build-and-test/build-instructions.md`:
 
 ---
 
-## Step 3: Generate Unit Test Execution Instructions
+## Step 3: 단위 테스트 실행 지침 생성
 
-Create `aidlc-docs/construction/build-and-test/unit-test-instructions.md`:
+`aidlc-docs/construction/build-and-test/unit-test-instructions.md` 생성:
 
 ```markdown
 # Unit Test Execution
@@ -102,9 +102,9 @@ If tests fail:
 
 ---
 
-## Step 4: Generate Integration Test Instructions
+## Step 4: 통합 테스트 지침 생성
 
-Create `aidlc-docs/construction/build-and-test/integration-test-instructions.md`:
+`aidlc-docs/construction/build-and-test/integration-test-instructions.md` 생성:
 
 ```markdown
 # Integration Test Instructions
@@ -160,9 +160,9 @@ Test interactions between units/services to ensure they work together correctly.
 
 ---
 
-## Step 5: Generate Performance Test Instructions (If Applicable)
+## Step 5: 성능 테스트 지침 생성(해당 시)
 
-Create `aidlc-docs/construction/build-and-test/performance-test-instructions.md`:
+`aidlc-docs/construction/build-and-test/performance-test-instructions.md` 생성:
 
 ```markdown
 # Performance Test Instructions
@@ -220,34 +220,34 @@ If performance doesn't meet requirements:
 
 ---
 
-## Step 6: Generate Additional Test Instructions (As Needed)
+## Step 6: 추가 테스트 지침 생성(필요 시)
 
-Based on project requirements, generate additional test instruction files:
+프로젝트 요구사항에 따라 추가 테스트 지침 파일을 생성합니다:
 
-### Contract Tests (For Microservices)
-Create `aidlc-docs/construction/build-and-test/contract-test-instructions.md`:
-- API contract validation between services
-- Consumer-driven contract testing
-- Schema validation
+### Contract Tests (마이크로서비스용)
+`aidlc-docs/construction/build-and-test/contract-test-instructions.md` 생성:
+- 서비스 간 API 계약 검증
+- 소비자 주도 계약 테스트
+- 스키마 검증
 
 ### Security Tests
-Create `aidlc-docs/construction/build-and-test/security-test-instructions.md`:
-- Vulnerability scanning
-- Dependency security checks
-- Authentication/authorization testing
-- Input validation testing
+`aidlc-docs/construction/build-and-test/security-test-instructions.md` 생성:
+- 취약점 스캔
+- 의존성 보안 검사
+- 인증/권한 테스트
+- 입력 검증 테스트
 
 ### End-to-End Tests
-Create `aidlc-docs/construction/build-and-test/e2e-test-instructions.md`:
-- Complete user workflow testing
-- Cross-service scenarios
-- UI testing (if applicable)
+`aidlc-docs/construction/build-and-test/e2e-test-instructions.md` 생성:
+- 전체 사용자 워크플로 테스트
+- 서비스 간 시나리오
+- UI 테스트(해당 시)
 
 ---
 
-## Step 7: Generate Test Summary
+## Step 7: 테스트 요약 생성
 
-Create `aidlc-docs/construction/build-and-test/build-and-test-summary.md`:
+`aidlc-docs/construction/build-and-test/build-and-test-summary.md` 생성:
 
 ```markdown
 # Build and Test Summary
@@ -296,31 +296,31 @@ Create `aidlc-docs/construction/build-and-test/build-and-test-summary.md`:
 
 ---
 
-## Step 8: Update State Tracking
+## Step 8: 상태 추적 갱신
 
-Update `aidlc-docs/aidlc-state.md`:
-- Mark Build and Test stage as complete
-- Update current status
+`aidlc-docs/aidlc-state.md` 갱신:
+- Build and Test 단계를 완료로 표시
+- 현재 상태 갱신
 
 ---
 
-## Step 9: Present Results to User
+## Step 9: 사용자에게 결과 제시
 
-Present completion message in this structure:
-     1. **Completion Announcement** (mandatory): Always start with this:
+다음 구조로 완료 메시지를 제시합니다:
+     1. **완료 알림** (필수): 항상 다음으로 시작:
 
 ```markdown
 # 🔨 Build and Test Complete
 ```
 
-     2. **AI Summary** (optional): Provide structured bullet-point summary of build and test results
-        - Format: "Build and test has completed with the following results:"
-        - List build status and artifacts
-        - List test results by category (unit, integration, performance, etc.)
-        - List generated instruction files
-        - DO NOT include workflow instructions ("please review", "let me know", "proceed to next phase", "before we proceed")
-        - Keep factual and content-focused
-     3. **Formatted Workflow Message** (mandatory): Always end with this exact format:
+     2. **AI 요약** (선택): 빌드 및 테스트 결과에 대한 구조화된 글머리 요약
+        - 형식: "Build and test has completed with the following results:"
+        - 빌드 상태와 산출물 나열
+        - 범주별 테스트 결과 나열(unit, integration, performance 등)
+        - 생성된 지침 파일 나열
+        - 워크플로 지침은 넣지 않음("please review", "let me know" 등)
+        - 사실 위주로 유지
+     3. **형식화된 워크플로 메시지** (필수): 항상 다음 형식으로 끝냄:
 
 ```markdown
 > **📋 <u>**REVIEW REQUIRED:**</u>**  
@@ -340,9 +340,9 @@ Present completion message in this structure:
 
 ---
 
-## Step 10: Log Interaction
+## Step 10: 상호작용 로깅
 
-**MANDATORY**: Log the stage completion in `aidlc-docs/audit.md`:
+**필수**: `aidlc-docs/audit.md`에 단계 완료를 기록합니다:
 
 ```markdown
 ## Build and Test Stage

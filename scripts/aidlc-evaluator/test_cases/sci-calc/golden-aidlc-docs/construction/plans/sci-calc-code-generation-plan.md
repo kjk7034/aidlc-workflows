@@ -1,98 +1,98 @@
-# Code Generation Plan — sci-calc
+# 코드 생성 계획 — sci-calc
 
-## Unit Context
-- **Unit**: sci-calc (single unit — entire application)
-- **Project Type**: Greenfield, Python 3.13, FastAPI
-- **Workspace Root**: workspace/
-- **Code Location**: workspace/ (per tech-env structure: pyproject.toml, src/sci_calc/, tests/)
+## 유닛 맥락
+- **유닛**: sci-calc (단일 유닛 — 전체 애플리케이션)
+- **프로젝트 유형**: Greenfield, Python 3.13, FastAPI
+- **워크스페이스 루트**: workspace/
+- **코드 위치**: workspace/ (tech-env 구조: pyproject.toml, src/sci_calc/, tests/)
 
-## Step Sequence
+## 단계 순서
 
-### Step 1: Project Structure Setup
-- [ ] Create `workspace/pyproject.toml` with hatchling build backend, all dependencies (fastapi, uvicorn, httpx, pytest, pytest-asyncio, pytest-cov, ruff), Python 3.13 requirement
-- [ ] Create `workspace/src/sci_calc/__init__.py` with version
-- [ ] Create `workspace/src/sci_calc/routes/__init__.py`
-- [ ] Create `workspace/src/sci_calc/models/__init__.py`
-- [ ] Create `workspace/src/sci_calc/engine/__init__.py`
-- [ ] Create `workspace/tests/__init__.py`
-- [ ] Create `workspace/tests/conftest.py` with async test client fixture
+### 1단계: 프로젝트 구조 설정
+- [ ] hatchling 빌드 백엔드, 모든 의존성(fastapi, uvicorn, httpx, pytest, pytest-asyncio, pytest-cov, ruff), Python 3.13 요구사항으로 `workspace/pyproject.toml` 생성
+- [ ] 버전과 함께 `workspace/src/sci_calc/__init__.py` 생성
+- [ ] `workspace/src/sci_calc/routes/__init__.py` 생성
+- [ ] `workspace/src/sci_calc/models/__init__.py` 생성
+- [ ] `workspace/src/sci_calc/engine/__init__.py` 생성
+- [ ] `workspace/tests/__init__.py` 생성
+- [ ] 비동기 테스트 클라이언트 fixture가 있는 `workspace/tests/conftest.py` 생성
 
-### Step 2: Engine — Custom Exceptions
-- [ ] Create `workspace/src/sci_calc/engine/math_engine.py` — define custom exceptions: `MathDomainError`, `MathDivisionByZeroError`, `MathOverflowError`
+### 2단계: 엔진 — 사용자 정의 예외
+- [ ] `workspace/src/sci_calc/engine/math_engine.py` 생성 — 사용자 정의 예외 정의: `MathDomainError`, `MathDivisionByZeroError`, `MathOverflowError`
 
-### Step 3: Engine — Arithmetic Operations
-- [ ] Add arithmetic functions to `math_engine.py`: `add`, `subtract`, `multiply`, `divide`, `modulo`, `absolute`, `negate`
-- [ ] Implement overflow detection (result is inf/-inf → raise OverflowError)
+### 3단계: 엔진 — 산술 연산
+- [ ] `math_engine.py`에 산술 함수 추가: `add`, `subtract`, `multiply`, `divide`, `modulo`, `absolute`, `negate`
+- [ ] 오버플로 검출 구현(결과가 inf/-inf → OverflowError 발생)
 
-### Step 4: Engine — Powers and Roots
-- [ ] Add power functions to `math_engine.py`: `power`, `sqrt_op`, `cbrt`, `square`, `nth_root`
-- [ ] Implement domain validation (sqrt of negative, nth_root constraints)
+### 4단계: 엔진 — 거듭제곱과 루트
+- [ ] `math_engine.py`에 거듭제곱 함수 추가: `power`, `sqrt_op`, `cbrt`, `square`, `nth_root`
+- [ ] 정의역 검증 구현(음수의 sqrt, nth_root 제약)
 
-### Step 5: Engine — Trigonometry
-- [ ] Add trig functions to `math_engine.py`: `sin_op`, `cos_op`, `tan_op`, `asin_op`, `acos_op`, `atan_op`, `atan2_op`, `sinh_op`, `cosh_op`, `tanh_op`, `asinh_op`, `acosh_op`, `atanh_op`
-- [ ] Implement angle unit conversion (degrees ↔ radians) 
-- [ ] Implement domain validation for inverse trig functions
+### 5단계: 엔진 — 삼각함수
+- [ ] `math_engine.py`에 삼각 함수 추가: `sin_op`, `cos_op`, `tan_op`, `asin_op`, `acos_op`, `atan_op`, `atan2_op`, `sinh_op`, `cosh_op`, `tanh_op`, `asinh_op`, `acosh_op`, `atanh_op`
+- [ ] 각도 단위 변환 구현(도 ↔ 라디안)
+- [ ] 역삼각함수에 대한 정의역 검증 구현
 
-### Step 6: Engine — Logarithmic Operations
-- [ ] Add log functions to `math_engine.py`: `ln`, `log10_op`, `log2_op`, `log_op`, `exp_op`
-- [ ] Implement domain validation (a <= 0, base constraints)
+### 6단계: 엔진 — 로그 연산
+- [ ] `math_engine.py`에 로그 함수 추가: `ln`, `log10_op`, `log2_op`, `log_op`, `exp_op`
+- [ ] 정의역 검증 구현(a <= 0, 밑 제약)
 
-### Step 7: Engine — Statistics
-- [ ] Add statistics functions to `math_engine.py`: `mean_op`, `median_op`, `mode_op`, `stdev_op`, `variance_op`, `pstdev_op`, `pvariance_op`, `min_op`, `max_op`, `sum_op`, `count_op`
-- [ ] Implement minimum element count validation
+### 7단계: 엔진 — 통계
+- [ ] `math_engine.py`에 통계 함수 추가: `mean_op`, `median_op`, `mode_op`, `stdev_op`, `variance_op`, `pstdev_op`, `pvariance_op`, `min_op`, `max_op`, `sum_op`, `count_op`
+- [ ] 최소 요소 개수 검증 구현
 
-### Step 8: Engine — Constants
-- [ ] Add constants functions to `math_engine.py`: `get_constant`, `get_all_constants`
-- [ ] Define constant map: pi, e, tau, inf, nan, golden_ratio, sqrt2, ln2, ln10
+### 8단계: 엔진 — 상수
+- [ ] `math_engine.py`에 상수 함수 추가: `get_constant`, `get_all_constants`
+- [ ] 상수 맵 정의: pi, e, tau, inf, nan, golden_ratio, sqrt2, ln2, ln10
 
-### Step 9: Engine — Unit Conversions
-- [ ] Add conversion functions to `math_engine.py`: `convert_angle`, `convert_temperature`, `convert_length`, `convert_weight`
-- [ ] Define conversion factor tables for all supported units
+### 9단계: 엔진 — 단위 변환
+- [ ] `math_engine.py`에 변환 함수 추가: `convert_angle`, `convert_temperature`, `convert_length`, `convert_weight`
+- [ ] 지원 단위 전체에 대한 변환 계수 테이블 정의
 
-### Step 10: Models — Request Models
-- [ ] Create `workspace/src/sci_calc/models/requests.py` — all Pydantic v2 request models with NaN validation
+### 10단계: 모델 — 요청 모델
+- [ ] NaN 검증이 있는 모든 Pydantic v2 요청 모델로 `workspace/src/sci_calc/models/requests.py` 생성
 
-### Step 11: Models — Response Models
-- [ ] Create `workspace/src/sci_calc/models/responses.py` — SuccessResponse, ErrorDetail, ErrorResponse models
+### 11단계: 모델 — 응답 모델
+- [ ] SuccessResponse, ErrorDetail, ErrorResponse 모델로 `workspace/src/sci_calc/models/responses.py` 생성
 
-### Step 12: Routes — Arithmetic
-- [ ] Create `workspace/src/sci_calc/routes/arithmetic.py` — APIRouter with POST endpoints for all arithmetic ops
+### 12단계: 라우트 — 산술
+- [ ] 모든 산술 연산에 대한 POST 엔드포인트가 있는 APIRouter로 `workspace/src/sci_calc/routes/arithmetic.py` 생성
 
-### Step 13: Routes — Powers
-- [ ] Create `workspace/src/sci_calc/routes/powers.py` — APIRouter with POST endpoints for all power/root ops
+### 13단계: 라우트 — 거듭제곱
+- [ ] 모든 거듭제곱/루트 연산에 대한 POST 엔드포인트가 있는 APIRouter로 `workspace/src/sci_calc/routes/powers.py` 생성
 
-### Step 14: Routes — Trigonometry
-- [ ] Create `workspace/src/sci_calc/routes/trigonometry.py` — APIRouter with POST endpoints for all trig ops
+### 14단계: 라우트 — 삼각함수
+- [ ] 모든 삼각 연산에 대한 POST 엔드포인트가 있는 APIRouter로 `workspace/src/sci_calc/routes/trigonometry.py` 생성
 
-### Step 15: Routes — Logarithmic
-- [ ] Create `workspace/src/sci_calc/routes/logarithmic.py` — APIRouter with POST endpoints for all log ops
+### 15단계: 라우트 — 로그
+- [ ] 모든 로그 연산에 대한 POST 엔드포인트가 있는 APIRouter로 `workspace/src/sci_calc/routes/logarithmic.py` 생성
 
-### Step 16: Routes — Statistics
-- [ ] Create `workspace/src/sci_calc/routes/statistics.py` — APIRouter with POST endpoints for all stats ops
+### 16단계: 라우트 — 통계
+- [ ] 모든 통계 연산에 대한 POST 엔드포인트가 있는 APIRouter로 `workspace/src/sci_calc/routes/statistics.py` 생성
 
-### Step 17: Routes — Constants
-- [ ] Create `workspace/src/sci_calc/routes/constants.py` — APIRouter with GET endpoints for constants
+### 17단계: 라우트 — 상수
+- [ ] 상수에 대한 GET 엔드포인트가 있는 APIRouter로 `workspace/src/sci_calc/routes/constants.py` 생성
 
-### Step 18: Routes — Conversions
-- [ ] Create `workspace/src/sci_calc/routes/conversions.py` — APIRouter with POST endpoints for all conversions
+### 18단계: 라우트 — 변환
+- [ ] 모든 변환에 대한 POST 엔드포인트가 있는 APIRouter로 `workspace/src/sci_calc/routes/conversions.py` 생성
 
-### Step 19: Application Entry Point
-- [ ] Create `workspace/src/sci_calc/app.py` — FastAPI app, register all routers, custom error handlers (422 override, catch-all), health check endpoint
+### 19단계: 애플리케이션 진입점
+- [ ] FastAPI 앱, 모든 라우터 등록, 사용자 정의 오류 핸들러(422 재정의, 포괄), 헬스 체크 엔드포인트로 `workspace/src/sci_calc/app.py` 생성
 
-### Step 20: Tests — Engine Unit Tests
-- [ ] Create `workspace/tests/test_arithmetic.py` — unit tests for arithmetic engine functions + boundary tests
-- [ ] Create `workspace/tests/test_powers.py` — unit tests for power engine functions + domain error tests
-- [ ] Create `workspace/tests/test_trigonometry.py` — unit tests for trig engine functions + domain error tests
-- [ ] Create `workspace/tests/test_logarithmic.py` — unit tests for log engine functions + domain error tests
-- [ ] Create `workspace/tests/test_statistics.py` — unit tests for statistics engine functions + edge cases
-- [ ] Create `workspace/tests/test_constants.py` — unit tests for constants + API integration tests
-- [ ] Create `workspace/tests/test_conversions.py` — unit tests for conversion functions + API integration tests
+### 20단계: 테스트 — 엔진 단위 테스트
+- [ ] 산술 엔진 함수 + 경계 테스트용 `workspace/tests/test_arithmetic.py` 생성
+- [ ] 거듭제곱 엔진 함수 + 정의역 오류 테스트용 `workspace/tests/test_powers.py` 생성
+- [ ] 삼각 엔진 함수 + 정의역 오류 테스트용 `workspace/tests/test_trigonometry.py` 생성
+- [ ] 로그 엔진 함수 + 정의역 오류 테스트용 `workspace/tests/test_logarithmic.py` 생성
+- [ ] 통계 엔진 함수 + 엣지 케이스용 `workspace/tests/test_statistics.py` 생성
+- [ ] 상수 + API 통합 테스트용 `workspace/tests/test_constants.py` 생성
+- [ ] 변환 함수 + API 통합 테스트용 `workspace/tests/test_conversions.py` 생성
 
-### Step 21: Tests — API Integration Tests
-- [ ] Add integration tests within each test file using httpx.AsyncClient
-- [ ] Test success responses match envelope structure
-- [ ] Test error responses match error envelope structure
-- [ ] Test 404 for unknown endpoints
-- [ ] Test custom 422 handler wraps Pydantic errors
+### 21단계: 테스트 — API 통합 테스트
+- [ ] httpx.AsyncClient를 사용해 각 테스트 파일에 통합 테스트 추가
+- [ ] 성공 응답이 래퍼 구조와 일치하는지 테스트
+- [ ] 오류 응답이 오류 래퍼 구조와 일치하는지 테스트
+- [ ] 알 수 없는 엔드포인트에 대해 404 테스트
+- [ ] 사용자 정의 422 핸들러가 Pydantic 오류를 감싸는지 테스트
 
-## Total: 21 steps, ~20 source files, ~7 test files
+## 합계: 21단계, 소스 파일 약 20개, 테스트 파일 약 7개

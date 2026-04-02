@@ -1,50 +1,49 @@
-# Administrative Guide
+# 관리자 가이드
 
-This guide documents the CI/CD infrastructure, GitHub Workflows, protected environments, secrets, variables, permissions, and release process for the `awslabs/aidlc-workflows` repository.
+이 가이드는 `awslabs/aidlc-workflows` 저장소의 CI/CD 인프라, GitHub 워크플로, 보호된 환경, 시크릿, 변수, 권한, 릴리스 프로세스를 설명합니다.
 
-**Audience:** Repository administrators, maintainers, and AI coding agents working on this repository.
+**대상:** 저장소 관리자, 유지보수 담당자, 이 저장소에서 작업하는 AI 코딩 에이전트.
 
-**Related documentation:**
-- [Developer's Guide](DEVELOPERS_GUIDE.md) — Running builds locally (CodeBuild + `act`)
-- [Contributing Guidelines](../CONTRIBUTING.md) — Contribution process and conventions
-- [README](../README.md) — User-facing setup and usage
+**관련 문서:**
+- [개발자 가이드](DEVELOPERS_GUIDE.md) — 로컬에서 빌드 실행(CodeBuild + `act`)
+- [기여 가이드](../CONTRIBUTING.md) — 기여 절차와 관례
+- [README](../README.md) — 사용자용 설정과 사용법
 
 ---
 
-## Table of Contents
+## 목차
 
-- [Repository Overview](#repository-overview)
-- [CI/CD Architecture](#cicd-architecture)
-- [Workflow Reference](#workflow-reference)
-  - [Release PR Workflow](#release-pr-workflow-release-pryml)
-  - [Tag Release Workflow](#tag-release-workflow-tag-on-mergeyml)
-  - [CodeBuild Workflow](#codebuild-workflow-codebuildyml)
-  - [Release Workflow](#release-workflow-releaseyml)
-  - [Pull Request Validation Workflow](#pull-request-validation-workflow-pull-request-lintyml)
-- [Protected Environments](#protected-environments)
-- [Secrets and Variables](#secrets-and-variables)
-- [Permissions Model](#permissions-model)
-- [Security Posture](#security-posture)
-- [Code Ownership](#code-ownership)
-- [Release Process](#release-process)
-- [Changelog Configuration](#changelog-configuration)
+- [저장소 개요](#repository-overview)
+- [CI/CD 아키텍처](#cicd-architecture)
+- [워크플로 참조](#workflow-reference)
+  - [Release PR 워크플로](#release-pr-workflow-release-pryml)
+  - [Tag Release 워크플로](#tag-release-workflow-tag-on-mergeyml)
+  - [CodeBuild 워크플로](#codebuild-workflow-codebuildyml)
+  - [Release 워크플로](#release-workflow-releaseyml)
+  - [Pull Request 검증 워크플로](#pull-request-validation-workflow-pull-request-lintyml)
+- [보호된 환경](#protected-environments)
+- [시크릿과 변수](#secrets-and-variables)
+- [권한 모델](#permissions-model)
+- [보안 태세](#security-posture)
+- [코드 소유권](#code-ownership)
+- [릴리스 프로세스](#release-process)
+- [Changelog 설정](#changelog-configuration)
 
 ---
 
 ## Repository Overview
 
-This repository publishes the **AI-DLC (AI-Driven Development Life Cycle)** methodology as a set of markdown rule files under `aidlc-rules/`. The CI/CD infrastructure handles:
+이 저장소는 **AI-DLC (AI-Driven Development Life Cycle)** 방법론을 `aidlc-rules/` 아래 마크다운 규칙 파일 집합으로 제공합니다. CI/CD 인프라는 다음을 담당합니다.
 
-- **Continuous integration** via AWS CodeBuild (evaluation and reporting)
-- **Release distribution** via GitHub Releases (zipped rule files)
-- **Changelog generation** via git-cliff (changelog-first: updated before release, included in the tagged commit)
+- AWS CodeBuild를 통한 **지속적 통합**(평가 및 리포팅)
+- GitHub Releases를 통한 **릴리스 배포**(규칙 파일 zip)
+- git-cliff를 통한 **Changelog 생성**(changelog-first: 릴리스 전에 갱신, 태그 커밋에 포함)
 
 ```
 awslabs/aidlc-workflows/
 ├── .github/
 │   ├── CODEOWNERS
 │   ├── ISSUE_TEMPLATE/           # Bug, feature, RFC, docs templates
-│   ├── labeler.yml               # Auto-label rules (path → label mapping)
 │   ├── pull_request_template.md  # PR template with contributor statement
 │   └── workflows/
 │       ├── codebuild.yml         # CI via AWS CodeBuild
@@ -69,9 +68,9 @@ awslabs/aidlc-workflows/
 
 ## CI/CD Architecture
 
-Five workflows form two distinct pipelines plus a pull request validation gate:
+다섯 개의 워크플로가 서로 다른 파이프라인 두 개와 풀 리퀘스트 검증 게이트를 구성합니다.
 
-### Pipeline 1: Release (changelog-first)
+### 파이프라인 1: Release (changelog-first)
 
 ```mermaid
 flowchart TD
@@ -117,7 +116,7 @@ The release flow is **changelog-first**: the CHANGELOG is updated *before* the t
 flowchart LR
     A["git push main"] --> B{{"Manual approval\n(codebuild environment)"}}
     C["workflow_dispatch\n(no tag input)"] --> B
-    D["pull_request\n(aidlc-rules/** changed)"] --> E{"rules\nlabel?"}
+    D["pull_request\n(aidlc-rules/** changed)"] --> E{"codebuild\nlabel?"}
     E -->|yes| F["label-cleanup\n(remove reminder comment)"]
     F --> B
     E -->|no| I["label-reminder\n(warning + PR comment)"]
@@ -125,7 +124,7 @@ flowchart LR
     G --> H["Upload workflow artifacts"]
 ```
 
-### Pipeline 3: Pull Request Validation
+### 파이프라인 3: Pull Request 검증
 
 ```mermaid
 flowchart TD
@@ -136,40 +135,39 @@ flowchart TD
     B --> E["fail-by-label\n(do-not-merge label)"]
     A --> F["validate\n(conventional commit title)"]
     A --> G["contributorStatement\n(acknowledgment in PR body)"]
-    A --> H["auto-label\n(actions/labeler)"]
 ```
 
-`pull-request-lint.yml` runs on every PR targeting `main` and on merge queue checks. It enforces four gates (conventional commit PR titles, the contributor statement from the PR template, a configurable merge-halt mechanism, and a do-not-merge label check) and automatically applies labels based on changed file paths. The workflow uses `pull_request_target` (not `pull_request`) so it runs in the context of the base branch — this is safe because it never checks out PR code and the `auto-label` job uses `actions/labeler` which only reads file paths from the API.
+`pull-request-lint.yml`은 `main`을 대상으로 하는 모든 PR과 머지 큐 검사에서 실행됩니다. 네 가지 게이트를 강제합니다. conventional commit 형식의 PR 제목, PR 템플릿의 기여자 진술, 설정 가능한 병합 중단(merge-halt) 메커니즘, do-not-merge 라벨 검사입니다. 워크플로는 `pull_request`가 아니라 `pull_request_target`을 사용해 베이스 브랜치 맥락에서 실행됩니다. PR 코드를 체크아웃하지 않으므로 안전합니다.
 
 ---
 
 ## Workflow Reference
 
-### Release PR Workflow (`release-pr.yml`)
+### Release PR 워크플로 (`release-pr.yml`)
 
-| Property        | Value                                             |
+| 속성        | 값                                             |
 | --------------- | ------------------------------------------------- |
-| **File**        | `.github/workflows/release-pr.yml`                |
-| **Trigger**     | `workflow_dispatch` with optional `version` input |
-| **Environment** | _(none)_                                          |
-| **Runner**      | `ubuntu-latest`                                   |
+| **파일**        | `.github/workflows/release-pr.yml`                |
+| **트리거**     | `workflow_dispatch`, 선택 입력 `version` |
+| **환경** | _(없음)_                                          |
+| **러너**      | `ubuntu-latest`                                   |
 
-**Purpose:** Generates an updated `CHANGELOG.md` from conventional commits using git-cliff and opens a PR on a `release/vX.Y.Z` branch. This is the first step in the changelog-first release flow.
+**목적:** git-cliff로 conventional commit에서 갱신된 `CHANGELOG.md`를 생성하고 `release/vX.Y.Z` 브랜치에 PR을 엽니다. changelog-first 릴리스 흐름의 첫 단계입니다.
 
-**Job: `release-pr` ("Create Release PR")**
+**잡: `release-pr` ("Create Release PR")**
 
-| Step | Name                     | Action                                                                                                                                     |
+| 단계 | 이름                     | 동작                                                                                                                                     |
 | ---- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1    | Checkout code            | `actions/checkout` with `fetch-depth: 0` (full history for git-cliff)                                                                      |
-| 2    | Install git-cliff        | `orhun/git-cliff-action` to make the CLI available                                                                                         |
-| 3    | Determine version        | Use `inputs.version` (with semver validation) or `git-cliff --bumped-version` for auto-detection; falls back to patch bump from latest tag |
-| 4    | Check tag does not exist | Fail early if the target tag already exists                                                                                                |
-| 5    | Generate changelog       | `orhun/git-cliff-action` with `--tag vX.Y.Z` to generate `CHANGELOG.md`                                                                    |
-| 6    | Create release PR        | Check branch doesn't already exist, commit, push `release/vX.Y.Z` branch, open PR (with label `release` if it exists in the repo)          |
+| 1    | 코드 체크아웃            | `actions/checkout`, `fetch-depth: 0`(git-cliff용 전체 이력)                                                                      |
+| 2    | git-cliff 설치        | `orhun/git-cliff-action`으로 CLI 사용 가능                                                                                         |
+| 3    | 버전 결정        | `inputs.version`(semver 검증) 또는 `git-cliff --bumped-version` 자동 감지. 최신 태그에서 패치 범프로 폴백 |
+| 4    | 태그 미존재 확인 | 대상 태그가 이미 있으면 조기 실패                                                                                                |
+| 5    | changelog 생성       | `orhun/git-cliff-action`, `--tag vX.Y.Z`로 `CHANGELOG.md` 생성                                                                    |
+| 6    | 릴리스 PR 생성        | 브랜치 중복 없음 확인, 커밋, `release/vX.Y.Z` 푸시, PR 열기(저장소에 있으면 `release` 라벨)          |
 
-**Version detection:** If a version is specified, it must be valid semver (`MAJOR.MINOR.PATCH`); both `v0.2.0` and `0.2.0` are accepted. If no version is specified, `git-cliff --bumped-version` determines the next version from conventional commit prefixes. The `[bump]` config in `cliff.toml` controls the rules (e.g., `feat` → minor bump, breaking change → major bump). If no conventional commits are found, the workflow falls back to a patch bump from the latest tag. If no tags exist at all, it exits cleanly with a warning (no PR is created).
+**버전 감지:** 버전을 지정하면 유효한 semver(`MAJOR.MINOR.PATCH`)여야 하며 `v0.2.0`과 `0.2.0` 모두 허용됩니다. 미지정 시 `git-cliff --bumped-version`이 conventional commit 접두로 다음 버전을 결정합니다. `cliff.toml`의 `[bump]` 설정이 규칙을 제어합니다(예: `feat` → 마이너, breaking change → 메이저). conventional commit이 없으면 최신 태그에서 패치 범프로 폴백합니다. 태그가 전혀 없으면 경고만 내고 깔끔히 종료합니다(PR 미생성).
 
-**External actions (SHA-pinned):**
+**외부 액션(SHA 고정):**
 
 | Action                   | Version | SHA                                        |
 | ------------------------ | ------- | ------------------------------------------ |
@@ -178,94 +176,94 @@ flowchart TD
 
 ---
 
-### Tag Release Workflow (`tag-on-merge.yml`)
+### Tag Release 워크플로 (`tag-on-merge.yml`)
 
-| Property        | Value                                                 |
+| 속성        | 값                                                 |
 | --------------- | ----------------------------------------------------- |
-| **File**        | `.github/workflows/tag-on-merge.yml`                  |
-| **Trigger**     | `pull_request: types: [closed]`                       |
-| **Condition**   | PR was merged AND branch name starts with `release/v` |
-| **Environment** | _(none)_                                              |
-| **Runner**      | `ubuntu-latest`                                       |
+| **파일**        | `.github/workflows/tag-on-merge.yml`                  |
+| **트리거**     | `pull_request: types: [closed]`                       |
+| **조건**   | PR이 병합되었고 브랜치 이름이 `release/v`로 시작 |
+| **환경** | _(없음)_                                              |
+| **러너**      | `ubuntu-latest`                                       |
 
-**Purpose:** Automatically creates a version tag on the merge commit when a release PR is merged, then dispatches `release.yml` (waits for completion) followed by `codebuild.yml`.
+**목적:** 릴리스 PR이 병합되면 병합 커밋에 버전 태그를 자동 생성한 뒤 `release.yml`을 디스패치하고(완료까지 대기) 이어서 `codebuild.yml`을 디스패치합니다.
 
-**Job: `tag` ("Create Release Tag")**
+**잡: `tag` ("Create Release Tag")**
 
-| Step | Name                               | Action                                                                                      |
+| 단계 | 이름                               | 동작                                                                                      |
 | ---- | ---------------------------------- | ------------------------------------------------------------------------------------------- |
-| 1    | Create tag                         | Extract version from branch name, verify tag doesn't exist, create via GitHub API           |
-| 2    | Dispatch release workflow and wait | `gh workflow run release.yml --ref $TAG --repo $REPO`, then `gh run watch` until completion |
-| 3    | Dispatch codebuild workflow        | `gh workflow run codebuild.yml --ref $TAG --repo $REPO` (runs after draft release exists)   |
+| 1    | 태그 생성                         | 브랜치 이름에서 버전 추출, 태그 미존재 확인, GitHub API로 생성           |
+| 2    | release 워크플로 디스패치 및 대기 | `gh workflow run release.yml --ref $TAG --repo $REPO`, 이후 `gh run watch`로 완료까지 대기 |
+| 3    | codebuild 워크플로 디스패치        | `gh workflow run codebuild.yml --ref $TAG --repo $REPO`(초안 릴리스 존재 후 실행)   |
 
-**Tag creation:** Uses `gh api repos/.../git/refs` to create a lightweight tag.
+**태그 생성:** `gh api repos/.../git/refs`로 lightweight 태그를 만듭니다.
 
-**Workflow dispatch:** Tags created with `GITHUB_TOKEN` do not trigger `on: push: tags` events in other workflows. To work around this, `tag-on-merge.yml` explicitly dispatches `release.yml` and `codebuild.yml` via `gh workflow run --ref $TAG`. The `workflow_dispatch` event is exempt from this `GITHUB_TOKEN` limitation. Since `--ref` is set to the tag, both dispatched workflows see `github.ref = refs/tags/vX.Y.Z` — identical to a real tag push. The dispatches are **sequential**: `release.yml` runs first (watched via `gh run watch`) to ensure the draft release exists before `codebuild.yml` attempts to upload artifacts. If the release run cannot be found or fails, `codebuild.yml` is dispatched anyway as a fallback.
+**워크플로 디스패치:** `GITHUB_TOKEN`으로 만든 태그는 다른 워크플로에서 `on: push: tags` 이벤트를 트리거하지 않습니다. 이를 우회하기 위해 `tag-on-merge.yml`이 `gh workflow run --ref $TAG`로 `release.yml`과 `codebuild.yml`을 명시적으로 디스패치합니다. `workflow_dispatch` 이벤트는 이 `GITHUB_TOKEN` 제한에서 제외됩니다. `--ref`가 태그로 설정되면 두 워크플로 모두 `github.ref = refs/tags/vX.Y.Z`를 보게 되어 실제 태그 푸시와 동일합니다. 디스패치는 **순차적**입니다. `release.yml`이 먼저 실행되고(`gh run watch`로 감시) 초안 릴리스가 존재한 뒤 `codebuild.yml`이 아티팩트를 업로드합니다. 릴리스 실행을 찾지 못하거나 실패해도 `codebuild.yml`은 폴백으로 디스패치됩니다.
 
-**Security:** The branch name `release/vX.Y.Z` is passed through an environment variable (not directly interpolated) to prevent command injection. The job-level `if` condition uses `github.event.pull_request.merged == true` to ensure only merged PRs trigger tagging.
+**보안:** 브랜치 이름 `release/vX.Y.Z`는 환경 변수로 전달되며(직접 보간 없음) 명령 주입을 방지합니다. 잡 수준 `if` 조건은 `github.event.pull_request.merged == true`로 병합된 PR만 태깅하도록 합니다.
 
 ---
 
-### CodeBuild Workflow (`codebuild.yml`)
+### CodeBuild 워크플로 (`codebuild.yml`)
 
-| Property        | Value                                                                                                                                                    |
+| 속성        | 값                                                                                                                                                    |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **File**        | `.github/workflows/codebuild.yml`                                                                                                                        |
-| **Triggers**    | `push` to `main`, `push` tags `v*`, `pull_request` to `main` (label-gated, path-filtered), `workflow_dispatch` (dispatched by `tag-on-merge.yml` or manual — select a tag in the UI to trigger a release build) |
-| **Environment** | `codebuild` (protected, manual approval)                                                                                                                 |
-| **Runner**      | `ubuntu-latest`                                                                                                                                          |
-| **Concurrency** | Groups by `{workflow}-{ref}`, cancels in-progress                                                                                                        |
+| **파일**        | `.github/workflows/codebuild.yml`                                                                                                                        |
+| **트리거**    | `main`에 `push`, `v*` 태그 `push`, `main` 대상 `pull_request`(라벨·경로 필터), `workflow_dispatch`(`tag-on-merge.yml`에서 디스패치 또는 수동 — UI에서 태그를 고르면 릴리스 빌드) |
+| **환경** | `codebuild`(보호됨, 수동 승인)                                                                                                                 |
+| **러너**      | `ubuntu-latest`                                                                                                                                          |
+| **동시성** | `{workflow}-{ref}`로 그룹화, 진행 중인 실행 취소                                                                                                        |
 
-**Purpose:** Runs an AWS CodeBuild project, downloads primary and secondary artifacts from S3, caches them in GitHub Actions cache, uploads them as workflow artifacts, and (when triggered from a `v*` tag) attaches them to the GitHub Release.
+**목적:** AWS CodeBuild 프로젝트를 실행하고, S3에서 주·보조 아티팩트를 내려받아 GitHub Actions 캐시에 저장한 뒤 워크플로 아티팩트로 업로드하고,(`v*` 태그로 트리거된 경우) GitHub Release에 붙입니다.
 
-**PR label gate:** For `pull_request` events, the workflow only fires when files under `aidlc-rules/**` are changed (via `paths` filter) and the `build` job only runs when the `rules` label is present on the PR (via `contains(github.event.pull_request.labels.*.name, 'rules')`). The `rules` label is applied automatically by the `auto-label` job in `pull-request-lint.yml` (see [Pull Request Validation Workflow](#pull-request-validation-workflow-pull-request-lintyml)). The trigger includes `types: [opened, synchronize, reopened, labeled]` so that subsequent pushes to a labeled PR re-trigger the build automatically. `push`, `workflow_dispatch`, and tag events bypass the label check entirely.
+**PR 라벨 게이트:** `pull_request` 이벤트에서는 `aidlc-rules/**`가 변경된 경우에만(`paths` 필터) 워크플로가 돌고, `build` 잡은 PR에 `codebuild` 라벨이 있을 때만(`contains(github.event.pull_request.labels.*.name, 'codebuild')`) 실행됩니다. 트리거에 `types: [opened, synchronize, reopened, labeled]`가 포함되어 라벨이 붙은 PR에 이후 푸시가 있으면 빌드가 자동으로 다시 트리거됩니다. `push`, `workflow_dispatch`, 태그 이벤트는 라벨 검사를 건너뜁니다.
 
-**Job: `label-reminder`** (PR only, no `rules` label)
+**잡: `label-reminder`** (PR만, `codebuild` 라벨 없음)
 
-| Step | Name                             | Action                                                                                     |
+| 단계 | 이름                             | 동작                                                                                     |
 | ---- | -------------------------------- | ------------------------------------------------------------------------------------------ |
-| 1    | Warn about missing rules label   | Emits a `::warning::` annotation visible in the Actions summary                           |
-| 2    | Comment on PR                    | Posts a one-time PR comment (idempotent — skips if the reminder comment already exists)     |
+| 1    | codebuild 라벨 누락 경고 | Actions 요약에 보이는 `::warning::` 주석을 내보냄                           |
+| 2    | PR에 코멘트                    | 일회성 PR 코멘트 게시(멱등 — 알림 코멘트가 이미 있으면 생략)     |
 
-This job runs only for `pull_request` events where `aidlc-rules/**` changed but the `rules` label is absent. It alerts maintainers and reviewers that the evaluation pipeline was not triggered. The comment is posted once per PR using an HTML comment marker (`<!-- rules-label-reminder -->`) to avoid duplicates. In normal operation, the `auto-label` job in `pull-request-lint.yml` applies the `rules` label automatically, so this job serves as a fallback safety net.
+이 잡은 `aidlc-rules/**`가 바뀌었지만 `codebuild` 라벨이 없는 `pull_request`에서만 실행됩니다. 평가 파이프라인이 트리거되지 않았음을 유지보수 담당자와 리뷰어에게 알립니다. HTML 주석 마커(`<!-- codebuild-label-reminder -->`)로 PR당 한 번만 코멘트합니다.
 
-**Job: `label-cleanup`** (PR only, `rules` label present)
+**잡: `label-cleanup`** (PR만, `codebuild` 라벨 있음)
 
-| Step | Name                          | Action                                                                                   |
+| 단계 | 이름                          | 동작                                                                                   |
 | ---- | ----------------------------- | ---------------------------------------------------------------------------------------- |
-| 1    | Remove label reminder comment | Finds and deletes the `label-reminder` PR comment (no-op if it doesn't exist)            |
+| 1    | 라벨 알림 코멘트 제거 | `label-reminder` PR 코멘트를 찾아 삭제(없으면 무동작)            |
 
-This job runs when the `rules` label is applied, immediately removing the reminder comment without waiting for the `codebuild` environment approval gate.
+`codebuild` 라벨이 붙으면 실행되며, `codebuild` 환경 승인 게이트를 기다리지 않고 즉시 알림 코멘트를 제거합니다.
 
-**Job: `build`**
+**잡: `build`**
 
-| Step | Name                         | Condition                 | Action                                                        |
+| 단계 | 이름                         | 조건                 | 동작                                                        |
 | ---- | ---------------------------- | ------------------------- | ------------------------------------------------------------- |
-| 1    | List caches                  | _(always)_                | `gh cache list` for existing project caches                   |
-| 2    | Check cache                  | _(always)_                | `actions/cache/restore` with `lookup-only: true`              |
-| 3    | Configure AWS credentials    | cache miss                | `aws-actions/configure-aws-credentials` (OIDC)                |
-| 4    | Run CodeBuild                | cache miss                | `aws-actions/aws-codebuild-run-build` with inline buildspec   |
-| 5    | Build ID                     | cache miss (always)       | Echo CodeBuild build ID                                       |
-| 6    | Download CodeBuild artifacts | cache miss                | Download primary + secondary artifacts from S3                |
-| 7    | List CodeBuild artifacts     | cache miss                | List and inspect downloaded zip files                         |
-| 8    | Clean old report caches      | cache miss                | Delete 3 oldest matching caches for branch                    |
-| 9    | Save report to cache         | cache miss                | `actions/cache/save` with key `{project}-{branch}-{sha}`      |
-| 10   | Upload primary artifact      | `!env.ACT`                | `actions/upload-artifact` for `{project}.zip`                 |
-| 11   | Upload evaluation artifact   | `!env.ACT`                | `actions/upload-artifact` for `evaluation.zip`                |
-| 12   | Upload trend artifact        | `!env.ACT`                | `actions/upload-artifact` for `trend.zip`                     |
-| 13   | Upload artifacts to release  | triggered from a `v*` tag | Attach build artifacts to GitHub Release (draft or published) |
+| 1    | 캐시 목록                  | _(항상)_                | 기존 프로젝트 캐시용 `gh cache list`                   |
+| 2    | 캐시 확인                  | _(항상)_                | `lookup-only: true`인 `actions/cache/restore`              |
+| 3    | AWS 자격 증명 구성    | 캐시 미스                | `aws-actions/configure-aws-credentials` (OIDC)                |
+| 4    | CodeBuild 실행                | 캐시 미스                | 인라인 buildspec이 있는 `aws-actions/aws-codebuild-run-build`   |
+| 5    | 빌드 ID                     | 캐시 미스(항상)       | CodeBuild 빌드 ID 출력                                       |
+| 6    | CodeBuild 아티팩트 내려받기 | 캐시 미스                | S3에서 주·보조 아티팩트 다운로드                |
+| 7    | CodeBuild 아티팩트 목록     | 캐시 미스                | 내려받은 zip 목록 및 검사                         |
+| 8    | 오래된 리포트 캐시 정리      | 캐시 미스                | 브랜치별 일치하는 캐시 중 가장 오래된 3개 삭제                    |
+| 9    | 리포트 캐시 저장         | 캐시 미스                | 키 `{project}-{branch}-{sha}`인 `actions/cache/save`      |
+| 10   | 주 아티팩트 업로드      | `!env.ACT`                | `{project}.zip`용 `actions/upload-artifact`                 |
+| 11   | 평가 아티팩트 업로드   | `!env.ACT`                | `evaluation.zip`용 `actions/upload-artifact`                |
+| 12   | 추세 아티팩트 업로드        | `!env.ACT`                | `trend.zip`용 `actions/upload-artifact`                     |
+| 13   | 릴리스에 아티팩트 업로드  | `v*` 태그로 트리거 | GitHub Release(초안 또는 게시됨)에 빌드 아티팩트 첨부 |
 
-**Caching strategy:** The cache key `{project}-{branch}-{sha}` ensures that the same commit on the same branch is never built twice. On cache hit, steps 3–9 are skipped entirely.
+**캐싱 전략:** 캐시 키 `{project}-{branch}-{sha}`로 같은 브랜치의 같은 커밋을 두 번 빌드하지 않습니다. 캐시 히트 시 3단계~9단계를 건너뜁니다.
 
-**Inline buildspec:** The workflow embeds a full `buildspec-override` rather than referencing an external file. The buildspec:
-- Installs `gh` CLI (via dnf) and `uv` (Python package manager)
-- Determines build context: release (tagged), pre-release (default branch), or pre-merge (feature branch)
-- Creates placeholder evaluation and trend report files under `.codebuild/`
-- Outputs a primary artifact (all files under `.codebuild/`) and two secondary artifacts (`evaluation`, `trend`)
+**인라인 buildspec:** 워크플로는 외부 파일 대신 전체 `buildspec-override`를 포함합니다. buildspec은 다음을 수행합니다.
+- `gh` CLI(dnf)와 `uv`(Python 패키지 관리자) 설치
+- 빌드 맥락 판별: 릴리스(태그됨), 프리릴리스(기본 브랜치), 프리머지(기능 브랜치)
+- `.codebuild/` 아래에 평가·추세 리포트 플레이스홀더 생성
+- 주 아티팩트(`.codebuild/` 아래 전체)와 보조 아티팩트 두 개(`evaluation`, `trend`) 출력
 
-**Artifact upload compatibility:** Upload steps are gated by `!env.ACT` because `actions/upload-artifact` v6 is incompatible with the [`act`](https://github.com/nektos/act) local runner.
+**아티팩트 업로드 호환성:** [`act`](https://github.com/nektos/act) 로컬 러너와 `actions/upload-artifact` v6가 호환되지 않아 업로드 단계는 `!env.ACT`로 게이트합니다.
 
-**External actions (all SHA-pinned):**
+**외부 액션(모두 SHA 고정):**
 
 | Action                                  | Version | SHA                                        |
 | --------------------------------------- | ------- | ------------------------------------------ |
@@ -277,31 +275,31 @@ This job runs when the `rules` label is applied, immediately removing the remind
 
 ---
 
-### Release Workflow (`release.yml`)
+### Release 워크플로 (`release.yml`)
 
-| Property        | Value                                                                                                                 |
+| 속성        | 값                                                                                                                 |
 | --------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **File**        | `.github/workflows/release.yml`                                                                                       |
-| **Triggers**    | `workflow_dispatch` (dispatched by `tag-on-merge.yml`), `push` on tags matching `v*` (fallback for manual tag pushes) |
-| **Environment** | _(none)_                                                                                                              |
-| **Runner**      | `ubuntu-latest`                                                                                                       |
+| **파일**        | `.github/workflows/release.yml`                                                                                       |
+| **트리거**    | `workflow_dispatch`(`tag-on-merge.yml`에서 디스패치), `v*`에 맞는 태그에 대한 `push`(수동 태그 푸시 폴백) |
+| **환경** | _(없음)_                                                                                                              |
+| **러너**      | `ubuntu-latest`                                                                                                       |
 
-**Purpose:** Creates a **draft** GitHub Release with a zip of `aidlc-rules/` when dispatched or when a version tag is pushed. The release is kept as a draft so that CodeBuild artifacts can be attached and reviewed before publishing.
+**목적:** 디스패치되거나 버전 태그가 푸시되면 `aidlc-rules/` zip이 포함된 **초안** GitHub Release를 만듭니다. CodeBuild 아티팩트를 붙이고 게시 전에 검토할 수 있도록 초안으로 둡니다.
 
-**Job: `release` ("Create Release")**
+**잡: `release` ("Create Release")**
 
-| Step | Name                    | Condition         | Action                                                                                                                                              |
+| 단계 | 이름                    | 조건         | 동작                                                                                                                                              |
 | ---- | ----------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | Checkout code           | _(always)_        | `actions/checkout` with `fetch-depth: 0`                                                                                                            |
-| 2    | Extract version         | _(always)_        | Guard: if `GITHUB_REF` is not a `v*` tag, emit `::warning::` and skip remaining steps. Otherwise parse into `version` (no `v`) and `tag` (with `v`) |
-| 3    | Create release artifact | ref is a `v*` tag | `zip -r ai-dlc-rules-v{VERSION}.zip aidlc-rules/`                                                                                                   |
-| 4    | Create GitHub Release   | ref is a `v*` tag | `softprops/action-gh-release` with `draft: true` and zip attached                                                                                   |
+| 1    | 코드 체크아웃           | _(항상)_        | `fetch-depth: 0`인 `actions/checkout`                                                                                                            |
+| 2    | 버전 추출         | _(항상)_        | 가드: `GITHUB_REF`가 `v*` 태그가 아니면 `::warning::` 후 나머지 단계 생략. 그렇지 않으면 `version`(`v` 없음)과 `tag`(`v` 포함)으로 파싱 |
+| 3    | 릴리스 아티팩트 생성 | ref가 `v*` 태그 | `zip -r ai-dlc-rules-v{VERSION}.zip aidlc-rules/`                                                                                                   |
+| 4    | GitHub Release 생성   | ref가 `v*` 태그 | zip 첨부, `draft: true`인 `softprops/action-gh-release`                                                                                   |
 
-**Graceful skip:** If dispatched from a branch instead of a tag (e.g., someone manually runs the workflow from `main`), the job completes successfully with a warning annotation rather than failing. This prevents confusing red X failures in the Actions UI.
+**우아한 생략:** 태그가 아닌 브랜치에서 디스패치된 경우(예: `main`에서 수동 실행) 잡은 실패 대신 경고 주석과 함께 성공으로 끝납니다. Actions UI에서 혼란스러운 빨간 X를 막습니다.
 
-**Release naming:** `AI-DLC Workflow v{VERSION}` (e.g., `AI-DLC Workflow v0.1.6`)
+**릴리스 이름:** `AI-DLC Workflow v{VERSION}` (예: `AI-DLC Workflow v0.1.6`)
 
-**External actions (SHA-pinned):**
+**외부 액션(SHA 고정):**
 
 | Action                        | Version | SHA                                        |
 | ----------------------------- | ------- | ------------------------------------------ |
@@ -310,72 +308,59 @@ This job runs when the `rules` label is applied, immediately removing the remind
 
 ---
 
-### Pull Request Validation Workflow (`pull-request-lint.yml`)
+### Pull Request 검증 워크플로 (`pull-request-lint.yml`)
 
-| Property        | Value                                                                                            |
+| 속성        | 값                                                                                            |
 | --------------- | ------------------------------------------------------------------------------------------------ |
-| **File**        | `.github/workflows/pull-request-lint.yml`                                                        |
-| **Triggers**    | `pull_request_target` to `main` (edited, labeled, opened, ready_for_review, reopened, synchronize, unlabeled); `merge_group` (checks_requested) |
-| **Environment** | _(none)_                                                                                         |
-| **Runner**      | `ubuntu-latest`                                                                                  |
-| **Concurrency** | Groups by `{workflow}-{ref}`, cancels in-progress                                                |
+| **파일**        | `.github/workflows/pull-request-lint.yml`                                                        |
+| **트리거**    | `main` 대상 `pull_request_target`(edited, labeled, opened, ready_for_review, reopened, synchronize, unlabeled); `merge_group`(checks_requested) |
+| **환경** | _(없음)_                                                                                         |
+| **러너**      | `ubuntu-latest`                                                                                  |
+| **동시성** | `{workflow}-{ref}`로 그룹화, 진행 중인 실행 취소                                                |
 
-**Purpose:** Validates pull requests before merge. Enforces conventional commit PR titles, the contributor acknowledgment statement, merge-halt controls, and a do-not-merge label gate. Also runs as a merge queue check.
+**목적:** 병합 전에 PR을 검증합니다. conventional commit 형식의 PR 제목, 기여자 확인 진술, 병합 중단 제어, do-not-merge 라벨 게이트를 강제합니다. 머지 큐 검사로도 실행됩니다.
 
-**Why `pull_request_target`:** This trigger runs the workflow in the context of the base branch (not the PR head). This is safe here because no step checks out or executes PR code — the workflow only inspects PR metadata (title, labels, body). Using `pull_request_target` ensures the workflow has access to repository secrets and labels even for PRs from forks.
+**`pull_request_target`을 쓰는 이유:** 이 트리거는 베이스 브랜치 맥락에서 워크플로를 실행합니다(PR 헤드가 아님). PR 코드를 체크아웃하거나 실행하는 단계가 없고 메타데이터(제목, 라벨, 본문)만 보므로 여기서는 안전합니다. `pull_request_target`을 쓰면 포크 PR에도 저장소 시크릿과 라벨 접근이 가능합니다.
 
-**Job: `get-pr-info`**
+**잡: `get-pr-info`**
 
-| Step | Name        | Action                                                                                                   |
+| 단계 | 이름        | 동작                                                                                                   |
 | ---- | ----------- | -------------------------------------------------------------------------------------------------------- |
-| 1    | Get PR info | Extract PR number and labels from event context (`pull_request_target`) or by API lookup (`merge_group`) |
+| 1    | PR 정보 가져오기 | 이벤트 맥락(`pull_request_target`)에서 PR 번호와 라벨 추출 또는 API 조회(`merge_group`) |
 
-Outputs `pr_number` and `pr_labels` for downstream jobs. For `merge_group` events, the PR number is extracted from the ref name and labels are fetched via the GitHub API. For `pull_request_target` events, values come directly from the event payload.
+하위 잡에 `pr_number`와 `pr_labels`를 출력합니다. `merge_group` 이벤트에서는 ref 이름에서 PR 번호를 추출하고 GitHub API로 라벨을 가져옵니다. `pull_request_target` 이벤트에서는 이벤트 페이로드에서 직접 가져옵니다.
 
-**Job: `check-merge-status` ("Check Merge Status")**
+**잡: `check-merge-status` ("Check Merge Status")**
 
-Depends on `get-pr-info`. Runs `if: always()` so it executes even if the upstream job fails.
+`get-pr-info`에 의존. `if: always()`로 상위 잡이 실패해도 실행됩니다.
 
-| Check                | Behavior                                                                      |
+| 검사                | 동작                                                                      |
 | -------------------- | ----------------------------------------------------------------------------- |
-| Open release PRs     | Blocks merge if other `release/` PRs are open (prevents concurrent releases)  |
-| `HALT_MERGES = 0`    | All merges allowed (default)                                                  |
-| `HALT_MERGES = -N`   | All merges blocked                                                            |
-| `HALT_MERGES = N`    | Only PR #N is allowed to merge                                                |
+| 열린 릴리스 PR     | 다른 `release/` PR이 열려 있으면 병합 차단(동시 릴리스 방지)  |
+| `HALT_MERGES = 0`    | 모든 병합 허용(기본값)                                                  |
+| `HALT_MERGES = -N`   | 모든 병합 차단                                                            |
+| `HALT_MERGES = N`    | PR #N만 병합 허용                                                |
 
-**Job: `fail-by-label` ("Fail by Label")**
+**잡: `fail-by-label` ("Fail by Label")**
 
-Depends on `get-pr-info`. Runs `if: always()`. Fails the check if the PR has the `do-not-merge` label (configurable via `DO_NOT_MERGE_LABEL` variable).
+`get-pr-info`에 의존. `if: always()`로 실행. PR에 `do-not-merge` 라벨이 있으면(`DO_NOT_MERGE_LABEL` 변수로 설정 가능) 검사를 실패시킵니다.
 
-**Job: `validate` ("Validate PR title")**
+**잡: `validate` ("Validate PR title")**
 
-Only runs for `pull_request` and `pull_request_target` events (not `merge_group`). Uses `amannn/action-semantic-pull-request` to enforce conventional commit format on PR titles.
+`pull_request` 및 `pull_request_target` 이벤트에서만 실행(`merge_group` 아님). `amannn/action-semantic-pull-request`로 PR 제목에 conventional commit 형식을 강제합니다.
 
-Allowed types: `fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`. Scopes are optional (`requireScope: false`).
+허용 타입: `fix`, `feat`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf`, `test`. 스코프는 선택(`requireScope: false`).
 
-**Job: `auto-label` ("Auto-label")**
+**잡: `contributorStatement` ("Require Contributor Statement")**
 
-Only runs for `pull_request_target` events. Uses [`actions/labeler`](https://github.com/actions/labeler) v6.0.1 to automatically apply and remove labels based on changed file paths. Label rules are defined in `.github/labeler.yml`:
-
-| Label           | Path Pattern                                    | Description                                      |
-| --------------- | ----------------------------------------------- | ------------------------------------------------ |
-| `rules`         | `aidlc-rules/**`                                | Triggers CodeBuild evaluation pipeline           |
-| `documentation` | `**/*.md` (excluding `aidlc-rules/**`)          | Non-rules markdown file changes                  |
-| `github`        | `.github/**`                                    | Workflow, template, or config changes             |
-
-With `sync-labels: true`, labels are automatically removed when the matching files are no longer in the PR diff (e.g., after a rebase drops those changes). New label rules can be added by editing `.github/labeler.yml` — no workflow changes required.
-
-**Job: `contributorStatement` ("Require Contributor Statement")**
-
-Only runs for `pull_request` and `pull_request_target` events. Skipped for bot accounts (`dependabot[bot]`, `github-actions[bot]`, `github-actions`, `aidlc-workflows`). Verifies the PR body contains the contributor acknowledgment text from `.github/pull_request_template.md`:
+`pull_request` 및 `pull_request_target`에서만 실행. 봇 계정(`dependabot[bot]`, `github-actions[bot]`, `github-actions`, `aidlc-workflows`)은 건너뜁니다. PR 본문에 `.github/pull_request_template.md`의 기여자 확인 문구가 있는지 검증합니다.
 
 > By submitting this pull request, I confirm that you can use, modify, copy, and redistribute this contribution, under the terms of the project license.
 
-**External actions (SHA-pinned):**
+**외부 액션(SHA 고정):**
 
 | Action                                  | Version | SHA                                        |
 | --------------------------------------- | ------- | ------------------------------------------ |
-| `actions/labeler`                       | v6.0.1  | `634933edcd8ababfe52f92936142cc22ac488b1b` |
 | `amannn/action-semantic-pull-request`   | v6.1.1  | `48f256284bd46cdaab1048c3721360e808335d50` |
 | `actions/github-script`                 | v8.0.0  | `ed597411d8f924073f98dfc5c65a23a2325f34cd` |
 
@@ -436,10 +421,9 @@ All variables have sensible defaults via `${{ vars.VAR || 'default' }}` syntax, 
 
 | Workflow                | Job                    | Permissions                                            | Rationale                                                      |
 | ----------------------- | ---------------------- | ------------------------------------------------------ | -------------------------------------------------------------- |
-| `codebuild.yml`         | `label-reminder`       | `pull-requests: write`                                 | Post reminder comment when `rules` label is missing            |
-| `codebuild.yml`         | `label-cleanup`        | `pull-requests: write`                                 | Delete reminder comment when `rules` label is applied          |
+| `codebuild.yml`         | `label-reminder`       | `pull-requests: write`                                 | Post reminder comment when `codebuild` label is missing        |
+| `codebuild.yml`         | `label-cleanup`        | `pull-requests: write`                                 | Delete reminder comment when `codebuild` label is applied      |
 | `codebuild.yml`         | `build`                | `actions: write`, `contents: write`, `id-token: write` | Cache management, release asset upload, OIDC token for AWS STS |
-| `pull-request-lint.yml` | `auto-label`           | `contents: read`, `issues: write`, `pull-requests: write` | Apply/remove labels based on changed file paths; `issues: write` allows creating labels that don't yet exist |
 | `pull-request-lint.yml` | `get-pr-info`          | `contents: read`, `pull-requests: read`                | Read PR metadata and labels via API                            |
 | `pull-request-lint.yml` | `check-merge-status`   | `pull-requests: read`                                  | Read PR state for merge gate checks                            |
 | `pull-request-lint.yml` | `validate`             | `pull-requests: read`                                  | Read PR title for conventional commit validation               |
@@ -457,7 +441,7 @@ Both `codebuild.yml` and `pull-request-lint.yml` follow a **deny-all-then-grant*
 | **AWS authentication**      | OIDC-based role assumption via `id-token: write` — no static credentials stored                                                                                   |
 | **Least-privilege tokens**  | `codebuild.yml` and `pull-request-lint.yml` explicitly deny all 16 permission scopes at workflow level, grant only required scopes at job level                   |
 | **Environment protection**  | `codebuild` environment gates AWS credential access with potential reviewer/branch rules                                                                          |
-| **Label-gated CI**          | `codebuild.yml` requires the `rules` label on PRs and only triggers for `aidlc-rules/**` changes, preventing unnecessary builds and environment approval prompts. The label is applied automatically by the `auto-label` job in `pull-request-lint.yml` |
+| **Label-gated CI**          | `codebuild.yml` requires the `codebuild` label on PRs and only triggers for `aidlc-rules/**` changes, preventing unnecessary builds and environment approval prompts |
 | **Concurrency control**     | `codebuild.yml` and `pull-request-lint.yml` cancel in-progress runs for the same branch                                                                          |
 | **Safe PR trigger**         | `pull-request-lint.yml` uses `pull_request_target` but never checks out PR code — only inspects metadata (title, labels, body)                                    |
 | **Injection-safe inputs**   | Zero `${{ }}` expression interpolation in `run:` blocks — all dynamic values (`github.ref_name`, `github.repository`, `env.*`, event inputs) passed via step-level `env:` or auto-exported workflow `env:` variables |

@@ -1,4 +1,4 @@
-# AI-DLC Evaluation Framework - File Structure
+# AI-DLC 평가 프레임워크 - 파일 구조
 
 ```
 aidlc-regression/
@@ -92,7 +92,7 @@ aidlc-regression/
     └── writing-inputs/                # Guides for writing vision/tech-env docs
 ```
 
-## Big Rocks → Package Mapping
+## Big Rocks → 패키지 매핑
 
 ```
 1. Golden Test Case        → test_cases/
@@ -103,7 +103,7 @@ aidlc-regression/
 6. GitHub CI/CD            → .github/workflows/  (planned)
 ```
 
-## Package Dependencies
+## 패키지 의존성
 
 ```
 aidlc-runner (standalone — runs the AIDLC workflow and produces run folders)
@@ -121,12 +121,12 @@ reporting
 └── nonfunctional (reads NFR results)
 ```
 
-## Key Design Decisions
+## 주요 설계 결정
 
-1. **Monorepo with uv workspace:** Simplifies dependency management and cross-package development
-2. **Python 3.13:** Latest stable Python with modern features
-3. **Separate packages by evaluation type:** Clear separation of concerns, independent evolution
-4. **aidlc-runner as execution engine:** Produces run folders that evaluation packages consume
-5. **Golden test cases as versioned inputs:** Reproducible, curated baselines for consistent evaluation
-6. **Shared utilities package:** Common code reused across all evaluation packages
-7. **Reporting aggregates all:** Single entry point for generating comprehensive reports
+1. **uv 워크스페이스 모노레포:** 의존성 관리와 패키지 간 개발을 단순화
+2. **Python 3.13:** 최신 안정 Python과 최신 기능
+3. **평가 유형별 패키지 분리:** 관심사 분리, 독립적 진화
+4. **aidlc-runner를 실행 엔진으로:** 평가 패키지가 소비하는 run 폴더 생성
+5. **골든 테스트 케이스를 버전 관리된 입력으로:** 일관된 평가를 위한 선별된 기준선
+6. **공유 유틸리티 패키지:** 모든 평가 패키지에서 재사용하는 공통 코드
+7. **보고가 전체 집계:** 포괄 보고서를 만드는 단일 진입점
